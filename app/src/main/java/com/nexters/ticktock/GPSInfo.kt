@@ -1,16 +1,23 @@
 package com.nexters.ticktock
 
+import android.app.Activity
 import android.os.Bundle
 import android.content.Intent
 import android.os.IBinder
 import android.app.Service
 import android.content.Context
+import android.content.DialogInterface
 import android.location.LocationManager
 import android.location.Location
 import android.location.LocationListener
+import android.provider.Settings
+import android.support.v4.app.ActivityCompat.startActivityForResult
+import android.support.v7.app.AlertDialog
 
 
-class GPSInfo(private val mContext: Context) : Service(), LocationListener {
+class GPSInfo(private val activity: Activity) : Service(), LocationListener {
+
+    val GPS_ENABLE_REQUEST_CODE = 2001
 
     // 현재 GPS 사용유무
     internal var isGPSEnabled = false
@@ -55,7 +62,7 @@ class GPSInfo(private val mContext: Context) : Service(), LocationListener {
 
     fun getLocation(): Location? {
         try {
-            locationManager = mContext
+            locationManager = activity
                     .getSystemService(LOCATION_SERVICE) as LocationManager
 
             isGPSEnabled = locationManager!!
@@ -127,6 +134,27 @@ class GPSInfo(private val mContext: Context) : Service(), LocationListener {
     fun stopUsingGPS() {
         if (locationManager != null) {
             locationManager!!.removeUpdates(this@GPSInfo)
+        }
+    }
+
+    fun checkLocationServicesStatus(): Boolean {
+        val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    }
+
+    fun isGPSConnected() {
+        if (!checkLocationServicesStatus()) {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("위치 서비스 비활성화")
+            builder.setMessage("앱을 사용하기 위해서는 위치 서비스가 필요합니다.\n" + "위치 설정을 수정하십시오.")
+            builder.setCancelable(true)
+            builder.setPositiveButton("설정", DialogInterface.OnClickListener { dialogInterface, i ->
+                val callGPSSettingIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                activity.startActivityForResult(callGPSSettingIntent, GPS_ENABLE_REQUEST_CODE)
+            })
+            builder.setNegativeButton("취소", DialogInterface.OnClickListener { dialogInterface, i -> dialogInterface.cancel() })
+            builder.create().show()
         }
     }
 
