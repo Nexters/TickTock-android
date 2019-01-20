@@ -1,5 +1,6 @@
 package com.nexters.ticktock
 
+import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -14,20 +15,26 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.View
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException
+import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.places.Place
+import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import com.google.android.gms.location.places.ui.PlaceSelectionListener
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.activity_auto_complete.*
 import java.io.IOException
+import javax.xml.transform.Templates
 
 
-class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener {
+class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.OnClickListener {
 
     val TAG:String = "AutoCompleteActivity"
 
     val GPS_ENABLE_REQUEST_CODE = 2001
+    val PLACE_AUTOCOMPLETE_REQUEST_CODE_FROM = 1;
+    val PLACE_AUTOCOMPLETE_REQUEST_CODE_TO = 2;
 
     lateinit var geocoder: Geocoder
     lateinit var gps: GPSInfo
@@ -40,30 +47,24 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener {
         geocoder = Geocoder(this)
         gps = GPSInfo(this)
         isGPSConnected()
+        layout_auto_from.setOnClickListener(this)
+        layout_auto_to.setOnClickListener(this)
         btnShowLocation.setOnClickListener(this)
-
-        setAutoComplete()
     }
 
-    fun setAutoComplete() {
-        val autocompleteFragment: SupportPlaceAutocompleteFragment? = SupportPlaceAutocompleteFragment()
-        val fm: FragmentManager? = supportFragmentManager
-        val ft: FragmentTransaction? = fm?.beginTransaction()
-        ft?.replace(R.id.fragment_content, autocompleteFragment)
-        ft?.commit()
+    fun createAutoComplete(requestCode: Int) {
 
-        autocompleteFragment?.setOnPlaceSelectedListener(object : PlaceSelectionListener {
-            override fun onPlaceSelected(place: Place) {
-                val latLng = LatLng(place.latLng.latitude, place.latLng.longitude)
-                Log.d(TAG, "${place.name}: ${place.address}")
-                Log.d(TAG, "${place.latLng.latitude}, ${place.latLng.longitude}")
-                tv_destination.text = "${place.name} ${place.address}"
-            }
-
-            override fun onError(p0: Status?) {
-                Log.i(TAG, "An error occurred: ${p0}")
-            }
-        })
+        try {
+            val intent:Intent =
+            PlaceAutocomplete
+                    .IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                    .build(this);
+            startActivityForResult(intent, requestCode);
+        } catch (e: GooglePlayServicesRepairableException) {
+            e.printStackTrace()
+        } catch (e: GooglePlayServicesNotAvailableException) {
+            e.printStackTrace()
+        }
     }
 
     private fun getFromLocationToName(latLng: LatLng): Address? {
@@ -93,8 +94,32 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode){
-            GPS_ENABLE_REQUEST_CODE-> {
-                gps = GPSInfo(this)
+            GPS_ENABLE_REQUEST_CODE -> gps = GPSInfo(this)
+
+            PLACE_AUTOCOMPLETE_REQUEST_CODE_FROM -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val place:Place = PlaceAutocomplete.getPlace(this, data)
+                    Log.i(TAG, "Place: " + place.getName())
+                    tv_current.text = "${place.name}"
+                } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                    val status:Status = PlaceAutocomplete.getStatus(this, data)
+                    Log.i(TAG, status.statusMessage)
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+                    // 사용자 입력에의한 종료
+                }
+            }
+
+            PLACE_AUTOCOMPLETE_REQUEST_CODE_TO -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    val place:Place = PlaceAutocomplete.getPlace(this, data)
+                    Log.i(TAG, "Place: " + place.getName())
+                    tv_to.text = "${place.name}"
+                } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                    val status:Status = PlaceAutocomplete.getStatus(this, data)
+                    Log.i(TAG, status.statusMessage)
+                } else if (resultCode == Activity.RESULT_CANCELED) {
+                    // 사용자 입력에의한 종료
+                }
             }
         }
     }
@@ -122,26 +147,52 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v?.id) {
+            R.id.layout_auto_from -> {
+                val builder = AlertDialog.Builder(this)
+                val items = arrayOf("현위치", "검색")
+                builder.setSingleChoiceItems(items, 0, this)
+                builder.create().show()
+                // val customDialog = CustomDialog(this)
+                // customDialog.callFunction()
+                // createAutoComplete(PLACE_AUTOCOMPLETE_REQUEST_CODE_FROM)
+            }
+
+            R.id.layout_auto_to -> createAutoComplete(PLACE_AUTOCOMPLETE_REQUEST_CODE_TO)
+
             R.id.btnShowLocation -> {
                 if (gps.isGetLocation) {
-                    val latitude = gps.latitude
+                    var latitude = gps.latitude
                     var longitude = gps.longitude
 
                     var latLng = LatLng(latitude, longitude)
 
                     var address: Address? = null
                     while (address == null) {
-                        longitude += 0.0000001
+                        latitude += 0.00000001
                         latLng = LatLng(latitude, longitude)
                         address = getFromLocationToName(latLng)
                     }
                     tv_current.text = "${address.getAddressLine(0)}"
-                    Log.d("tag", "${latLng.latitude}, ${latLng.longitude}")
+                    Log.d(TAG, "${latLng.latitude}, ${latLng.longitude}")
                 } else {
-                    tv_current.text = "cannot find"
-                    Log.d("tag", "cannot find")
+                    tv_current.text = "잠시뒤 다시 시도해주세요"
+                    Log.d(TAG, "cannot find")
                 }
             }
         }
+    }
+
+    override fun onClick(dialog: DialogInterface?, index: Int) {
+        val dialog:DialogInterface? = dialog
+        dialog?.dismiss()
+         when (index) {
+             0 -> {
+
+             }
+
+             1 -> {
+                 createAutoComplete(PLACE_AUTOCOMPLETE_REQUEST_CODE_FROM)
+             }
+         }
     }
 }
