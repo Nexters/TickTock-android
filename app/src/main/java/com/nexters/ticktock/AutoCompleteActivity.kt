@@ -17,11 +17,18 @@ import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.places.Place
 import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import com.google.android.gms.maps.model.LatLng
+import com.odsay.odsayandroidsdk.API
+import com.odsay.odsayandroidsdk.ODsayData
+import com.odsay.odsayandroidsdk.ODsayService
+import com.odsay.odsayandroidsdk.OnResultCallbackListener
 import kotlinx.android.synthetic.main.activity_auto_complete.*
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.IOException
 
 
-class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.OnClickListener {
+class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.OnClickListener, OnResultCallbackListener {
 
     val TAG:String = "AutoCompleteActivity"
 
@@ -41,15 +48,24 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
     lateinit var geocoder: Geocoder
     lateinit var gps: GPSInfo
 
+    lateinit var odsayService: ODsayService
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auto_complete)
 
-        geocoder = Geocoder(this)
-        gps = GPSInfo(this)
+        gps = GPSInfo(this) // GPS
         gps.isGPSConnected()
+        geocoder = Geocoder(this) // 좌표 주소 변환 객체
+
+        // 싱글톤 생성, Key 값을 활용하여 객체 생성
+        odsayService = ODsayService.init(this, getResources().getString(R.string.odsay_key));
+        // 서버 연결 제한 시간(단위(초), default : 5초)
+        odsayService.setReadTimeout(5000);
+        // 데이터 획득 제한 시간(단위(초), default : 5초)
+        odsayService.setConnectionTimeout(5000);
+
         layout_auto_from.setOnClickListener(this)
         layout_auto_to.setOnClickListener(this)
         btnShowLocation.setOnClickListener(this)
@@ -65,8 +81,10 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
             PLACE_AUTOCOMPLETE_REQUEST_CODE_FROM -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val place:Place = PlaceAutocomplete.getPlace(this, data)
-                    Log.i(TAG, "Place: " + place.getName())
+                    Log.i(TAG, "FromPlace: " + place.getName())
                     tv_current.text = "${place.name}"
+
+                    fromLatLng = LatLng(place.latLng.latitude, place.latLng.longitude)
                 } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                     val status:Status = PlaceAutocomplete.getStatus(this, data)
                     Log.i(TAG, status.statusMessage)
@@ -78,8 +96,10 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
             PLACE_AUTOCOMPLETE_REQUEST_CODE_TO -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val place:Place = PlaceAutocomplete.getPlace(this, data)
-                    Log.i(TAG, "Place: " + place.getName())
+                    Log.i(TAG, "ToPlace: " + place.getName())
                     tv_destination.text = "${place.name}"
+
+                    toLatLng = LatLng(place.latLng.latitude, place.latLng.longitude)
                 } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                     val status:Status = PlaceAutocomplete.getStatus(this, data)
                     Log.i(TAG, status.statusMessage)
@@ -146,7 +166,8 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
                 address = getFromLocationToName(latLng)
             }
 
-            textView.text = "${address.getAddressLine(0).substring(4)}" // (대한민국) 서울시~~
+            // textView.text = "${address.getAddressLine(0).substring(4)}" // (대한민국) 서울시~~
+            textView.text = "현위치"
             if(isFrom)
                 fromLatLng = LatLng(latitude, longitude)
             else
@@ -176,6 +197,7 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
             }
 
             R.id.btnShowLocation -> {
+                odsayService.requestSearchPubTransPath(fromLatLng!!.longitude.toString(), fromLatLng!!.latitude.toString(), toLatLng!!.longitude.toString(), toLatLng!!.latitude.toString(), "0", "0", "0", this)
 
             }
         }
@@ -200,5 +222,29 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
                 1 -> createAutoComplete(PLACE_AUTOCOMPLETE_REQUEST_CODE_TO)
             }
         }
+    }
+
+    override fun onSuccess(odsayData: ODsayData, api: API?) {
+        try {
+            // API Value 는 API 호출 메소드 명을 따라갑니다.
+            if (api == API.SEARCH_PUB_TRANS_PATH) {
+                val jArray: JSONArray = odsayData.getJson().getJSONObject("result").getJSONArray("path")
+                val jObject: JSONObject = jArray.getJSONObject(0).getJSONObject("info") // 최단시간
+                val totalTime = jObject.getInt("totalTime")
+
+                Log.d(TAG, "totalTime" + "${totalTime}")
+
+                val intent = Intent()
+                intent.putExtra("totalTime", totalTime)
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+            }
+        }catch (e: JSONException) {
+            e.printStackTrace();
+        }
+    }
+
+    override fun onError(i: Int, s: String?, api: API?) {
+        if (api == API.SEARCH_PUB_TRANS_PATH) {}
     }
 }

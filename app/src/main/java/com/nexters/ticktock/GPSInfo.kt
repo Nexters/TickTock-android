@@ -6,12 +6,10 @@ import android.content.Intent
 import android.os.IBinder
 import android.app.Service
 import android.content.Context
-import android.content.DialogInterface
 import android.location.LocationManager
 import android.location.Location
 import android.location.LocationListener
 import android.provider.Settings
-import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.support.v7.app.AlertDialog
 
 
@@ -149,11 +147,11 @@ class GPSInfo(private val activity: Activity) : Service(), LocationListener {
             builder.setTitle("위치 서비스 비활성화")
             builder.setMessage("앱을 사용하기 위해서는 위치 서비스가 필요합니다.\n" + "위치 설정을 수정하십시오.")
             builder.setCancelable(true)
-            builder.setPositiveButton("설정", DialogInterface.OnClickListener { dialogInterface, i ->
+            builder.setPositiveButton("설정", { dialogInterface, i ->
                 val callGPSSettingIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 activity.startActivityForResult(callGPSSettingIntent, GPS_ENABLE_REQUEST_CODE)
             })
-            builder.setNegativeButton("취소", DialogInterface.OnClickListener { dialogInterface, i -> dialogInterface.cancel() })
+            builder.setNegativeButton("취소", { dialogInterface, i -> dialogInterface.cancel() })
             builder.create().show()
         }
     }
