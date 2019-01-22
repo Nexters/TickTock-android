@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">TickTock</string>
     <string name = "timer_finished">Timer Finished!</string>
+    <string name = "google_maps_key">Google Map Key</string>
 </resources>
