@@ -19,6 +19,12 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Button" />
+
     </android.support.constraint.ConstraintLayout>
 
 </layout>

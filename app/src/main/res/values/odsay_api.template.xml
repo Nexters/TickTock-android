@@ -1,0 +1,3 @@
+<resources>
+    <string name="odsay_key_template" templateMergeStrategy="preserve" translatable="false">your api key</string>
+</resources>
