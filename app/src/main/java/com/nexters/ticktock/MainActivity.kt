@@ -7,19 +7,24 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
+import android.databinding.DataBindingUtil
+import com.nexters.ticktock.databinding.ActivityMainBinding
+import com.nexters.ticktock.dto.DayGroup
+import com.nexters.ticktock.dto.entity.Article
 
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : OrmAppCompatActivity(), View.OnClickListener {
 
     val TAG:String = "MainActivity"
 
     val MAIN_ACTIVITY_REQUEST_CODE = 1111
 
+    private lateinit var binding : ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        button.setOnClickListener(this)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.button.setOnClickListener(this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -29,7 +34,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
                         Log.d(TAG, "${data?.getIntExtra("totalTime", 0)}")
-                        button.text =  "${data?.getIntExtra("totalTime", 0)}분이 걸립니다."
+                        binding.button.text =  "${data?.getIntExtra("totalTime", 0)}분이 걸립니다."
                     }
                 }
             }
@@ -38,7 +43,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.button -> {
+            binding.button.id -> {
                 newActivity()
             }
         }
