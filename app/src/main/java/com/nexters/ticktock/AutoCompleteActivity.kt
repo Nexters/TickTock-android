@@ -14,6 +14,7 @@ import android.widget.TextView
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.location.places.AutocompleteFilter
 import com.google.android.gms.location.places.Place
 import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import com.google.android.gms.maps.model.LatLng
@@ -114,11 +115,14 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
     fun createAutoComplete(requestCode: Int) {
 
         try {
-            val intent:Intent =
-            PlaceAutocomplete
-                    .IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
-                    .build(this);
-            startActivityForResult(intent, requestCode);
+            val typeFilter:AutocompleteFilter = AutocompleteFilter.Builder().setCountry("KR").build()
+
+            val intent:Intent = PlaceAutocomplete
+                                .IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                                .setFilter(typeFilter)
+                                .build(this)
+
+            startActivityForResult(intent, requestCode)
         } catch (e: GooglePlayServicesRepairableException) {
             e.printStackTrace()
         } catch (e: GooglePlayServicesNotAvailableException) {
@@ -197,8 +201,15 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
             }
 
             R.id.btnShowLocation -> {
-                odsayService.requestSearchPubTransPath(fromLatLng!!.longitude.toString(), fromLatLng!!.latitude.toString(), toLatLng!!.longitude.toString(), toLatLng!!.latitude.toString(), "0", "0", "0", this)
-
+                odsayService.requestSearchPubTransPath(
+                        fromLatLng!!.longitude.toString(),
+                        fromLatLng!!.latitude.toString(),
+                        toLatLng!!.longitude.toString(),
+                        toLatLng!!.latitude.toString(),
+                        "0",
+                        "0",
+                        "0",
+                        this)
             }
         }
     }
