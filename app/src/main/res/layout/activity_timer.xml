@@ -8,7 +8,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".TimerActivity">
+        tools:context=".timer.TimerActivity">
 
         <TextView
             android:id="@+id/text_view_countdown"
@@ -42,7 +42,6 @@
             app:layout_constraintRight_toLeftOf="@+id/button_start_pause"
             app:layout_constraintTop_toBottomOf="@+id/text_view_countdown"
             android:text="reset"
-            android:visibility="invisible"
             tools:visibility="visible" />
 
     </android.support.constraint.ConstraintLayout>

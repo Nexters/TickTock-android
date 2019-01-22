@@ -12,13 +12,14 @@
         <activity android:name=".MainActivity">
 
         </activity>
-        <activity android:name=".TimerActivity">
+        <activity android:name=".timer.TimerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".timer.TimerExpiredReceiver"/>
     </application>
 
 </manifest>
