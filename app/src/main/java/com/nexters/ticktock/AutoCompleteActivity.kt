@@ -31,25 +31,25 @@ import java.io.IOException
 
 class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.OnClickListener, OnResultCallbackListener {
 
-    val TAG:String = "AutoCompleteActivity"
+    private val TAG:String = "AutoCompleteActivity"
 
-    val GPS_ENABLE_REQUEST_CODE = 2001
+    private val GPS_ENABLE_REQUEST_CODE = 2001
 
-    val PLACE_AUTOCOMPLETE_REQUEST_CODE_FROM = 1;
-    val PLACE_AUTOCOMPLETE_REQUEST_CODE_TO = 2;
+    private val PLACE_AUTOCOMPLETE_REQUEST_CODE_FROM = 1;
+    private val PLACE_AUTOCOMPLETE_REQUEST_CODE_TO = 2;
 
-    var isFrom:Boolean = true
+    private var isFrom:Boolean = true
 
-    var checkNumberFrom = 0
-    var checkNumberTo = 0
+    private var checkNumberFrom = 0
+    private var checkNumberTo = 0
 
-    var fromLatLng:LatLng? = null
-    var toLatLng:LatLng? = null
+    private var fromLatLng:LatLng? = null
+    private var toLatLng:LatLng? = null
 
-    lateinit var geocoder: Geocoder
-    lateinit var gps: GPSInfo
+    private lateinit var geocoder: Geocoder
+    private lateinit var gps: GPSInfo
 
-    lateinit var odsayService: ODsayService
+    private lateinit var odsayService: ODsayService
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -112,7 +112,7 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
     }
 
     // 자동완성 액티비티 생성
-    fun createAutoComplete(requestCode: Int) {
+    private fun createAutoComplete(requestCode: Int) {
 
         try {
             val typeFilter:AutocompleteFilter = AutocompleteFilter.Builder().setCountry("KR").build()
@@ -131,7 +131,7 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
     }
 
     // 좌표 주소 변환
-    fun getFromLocationToName(latLng: LatLng): Address? {
+    private fun getFromLocationToName(latLng: LatLng): Address? {
 
         var list: List<Address>? = null
         var address: Address? = null
@@ -156,7 +156,7 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
         return address
     }
 
-    fun getGPSLocation(textView: TextView) {
+    private fun getGPSLocation(textView: TextView) {
         if (gps.isGetLocation) {
             var latitude = gps.latitude
             var longitude = gps.longitude
