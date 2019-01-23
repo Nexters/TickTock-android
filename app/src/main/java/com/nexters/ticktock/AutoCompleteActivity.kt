@@ -85,7 +85,6 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
             PLACE_AUTOCOMPLETE_REQUEST_CODE_FROM -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val place:Place = PlaceAutocomplete.getPlace(this, data)
-                    Log.i(TAG, "FromPlace: " + place.getName())
                     binding.tvCurrent.text = "${place.name}"
 
                     fromLatLng = LatLng(place.latLng.latitude, place.latLng.longitude)
@@ -100,7 +99,6 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
             PLACE_AUTOCOMPLETE_REQUEST_CODE_TO -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val place:Place = PlaceAutocomplete.getPlace(this, data)
-                    Log.i(TAG, "ToPlace: " + place.getName())
                     binding.tvDestination.text = "${place.name}"
 
                     toLatLng = LatLng(place.latLng.latitude, place.latLng.longitude)
@@ -145,12 +143,12 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
                     1) // 얻어올 값의 개수
         } catch (e: IOException) {
             e.printStackTrace()
-            Log.e("tag", "입출력 오류 - 서버에서 주소변환시 에러발생")
+            Log.e(TAG, "입출력 오류 - 서버에서 주소변환시 에러발생")
         }
 
         if (list != null) {
             if (list.isEmpty())
-                Log.d("tag", "해당되는 주소 정보는 없습니다")
+                Log.d(TAG, "해당되는 주소 정보는 없습니다")
             else {
                 address = list[0]
                 Log.d("tag", list[0].toString())
@@ -245,8 +243,6 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
                 val jArray: JSONArray = odsayData.getJson().getJSONObject("result").getJSONArray("path")
                 val jObject: JSONObject = jArray.getJSONObject(0).getJSONObject("info") // 최단시간
                 val totalTime = jObject.getInt("totalTime")
-
-                Log.d(TAG, "totalTime" + "${totalTime}")
 
                 val intent = Intent()
                 intent.putExtra("totalTime", totalTime)

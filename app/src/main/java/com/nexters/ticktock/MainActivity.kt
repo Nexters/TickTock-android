@@ -33,7 +33,6 @@ class MainActivity : OrmAppCompatActivity(), View.OnClickListener {
             MAIN_ACTIVITY_REQUEST_CODE -> {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-                        Log.d(TAG, "${data?.getIntExtra("totalTime", 0)}")
                         binding.button.text =  "${data?.getIntExtra("totalTime", 0)}분이 걸립니다."
                     }
                 }
