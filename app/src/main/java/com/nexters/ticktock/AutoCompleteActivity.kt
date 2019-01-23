@@ -3,6 +3,7 @@ package com.nexters.ticktock
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.location.Address
 import android.location.Geocoder
 import android.support.v7.app.AppCompatActivity
@@ -18,6 +19,7 @@ import com.google.android.gms.location.places.AutocompleteFilter
 import com.google.android.gms.location.places.Place
 import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import com.google.android.gms.maps.model.LatLng
+import com.nexters.ticktock.databinding.ActivityAutoCompleteBinding
 import com.odsay.odsayandroidsdk.API
 import com.odsay.odsayandroidsdk.ODsayData
 import com.odsay.odsayandroidsdk.ODsayService
@@ -31,6 +33,7 @@ import java.io.IOException
 
 class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogInterface.OnClickListener, OnResultCallbackListener {
 
+    private lateinit var binding: ActivityAutoCompleteBinding
     private val TAG:String = "AutoCompleteActivity"
 
     private val GPS_ENABLE_REQUEST_CODE = 2001
@@ -54,7 +57,7 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_auto_complete)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_auto_complete)
 
         gps = GPSInfo(this) // GPS
         gps.isGPSConnected()
@@ -83,7 +86,7 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
                 if (resultCode == Activity.RESULT_OK) {
                     val place:Place = PlaceAutocomplete.getPlace(this, data)
                     Log.i(TAG, "FromPlace: " + place.getName())
-                    tv_current.text = "${place.name}"
+                    binding.tvCurrent.text = "${place.name}"
 
                     fromLatLng = LatLng(place.latLng.latitude, place.latLng.longitude)
                 } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
@@ -98,7 +101,7 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
                 if (resultCode == Activity.RESULT_OK) {
                     val place:Place = PlaceAutocomplete.getPlace(this, data)
                     Log.i(TAG, "ToPlace: " + place.getName())
-                    tv_destination.text = "${place.name}"
+                    binding.tvDestination.text = "${place.name}"
 
                     toLatLng = LatLng(place.latLng.latitude, place.latLng.longitude)
                 } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
@@ -184,7 +187,7 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.layout_auto_from -> {
+            binding.layoutAutoFrom.id -> {
                 isFrom = true
                 val builder = AlertDialog.Builder(this)
                 val items = arrayOf("현위치", "검색")
@@ -192,7 +195,7 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
                 builder.create().show()
             }
 
-            R.id.layout_auto_to -> {
+            binding.layoutAutoTo.id -> {
                 isFrom = false
                 val builder = AlertDialog.Builder(this)
                 val items = arrayOf("현위치", "검색")
@@ -200,7 +203,7 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
                 builder.create().show()
             }
 
-            R.id.btnShowLocation -> {
+            binding.btnShowLocation.id -> {
                 odsayService.requestSearchPubTransPath(
                         fromLatLng!!.longitude.toString(),
                         fromLatLng!!.latitude.toString(),
@@ -221,14 +224,14 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
         if (isFrom) {
             checkNumberFrom = index
             when (index) {
-                0 -> getGPSLocation(tv_current)
+                0 -> getGPSLocation(binding.tvCurrent)
 
                 1 -> createAutoComplete(PLACE_AUTOCOMPLETE_REQUEST_CODE_FROM)
             }
         } else {
             checkNumberTo = index
             when (index) {
-                0 -> getGPSLocation(tv_destination)
+                0 -> getGPSLocation(binding.tvDestination)
 
                 1 -> createAutoComplete(PLACE_AUTOCOMPLETE_REQUEST_CODE_TO)
             }
