@@ -143,7 +143,7 @@ class GPSInfo(private val activity: Activity) : Service(), LocationListener {
 
     fun isGPSConnected() {
         if (!checkLocationServicesStatus()) {
-            val builder = AlertDialog.Builder(this)
+            val builder = AlertDialog.Builder(activity)
             builder.setTitle("위치 서비스 비활성화")
             builder.setMessage("앱을 사용하기 위해서는 위치 서비스가 필요합니다.\n" + "위치 설정을 수정하십시오.")
             builder.setCancelable(true)
