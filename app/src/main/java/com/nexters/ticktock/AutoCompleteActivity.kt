@@ -70,9 +70,9 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
         // 데이터 획득 제한 시간(단위(초), default : 5초)
         odsayService.setConnectionTimeout(5000);
 
-        layout_auto_from.setOnClickListener(this)
-        layout_auto_to.setOnClickListener(this)
-        btnShowLocation.setOnClickListener(this)
+        binding.layoutAutoFrom.setOnClickListener(this)
+        binding.layoutAutoTo.setOnClickListener(this)
+        binding.btnShowLocation.setOnClickListener(this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -83,30 +83,36 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, DialogIn
             GPS_ENABLE_REQUEST_CODE -> gps = GPSInfo(this)
 
             PLACE_AUTOCOMPLETE_REQUEST_CODE_FROM -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    val place:Place = PlaceAutocomplete.getPlace(this, data)
-                    binding.tvCurrent.text = "${place.name}"
+                when (resultCode) {
+                    Activity.RESULT_OK -> {
+                        val place:Place = PlaceAutocomplete.getPlace(this, data)
+                        binding.tvCurrent.text = "${place.name}"
 
-                    fromLatLng = LatLng(place.latLng.latitude, place.latLng.longitude)
-                } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                    val status:Status = PlaceAutocomplete.getStatus(this, data)
-                    Log.i(TAG, status.statusMessage)
-                } else if (resultCode == Activity.RESULT_CANCELED) {
-                    // 사용자 입력에의한 종료
+                        fromLatLng = LatLng(place.latLng.latitude, place.latLng.longitude)
+                    }
+                    PlaceAutocomplete.RESULT_ERROR -> {
+                        val status:Status = PlaceAutocomplete.getStatus(this, data)
+                        Log.i(TAG, status.statusMessage)
+                    }
+                    Activity.RESULT_CANCELED -> {
+                        // 사용자 입력에의한 종료
+                    }
                 }
             }
 
             PLACE_AUTOCOMPLETE_REQUEST_CODE_TO -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    val place:Place = PlaceAutocomplete.getPlace(this, data)
-                    binding.tvDestination.text = "${place.name}"
+                when (resultCode) {
+                    Activity.RESULT_OK -> {
+                        val place: Place = PlaceAutocomplete.getPlace(this, data)
+                        binding.tvDestination.text = "${place.name}"
 
-                    toLatLng = LatLng(place.latLng.latitude, place.latLng.longitude)
-                } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                    val status:Status = PlaceAutocomplete.getStatus(this, data)
-                    Log.i(TAG, status.statusMessage)
-                } else if (resultCode == Activity.RESULT_CANCELED) {
-                    // 사용자 입력에의한 종료
+                        toLatLng = LatLng(place.latLng.latitude, place.latLng.longitude)
+                    } PlaceAutocomplete.RESULT_ERROR -> {
+                        val status: Status = PlaceAutocomplete.getStatus(this, data)
+                        Log.i(TAG, status.statusMessage)
+                    } Activity.RESULT_CANCELED -> {
+                        // 사용자 입력에의한 종료
+                    }
                 }
             }
         }
