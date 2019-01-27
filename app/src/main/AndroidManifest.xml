@@ -27,7 +27,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".AutoCompleteActivity"></activity>
+        <activity android:name=".AutoCompleteActivity"/>
+        <service android:name=".GPSInfo"/>
     </application>
 
 </manifest>

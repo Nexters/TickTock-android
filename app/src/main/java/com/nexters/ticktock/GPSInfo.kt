@@ -1,21 +1,33 @@
 package com.nexters.ticktock
 
-import android.app.Activity
 import android.os.Bundle
 import android.content.Intent
 import android.os.IBinder
 import android.app.Service
 import android.content.Context
-import android.location.LocationManager
-import android.location.Location
-import android.location.LocationListener
+import android.location.*
 import android.provider.Settings
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import android.widget.TextView
+import com.google.android.gms.maps.model.LatLng
+import java.io.IOException
 
 
-class GPSInfo(private val activity: Activity) : Service(), LocationListener {
+class GPSInfo() : Service(), LocationListener {
 
-    val GPS_ENABLE_REQUEST_CODE = 2001
+    constructor (ac: AppCompatActivity):this() {
+        getLocation()
+        activity = ac
+        geocoder = Geocoder(activity) // 좌표 주소 변환 객체
+    }
+
+    private val TAG:String = "GPSINFO"
+    private val GPS_ENABLE_REQUEST_CODE = 2001
+
+    private lateinit var activity: AppCompatActivity
+    private lateinit var geocoder: Geocoder // 좌표 - 주소 변환
 
     // 현재 GPS 사용유무
     internal var isGPSEnabled = false
@@ -53,10 +65,6 @@ class GPSInfo(private val activity: Activity) : Service(), LocationListener {
             }
             return lon
         }
-
-    init {
-        getLocation()
-    }
 
     fun getLocation(): Location? {
         try {
@@ -183,5 +191,57 @@ class GPSInfo(private val activity: Activity) : Service(), LocationListener {
 
         // GPS 정보 업데이트 시간 1/1000
         private val MIN_TIME_UPDATES = (1000 * 60 * 1).toLong()
+    }
+
+    /*
+     * 좌표 주소 변환
+     */
+    private fun getFromLocationToName(latLng: LatLng): Address? {
+
+        var list: List<Address>? = null
+        var address: Address? = null
+        try {
+            list = geocoder.getFromLocation(
+                    latLng.latitude, // 위도
+                    latLng.longitude, // 경도
+                    1) // 얻어올 값의 개수
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Log.e(TAG, "입출력 오류 - 서버에서 주소변환시 에러발생")
+        }
+
+        if (list != null) {
+            if (list.isEmpty())
+                Log.d(TAG, "해당되는 주소 정보는 없습니다")
+            else {
+                address = list[0]
+                Log.d("tag", list[0].toString())
+            }
+        }
+        return address
+    }
+
+    // TODO 인자변경
+    private fun getGPSLocation(textView: TextView) {
+        if (isGetLocation) {
+            var latitude = latitude
+            var longitude = longitude
+
+            var latLng = LatLng(latitude, longitude)
+            var address = getFromLocationToName(latLng)
+
+            while (address == null) {
+                latitude += 0.00000001
+                latLng = LatLng(latitude, longitude)
+                address = getFromLocationToName(latLng)
+            }
+
+            // textView.text = "${address.getAddressLine(0).substring(4)}" // (대한민국) 서울시~~
+            // TODO
+            latLng = LatLng(latitude, longitude)
+        } else {
+            textView.text = "잠시뒤 다시 시도해주세요"
+            Log.d(TAG, "cannot find")
+        }
     }
 }

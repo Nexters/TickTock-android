@@ -3,8 +3,6 @@ package com.nexters.ticktock
 import android.app.Activity
 import android.content.Intent
 import android.databinding.DataBindingUtil
-import android.location.Address
-import android.location.Geocoder
 import android.location.Location
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -13,11 +11,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.TextView
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.PendingResult
-import com.google.android.gms.common.api.ResultCallback
 import com.google.android.gms.location.places.AutocompleteFilter
 import com.google.android.gms.location.places.PlaceBuffer
 import com.google.android.gms.location.places.Places
@@ -30,7 +26,6 @@ import com.odsay.odsayandroidsdk.OnResultCallbackListener
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import java.io.IOException
 import java.lang.Exception
 import kotlin.collections.ArrayList
 
@@ -48,7 +43,6 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
     private var fromLatLng:LatLng? = null
     private var toLatLng:LatLng? = null
 
-    private lateinit var geocoder: Geocoder // 좌표 - 주소 변환
     private lateinit var gps: GPSInfo // gps
 
     private lateinit var googleApiClient: GoogleApiClient // 구글 검색 api 사용을 위함
@@ -63,7 +57,6 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
 
         gps = GPSInfo(this) // GPS
         gps.isGPSConnected()
-        geocoder = Geocoder(this) // 좌표 주소 변환 객체
 
         // 싱글톤 생성, Key 값을 활용하여 객체 생성
         odsayService = ODsayService.init(this, getResources().getString(R.string.odsay_key));
@@ -94,56 +87,6 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
         when (requestCode) {
             // gps 설정 변경 후 재연결
             GPS_ENABLE_REQUEST_CODE -> gps = GPSInfo(this)
-        }
-    }
-
-    // 좌표 주소 변환
-    private fun getFromLocationToName(latLng: LatLng): Address? {
-
-        var list: List<Address>? = null
-        var address: Address? = null
-        try {
-            list = geocoder.getFromLocation(
-                    latLng.latitude, // 위도
-                    latLng.longitude, // 경도
-                    1) // 얻어올 값의 개수
-        } catch (e: IOException) {
-            e.printStackTrace()
-            Log.e(TAG, "입출력 오류 - 서버에서 주소변환시 에러발생")
-        }
-
-        if (list != null) {
-            if (list.isEmpty())
-                Log.d(TAG, "해당되는 주소 정보는 없습니다")
-            else {
-                address = list[0]
-                Log.d("tag", list[0].toString())
-            }
-        }
-        return address
-    }
-
-    // TODO 인자변경
-    private fun getGPSLocation(textView: TextView) {
-        if (gps.isGetLocation) {
-            var latitude = gps.latitude
-            var longitude = gps.longitude
-
-            var latLng = LatLng(latitude, longitude)
-            var address = getFromLocationToName(latLng)
-
-            while (address == null) {
-                latitude += 0.00000001
-                latLng = LatLng(latitude, longitude)
-                address = getFromLocationToName(latLng)
-            }
-
-            // textView.text = "${address.getAddressLine(0).substring(4)}" // (대한민국) 서울시~~
-            // TODO
-            latLng = LatLng(latitude, longitude)
-        } else {
-            textView.text = "잠시뒤 다시 시도해주세요"
-            Log.d(TAG, "cannot find")
         }
     }
 
