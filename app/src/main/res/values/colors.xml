@@ -6,4 +6,5 @@
 
     <color name="appMainColor">#BDBDBD</color>
     <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#000000</color>
 </resources>
