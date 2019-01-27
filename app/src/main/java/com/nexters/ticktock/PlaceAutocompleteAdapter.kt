@@ -1,18 +1,14 @@
 package com.nexters.ticktock
 
 import android.content.Context
-import android.graphics.Typeface
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
-import android.text.style.CharacterStyle
-import android.text.style.StyleSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.RelativeLayout
 import android.widget.TextView
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.PendingResult
@@ -21,6 +17,7 @@ import com.google.android.gms.location.places.AutocompleteFilter
 import com.google.android.gms.location.places.AutocompletePrediction
 import com.google.android.gms.location.places.AutocompletePredictionBuffer
 import com.google.android.gms.location.places.Places
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import java.util.concurrent.TimeUnit
 
@@ -40,6 +37,7 @@ class PlaceAutocompleteAdapter(
     private var listener:PlaceAutoCompleteInterface
     private val TAG = "PLACE_AUTOCOMPLETE_ADAPTER"
     private var resultList:ArrayList<PlaceAutocomplete> = ArrayList()
+    public var placeList:ArrayList<PlaceAutocomplete> = ArrayList()
 
     init {
         listener = context as PlaceAutoCompleteInterface
@@ -112,8 +110,13 @@ class PlaceAutocompleteAdapter(
             // AutocompletePrediction 객체는 API 응답 (장소 ID 및 설명)을 캡슐화합니다.
             val iterator:Iterator<AutocompletePrediction> = autocompletePredictions.iterator()
 
-            val resultList:ArrayList<PlaceAutocomplete> = ArrayList(autocompletePredictions.count+1)
-            resultList.add(PlaceAutocomplete("-1", "현위치", "현재주소"))
+            val resultList:ArrayList<PlaceAutocomplete> = ArrayList(autocompletePredictions.count + placeList.size)
+
+            // 현위치 최근검색 리스트 추가
+            for (place in placeList) {
+                resultList.add(place)
+            }
+            placeList.clear()
             while (iterator.hasNext()) {
                 val prediction = iterator.next()
                 // 세부 정보를 가져 와서 새로운 PlaceAutocomplete 객체로 복사합니다.
@@ -160,6 +163,7 @@ class PlaceAutocompleteAdapter(
     // 지역정보 소유자 데이터 자동완성 API 결과
     class PlaceAutocomplete(var placeId: CharSequence, var title:CharSequence, var description: CharSequence) {
 
+        var latLng:LatLng? = null
         override fun toString(): String {
             return description.toString()
         }

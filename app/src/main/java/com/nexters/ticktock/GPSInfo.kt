@@ -10,24 +10,21 @@ import android.provider.Settings
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.widget.TextView
 import com.google.android.gms.maps.model.LatLng
 import java.io.IOException
 
 
-class GPSInfo() : Service(), LocationListener {
+class GPSInfo(private var activity: AppCompatActivity) : Service(), LocationListener {
 
-    constructor (ac: AppCompatActivity):this() {
+    init {
         getLocation()
-        activity = ac
-        geocoder = Geocoder(activity) // 좌표 주소 변환 객체
     }
 
     private val TAG:String = "GPSINFO"
     private val GPS_ENABLE_REQUEST_CODE = 2001
+    private val GPS_PLACE_ID: String = "-1"
 
-    private lateinit var activity: AppCompatActivity
-    private lateinit var geocoder: Geocoder // 좌표 - 주소 변환
+    private var geocoder: Geocoder = Geocoder(activity)// 좌표 - 주소 변환
 
     // 현재 GPS 사용유무
     internal var isGPSEnabled = false
@@ -221,8 +218,8 @@ class GPSInfo() : Service(), LocationListener {
         return address
     }
 
-    // TODO 인자변경
-    private fun getGPSLocation(textView: TextView) {
+    fun getGPSLocation():PlaceAutocompleteAdapter.PlaceAutocomplete {
+        lateinit var result:PlaceAutocompleteAdapter.PlaceAutocomplete
         if (isGetLocation) {
             var latitude = latitude
             var longitude = longitude
@@ -235,13 +232,24 @@ class GPSInfo() : Service(), LocationListener {
                 latLng = LatLng(latitude, longitude)
                 address = getFromLocationToName(latLng)
             }
+            lateinit var description:CharSequence
+            if(address.getAddressLine(0).substring(0,4).equals("대한민국"))
+                description = address.getAddressLine(0).substring(5)
+            else
+                description = address.getAddressLine(0)
 
-            // textView.text = "${address.getAddressLine(0).substring(4)}" // (대한민국) 서울시~~
-            // TODO
-            latLng = LatLng(latitude, longitude)
+            /*
+             *  현위치 정보 set
+             */
+            result = PlaceAutocompleteAdapter.PlaceAutocomplete(GPS_PLACE_ID, "현위치", description)
+            result.latLng = LatLng(latitude, longitude)
+            /*
+             *  완료
+             */
         } else {
-            textView.text = "잠시뒤 다시 시도해주세요"
+            result = PlaceAutocompleteAdapter.PlaceAutocomplete(GPS_PLACE_ID, "현위치 탐색중", "잠시만 기다려주세요")
             Log.d(TAG, "cannot find")
         }
+        return result
     }
 }

@@ -31,14 +31,15 @@ import kotlin.collections.ArrayList
 
 
 class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResultCallbackListener, PlaceAutocompleteAdapter.PlaceAutoCompleteInterface, GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks, TextWatcher {
+        GoogleApiClient.ConnectionCallbacks, TextWatcher, View.OnFocusChangeListener {
 
     private lateinit var binding: ActivityAutoCompleteBinding // 데이터 바인딩
     private val TAG:String = "AutoCompleteActivity"
 
     private val GPS_ENABLE_REQUEST_CODE = 2001
+    private val GPS_PLACE_ID: String = "-1"
 
-    private var latLng:LatLng? = null
+    private var isFrom:Boolean = true
 
     private var fromLatLng:LatLng? = null
     private var toLatLng:LatLng? = null
@@ -86,7 +87,7 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             // gps 설정 변경 후 재연결
-            GPS_ENABLE_REQUEST_CODE -> gps = GPSInfo(this)
+            GPS_ENABLE_REQUEST_CODE -> gps.getLocation()
         }
     }
 
@@ -112,21 +113,32 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
 
         binding.edSearchFrom.addTextChangedListener(this)
         binding.edSearchTo.addTextChangedListener(this)
+
+        binding.edSearchFrom.setOnFocusChangeListener(this)
+        binding.edSearchTo.setOnFocusChangeListener(this)
     }
 
     override fun onPlaceClick(resultList: ArrayList<PlaceAutocompleteAdapter.PlaceAutocomplete>, position: Int) {
         if(resultList.size > 0) {
             try {
                 val placeId: String = resultList.get(position).placeId.toString()
-                val placeResult: PendingResult<PlaceBuffer> = Places.GeoDataApi.getPlaceById(googleApiClient, placeId)
-                placeResult.setResultCallback {
-                    if(it.count == 1) {
-                        // 이곳에서 키워드를 선택한 데이터를 처리한다.
-                        val location = Location(it.get(0).name.toString())
-                        location.latitude = it.get(0).latLng.latitude
-                        location.longitude = it.get(0).latLng.longitude
-                    } else {
-                        // error
+                val placeTitle: String = resultList.get(position).title.toString()
+                val placeLatLng: LatLng? = resultList.get(position).latLng
+
+                if (placeId == GPS_PLACE_ID) { // 현위치
+                    setEditTextLatLng(placeTitle, placeLatLng)
+                }
+                else { // placeId에 해당하는 좌표 찾아서 반환
+                    val placeResult: PendingResult<PlaceBuffer> = Places.GeoDataApi.getPlaceById(googleApiClient, placeId)
+                    placeResult.setResultCallback {
+                        if(it.count == 1) { // 선택한 위치 좌표 set
+                            val latLng = LatLng(it.get(0).latLng.latitude, it.get(0).latLng.longitude)
+                            setEditTextLatLng(placeTitle, latLng)
+                            placeAutocompleteAdapter.clearList() // finally 부분 ui스레드 종료시에도 해당 콜백메소드가 실행되어
+                            binding.listSearch.setVisibility(View.GONE) // 정상적으로 리사이클뷰가 닫히지 않아 이중으로 작성 **
+                        } else {
+                            // error
+                        }
                     }
                 }
             } catch (e: Exception) {
@@ -137,6 +149,16 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
                     binding.listSearch.setVisibility(View.GONE)
                 } }
             }
+        }
+    }
+
+    private fun setEditTextLatLng(placeTitle:String, latLng: LatLng?) {
+        if (isFrom) {
+            fromLatLng = latLng
+            binding.edSearchFrom.setText(placeTitle)
+        } else {
+            toLatLng = latLng
+            binding.edSearchTo.setText(placeTitle)
         }
     }
 
@@ -156,6 +178,7 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
     }
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        placeAutocompleteAdapter.placeList.add(gps.getGPSLocation()) // gps 현위치 추가
         if (count > 0) {
             binding.listSearch.setVisibility(View.VISIBLE)
         } else {
@@ -166,6 +189,19 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
             placeAutocompleteAdapter.filter.filter(s.toString())
         } else if (!googleApiClient.isConnected) {
             Log.e("", "NOT CONNECTED")
+        }
+    }
+
+    override fun onFocusChange(v: View?, hasFocus: Boolean) {
+        when (v?.id) {
+            binding.edSearchFrom.id -> {
+                isFrom = true
+                binding.listSearch.setVisibility(View.GONE)
+            }
+            binding.edSearchTo.id -> {
+                isFrom = false
+                binding.listSearch.setVisibility(View.GONE)
+            }
         }
     }
     /*
