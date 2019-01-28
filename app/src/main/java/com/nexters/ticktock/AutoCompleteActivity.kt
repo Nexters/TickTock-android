@@ -178,7 +178,7 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
     }
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        placeAutocompleteAdapter.placeList.add(gps.getGPSLocation()) // gps 현위치 추가
+        placeAutocompleteAdapter.placeGPS = gps.getGPSLocation() // gps 현위치 추가
         if (count > 0) {
             binding.listSearch.setVisibility(View.VISIBLE)
         } else {
