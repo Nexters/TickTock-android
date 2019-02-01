@@ -6,11 +6,15 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <!-- No Title Bar-->
+        <!-- No Title Bar -->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-
+        <!-- Status Bar -->
         <item name="android:statusBarColor">@color/appMainColor</item>
+
+        <!-- EditText Color -->
+        <item name="colorControlActivated">@color/colorBlack</item>
+
         <item name="circularProgressBarStyle">@style/CircularProgressBar</item>
 
     </style>
@@ -37,6 +41,7 @@
         <item name="progress_background_color">#aaa</item>
         <item name="marker_visible">true</item>
         <item name="thumb_visible">true</item>
+>>>>>>> a6165f71ab1cf79f4c2dc3488bdc2c92f688b732
     </style>
 
 </resources>
