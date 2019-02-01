@@ -13,8 +13,6 @@ class DirectionActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_direction)
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_direction)
 
         val directionPagerAdapter = DirectionPagerAdapter(supportFragmentManager)

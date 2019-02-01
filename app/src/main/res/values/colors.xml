@@ -7,4 +7,7 @@
     <color name="appMainColor">#BDBDBD</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlack">#000000</color>
+
+    <color name="colorBus">#FF0000</color>
+    <color name="colorSubway">#00FF00</color>
 </resources>

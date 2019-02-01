@@ -6,8 +6,8 @@ import android.support.v4.app.FragmentPagerAdapter
 
 class DirectionPagerAdapter: FragmentPagerAdapter {
 
-    var data1: Fragment = Fragment()
-    var data2: Fragment = Fragment()
+    var data1: Fragment = DirectionFragment()
+    var data2: Fragment = DirectionFragment()
 
     var mData: ArrayList<Fragment> = arrayListOf(data1, data2)
 
