@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import android.databinding.DataBindingUtil
+import com.nexters.ticktock.autocomplete.AutoCompleteActivity
 import com.nexters.ticktock.databinding.ActivityMainBinding
 import com.nexters.ticktock.dto.DayGroup
 import com.nexters.ticktock.dto.entity.Article
