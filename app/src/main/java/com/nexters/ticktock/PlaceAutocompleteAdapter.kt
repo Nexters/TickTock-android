@@ -40,7 +40,6 @@ class PlaceAutocompleteAdapter(
 
     private var resultList:ArrayList<PlaceAutocomplete> = ArrayList()
     public var placeGPS:PlaceAutocomplete = PlaceAutocomplete(GPS_PLACE_ID, "현위치 탐색중", "잠시만 기다려주세요") // 현위치
-    public var placeList:ArrayList<PlaceAutocomplete> = ArrayList() // 최근검색위치
 
     init {
         listener = context as PlaceAutoCompleteInterface
