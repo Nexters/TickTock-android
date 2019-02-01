@@ -1,4 +1,4 @@
-package com.nexters.ticktock
+package com.nexters.ticktock.autocomplete
 
 import android.content.Context
 import android.support.constraint.ConstraintLayout
@@ -19,6 +19,7 @@ import com.google.android.gms.location.places.AutocompletePredictionBuffer
 import com.google.android.gms.location.places.Places
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
+import com.nexters.ticktock.R
 import java.util.concurrent.TimeUnit
 
 
@@ -31,15 +32,15 @@ class PlaceAutocompleteAdapter(
 ): RecyclerView.Adapter<PlaceAutocompleteAdapter.PlaceViewHolder>(), Filterable{
 
     interface PlaceAutoCompleteInterface {
-        fun onPlaceClick(resultList:ArrayList<PlaceAutocomplete> , position:Int)
+        fun onPlaceClick(resultList:ArrayList<PlaceAutocomplete>, position:Int)
     }
 
-    private var listener:PlaceAutoCompleteInterface
+    private var listener: PlaceAutoCompleteInterface
     private val TAG = "PLACE_AUTOCOMPLETE_ADAPTER"
     private val GPS_PLACE_ID: String = "-1"
 
     private var resultList:ArrayList<PlaceAutocomplete> = ArrayList()
-    public var placeGPS:PlaceAutocomplete = PlaceAutocomplete(GPS_PLACE_ID, "현위치 탐색중", "잠시만 기다려주세요") // 현위치
+    public var placeGPS: PlaceAutocomplete = PlaceAutocomplete(GPS_PLACE_ID, "현위치 탐색중", "잠시만 기다려주세요") // 현위치
 
     init {
         listener = context as PlaceAutoCompleteInterface

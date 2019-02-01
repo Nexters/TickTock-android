@@ -1,9 +1,8 @@
-package com.nexters.ticktock
+package com.nexters.ticktock.autocomplete
 
 import android.app.Activity
 import android.content.Intent
 import android.databinding.DataBindingUtil
-import android.location.Location
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -18,6 +17,7 @@ import com.google.android.gms.location.places.AutocompleteFilter
 import com.google.android.gms.location.places.PlaceBuffer
 import com.google.android.gms.location.places.Places
 import com.google.android.gms.maps.model.LatLng
+import com.nexters.ticktock.R
 import com.nexters.ticktock.databinding.ActivityAutoCompleteBinding
 import com.odsay.odsayandroidsdk.API
 import com.odsay.odsayandroidsdk.ODsayData

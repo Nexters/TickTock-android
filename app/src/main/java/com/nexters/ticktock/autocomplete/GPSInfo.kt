@@ -1,4 +1,4 @@
-package com.nexters.ticktock
+package com.nexters.ticktock.autocomplete
 
 import android.os.Bundle
 import android.content.Intent
@@ -218,8 +218,8 @@ class GPSInfo(private var activity: AppCompatActivity) : Service(), LocationList
         return address
     }
 
-    fun getGPSLocation():PlaceAutocompleteAdapter.PlaceAutocomplete {
-        lateinit var result:PlaceAutocompleteAdapter.PlaceAutocomplete
+    fun getGPSLocation(): PlaceAutocompleteAdapter.PlaceAutocomplete {
+        lateinit var result: PlaceAutocompleteAdapter.PlaceAutocomplete
         if (isGetLocation) {
             var latitude = latitude
             var longitude = longitude
