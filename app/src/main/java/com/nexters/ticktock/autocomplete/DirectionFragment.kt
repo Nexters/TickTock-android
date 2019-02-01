@@ -17,15 +17,14 @@ class DirectionFragment : Fragment() {
     private lateinit var binding: FragmentDirectionBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              bundle: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_direction, container, false)
 
-        init()
-        return binding.root
-    }
+        val transPath: ArrayList<SearchPubTransPath> = getArguments()!!.getParcelableArrayList("transPath")
 
-    fun init() {
         binding.recyclerviewDirection.layoutManager = LinearLayoutManager(activity)
-        binding.recyclerviewDirection.adapter = DirectionRecyclerAdapter(activity, activity!!.windowManager.defaultDisplay)
+        binding.recyclerviewDirection.adapter = DirectionRecyclerAdapter(activity, activity!!.windowManager.defaultDisplay, transPath)
+
+        return binding.root
     }
 }

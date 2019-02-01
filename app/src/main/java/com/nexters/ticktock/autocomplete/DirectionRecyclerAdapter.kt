@@ -12,7 +12,7 @@ import com.nexters.ticktock.R
 import com.nexters.ticktock.databinding.ItemDirectionBinding
 import java.text.DecimalFormat
 
-class DirectionRecyclerAdapter(val context: Context?, val display: Display): RecyclerView.Adapter<DirectionRecyclerAdapter.DirectionViewHolder>() {
+class DirectionRecyclerAdapter(val context: Context?, val display: Display, val transPath: ArrayList<SearchPubTransPath>): RecyclerView.Adapter<DirectionRecyclerAdapter.DirectionViewHolder>() {
 
     private lateinit var binding: ItemDirectionBinding
 
@@ -25,8 +25,7 @@ class DirectionRecyclerAdapter(val context: Context?, val display: Display): Rec
     }
 
     override fun getItemCount(): Int {
-        // TODO SearchPubTransPath 리스트 사이즈
-        return 5
+        return transPath.size
     }
 
     fun getWidth(): Int {
@@ -35,25 +34,18 @@ class DirectionRecyclerAdapter(val context: Context?, val display: Display): Rec
         return point.x
     }
 
-    override fun onBindViewHolder(holder: DirectionViewHolder, position: Int) {
-        // TODO 데이터 삽입 SearchPubTransPath 리스트
-        val subPathList = ArrayList<SearchPubTransPath.SubPath>()
-        subPathList.add(SearchPubTransPath.SubPath(3, 5, SearchPubTransPath.Lane(null, null), "", ""))
-        subPathList.add(SearchPubTransPath.SubPath(2, 15, SearchPubTransPath.Lane(null, "7"), "고읍주공4단지", "도봉면허시험장"))
-        subPathList.add(SearchPubTransPath.SubPath(1, 60, SearchPubTransPath.Lane("2호선", null), "도봉면허시험장", "신분당선강남역"))
-        subPathList.add(SearchPubTransPath.SubPath(3, 5, SearchPubTransPath.Lane(null, null), "", ""))
+    override fun onBindViewHolder(holder: DirectionViewHolder, i: Int) {
 
-        val transPath = SearchPubTransPath(3, SearchPubTransPath.Path(10, 85, 1250, 2), subPathList)
-        val totalLength = getWidth() - (100 * transPath.path.walkCount)
-        val partOfLength = totalLength / (transPath.path.totalTime - transPath.path.totalWalk)
+        val totalLength = getWidth() - (100 * transPath[i].path.walkCount)
+        val partOfLength = totalLength / (transPath[i].path.totalTime - transPath[i].path.totalWalk)
 
         /*
          * 길찾기 간략 정보 시작
          */
-        binding.tvDirectionTotalTime.text = "${transPath.path.totalTime}분"
-        binding.tvDirectionWalkTime.text = "도보 ${transPath.path.totalWalk}분"
+        binding.tvDirectionTotalTime.text = "${transPath[i].path.totalTime}분"
+        binding.tvDirectionWalkTime.text = "도보 ${transPath[i].path.totalWalk}분"
         val decimal = DecimalFormat("###,###")
-        val payment = decimal.format(transPath.path.payment)
+        val payment = decimal.format(transPath[i].path.payment)
         binding.tvDirectionCost.text = "${payment}원"
         /*
          * 종료
@@ -62,7 +54,7 @@ class DirectionRecyclerAdapter(val context: Context?, val display: Display): Rec
         /*
          * 길찾기 바 시작
          */
-        for (subpath in transPath.subPathList) {
+        for (subpath in transPath[i].subPathList) {
             val sectionTime = TextView(context)
             val width = partOfLength * subpath.sectionTime
 
@@ -86,9 +78,8 @@ class DirectionRecyclerAdapter(val context: Context?, val display: Display): Rec
         /*
          * 길찾기 환승 정보 시작
          */
-        // TODO subpath 중 traffictype == 3인 도보를 제거 해야함
         val subPathListExceptWalk = ArrayList<SearchPubTransPath.SubPath>()
-        for (subpath in subPathList) {
+        for (subpath in transPath[i].subPathList) {
             if (subpath.trafficType != 3)
                 subPathListExceptWalk.add(subpath)
         }
