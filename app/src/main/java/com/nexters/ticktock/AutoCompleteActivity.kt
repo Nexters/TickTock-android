@@ -5,9 +5,9 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.TextView

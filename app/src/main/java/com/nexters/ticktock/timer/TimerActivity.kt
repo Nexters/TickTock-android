@@ -1,16 +1,19 @@
 package com.nexters.ticktock.timer
 
+import android.animation.Animator
+import android.animation.Animator.AnimatorListener
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_CANCEL_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.view.View
+import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.Toast
 import com.nexters.ticktock.R
 import com.nexters.ticktock.databinding.ActivityTimerBinding
@@ -25,6 +28,8 @@ class TimerActivity : AppCompatActivity() {
 
     private var mCountDownTimer: CountDownTimer? = null // same
 
+    private var mProgressBarAnimator: ObjectAnimator? = null
+
     private var mTimerRunning: Boolean = false
     private enum class TimerState {
         RUNNING, STOPPED
@@ -33,12 +38,17 @@ class TimerActivity : AppCompatActivity() {
 
     private var mTimeLeftInMillis = START_TIME_IN_MILLIS
     private var mTimeToGo : Long? = null
+    private var mProgressTime : Float? = null
 
     private lateinit var mPreferences : PrefUtils
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_timer)
+
+        mProgressBarAnimator?.cancel()
+        //animate(binding.CircularProgressBar, null, 0f, 1000)
+
 
         mPreferences = PrefUtils(this)
         binding.buttonReset.isEnabled = false
@@ -55,11 +65,46 @@ class TimerActivity : AppCompatActivity() {
             if(mState == TimerState.RUNNING) {
                 mCountDownTimer!!.cancel()
                 mState = TimerState.STOPPED
+                animate(binding.CircularProgressBar, null, 0.0f, 500)
                 onTimerReset()
             }
+            else
+                animate(binding.CircularProgressBar, null, 0.0f, 500)
         }
 
         updateCountDownText()
+    }
+
+    private fun animate(progressBar: CircularProgressbar,
+                        listener: AnimatorListener) {
+        val progress = (Math.random() * 2).toFloat()
+        val duration = 3000
+        animate(progressBar, listener, progress, duration)
+    }
+
+    private fun animate(progressBar: CircularProgressbar, listener: AnimatorListener?, progress: Float, duration: Int) {
+
+        mProgressBarAnimator = ObjectAnimator.ofFloat(progressBar, "progress", progress)
+        mProgressBarAnimator!!.duration = duration.toLong()
+
+        mProgressBarAnimator!!.addListener(object : AnimatorListener {
+
+            override fun onAnimationCancel(animation: Animator) {}
+
+            override fun onAnimationEnd(animation: Animator) {
+            }
+
+            override fun onAnimationRepeat(animation: Animator) {}
+
+            override fun onAnimationStart(animation: Animator) {}
+        })
+        if (listener != null) {
+            mProgressBarAnimator!!.addListener(listener)
+        }
+        mProgressBarAnimator!!.reverse()
+        mProgressBarAnimator!!.addUpdateListener(AnimatorUpdateListener { animation -> progressBar.progress = animation.animatedValue as Float })
+        progressBar.markerProgress = progress
+        mProgressBarAnimator!!.start()
     }
 
     override fun onResume() {
@@ -85,6 +130,8 @@ class TimerActivity : AppCompatActivity() {
         val startTime : Long = mPreferences.getStartedTime()
         if(startTime > 0) {
             mTimeToGo = (TIMER_LENGTH - (getNow() - startTime))
+
+
             if(mTimeToGo!! <= 0) { // Timer expired
                 mTimeToGo = TIMER_LENGTH
                 mState = TimerState.STOPPED
@@ -120,7 +167,15 @@ class TimerActivity : AppCompatActivity() {
         mCountDownTimer = object : CountDownTimer(mTimeLeftInMillis, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 //mTimeLeftInMillis = millisUntilFinished
-                if(mTimeToGo!! > 0) mTimeToGo = mTimeToGo!! - 1
+                if(mTimeToGo!! > 0) {
+                    mTimeToGo = mTimeToGo!! - 1
+                    val percentage = (100 / TIMER_LENGTH).toFloat()
+                    mProgressBarAnimator?.cancel()
+                    mProgressTime = ((TIMER_LENGTH - mTimeToGo!!) / percentage)
+                    animate(binding.CircularProgressBar, null, mProgressTime!!, 500)
+
+                    Log.d("ProgressTime", mProgressTime.toString())
+                }
                 else {
                     mCountDownTimer!!.cancel()
                     mPreferences.setStartedTime(0)
@@ -144,6 +199,7 @@ class TimerActivity : AppCompatActivity() {
     private fun updateCountDownText() {
         binding.buttonStartPause.isEnabled = mState != TimerState.RUNNING
         val timeLeft = String.format(Locale.getDefault(), "00:%02d", mTimeToGo)
+        //Log.d("ProgressTime", mProgressTime.toString())
         binding.textViewCountdown.text = timeLeft
     }
 
@@ -161,7 +217,7 @@ class TimerActivity : AppCompatActivity() {
     }
 
     private fun removeAlarm() {
-        val intent : Intent = Intent(this, TimerExpiredReceiver::class.java)
+        val intent = Intent(this, TimerExpiredReceiver::class.java)
         val sender : PendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
         val am : AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         am.cancel(sender)
