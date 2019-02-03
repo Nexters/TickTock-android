@@ -5,6 +5,7 @@ import com.j256.ormlite.field.DatabaseField
 import com.j256.ormlite.field.ForeignCollectionField
 import com.j256.ormlite.table.DatabaseTable
 import com.nexters.ticktock.dto.DayGroup
+import com.nexters.ticktock.dto.Vehicle
 import java.util.*
 
 @DatabaseTable(tableName = "articles")
@@ -13,23 +14,44 @@ class Article(
         @DatabaseField(generatedId = true, allowGeneratedIdInsert = true)
         var id: Int = 0,
 
-        @DatabaseField(columnName = "title", canBeNull = false)
-        var title: String,
-
         @DatabaseField(columnName = "end_time", canBeNull = false)
         var endTime: Date,
 
         @DatabaseField(columnName = "extra_time", canBeNull = false)
         var extraTime: Int,
 
+        @DatabaseField(columnName = "color", canBeNull = true)
+        var color: String,
+
+        @DatabaseField(columnName = "isActive", canBeNull = false)
+        var isActive: Boolean,
+
         destination: Destination,
 
         days: DayGroup
-
 ){
 
-    constructor(id: Int = 0, title: String, endTime: Date, extraTime: Int, destinationName: String, travelTime: Int, days: DayGroup)
-            : this(id, title, endTime, extraTime, Destination(destinationName = destinationName, time = travelTime), days)
+    constructor(id: Int = 0,
+                endTime: Date,
+                extraTime: Int,
+                color: String,
+                isActive: Boolean,
+                destinationName: String,
+                travelTime: Int,
+                days: DayGroup,
+                vehicle: Vehicle
+    ) : this(id,
+            endTime,
+            extraTime,
+            color,
+            isActive,
+            Destination(
+                    destinationName = destinationName,
+                    time = travelTime,
+                    vehicle = vehicle
+            ),
+            days
+    )
 
     var days: DayGroup
         get() = DayGroup(this.daysString)
@@ -59,30 +81,6 @@ class Article(
     init {
         this.daysString = days.toString()
         this.destination = destination
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Article
-
-        if (id != other.id) return false
-        if (title != other.title) return false
-        if (endTime != other.endTime) return false
-        if (extraTime != other.extraTime) return false
-        if (daysString != other.daysString) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = id
-        result = 31 * result + title.hashCode()
-        result = 31 * result + endTime.hashCode()
-        result = 31 * result + extraTime
-        result = 31 * result + daysString.hashCode()
-        return result
     }
 
 }
