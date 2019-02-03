@@ -67,8 +67,18 @@
                     <TimePicker
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:timePickerMode="spinner">
+                        android:timePickerMode="spinner"
+                        android:layout_gravity="center">
                     </TimePicker>
+
+                    <!-- TODO: 구분선 수치 값을 상대 값으로 수정하자 -->
+
+                    <View
+                        android:layout_width="250dp"
+                        android:layout_height="1dp"
+                        android:background="#808080"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"/>
                     
                     <TextView
                         android:layout_width="wrap_content"
