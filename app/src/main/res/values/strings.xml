@@ -1,4 +1,21 @@
 <resources>
     <string name="app_name">TickTock</string>
-    <string name = "timer_finished">Timer Finished!</string>
+    <string name="timer_finished">Timer Finished!</string>
+
+    <!-- activity_auto_complete -->
+    <string name="ed_search_from_hint">출발지</string>
+    <string name="tv_from_text">에서</string>
+    <string name="ed_search_to_hint">도착지</string>
+    <string name="tv_to_text">까지</string>
+    <string name="btn_save_data_text">확인</string>
+
+    <!-- item_search -->
+    <string name="tv_address_title_text">이름</string>
+    <string name="tv_address_detail_text">상세주소</string>
+
+    <!-- item direction -->
+    <string name="tv_direction_total_time_text">40분</string>
+    <string name="tv_direction_walk_time_text">도보 10분</string>
+    <string name="tv_direction_divide_text">|</string>
+    <string name="tv_direction_cost_text">1,250원</string>
 </resources>
