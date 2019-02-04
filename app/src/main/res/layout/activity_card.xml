@@ -5,7 +5,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".CardActivity">
+        tools:context=".CardActivity" android:id="@+id/activity_card_layout"
+        android:background="@drawable/card_transition_drawable" android:animateLayoutChanges="true">
 
     <android.support.v7.widget.RecyclerView
             android:layout_width="wrap_content"
@@ -16,11 +17,35 @@
             app:layout_constraintHorizontal_bias="0.0" app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="8dp"/>
-    <Button
-            android:text="Button"
+    <TextView
+            android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button2" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:id="@+id/header" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerView" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp" android:textSize="25sp" app:layout_constraintVertical_bias="0.697"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="104dp" android:textStyle="bold"
+            android:textColor="@android:color/black"/>
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_menu_agenda"
+            android:id="@+id/settingBtn" android:layout_marginTop="32dp"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:background="@android:color/transparent"/>
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_menu_add"
+            android:id="@+id/addBtn" android:layout_marginTop="32dp"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:background="@android:color/transparent"/>
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/deleteCheckMessageText" android:textColor="@android:color/white"
+            android:textSize="30sp" android:layout_marginTop="84dp" app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp" app:layout_constraintTop_toBottomOf="@+id/recyclerView"/>
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintHorizontal_bias="0.502" android:visibility="invisible"/>
 </android.support.constraint.ConstraintLayout>

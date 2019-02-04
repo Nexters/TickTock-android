@@ -1,33 +1,98 @@
 package com.nexters.ticktock.card
 
 import android.content.Context
+import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.Switch
 import android.widget.TextView
+import com.nexters.ticktock.CardActivity
 import com.nexters.ticktock.R
 
 class CardRecyclerViewAdapter(
-        context: Context,
-        val cardList: MutableList<CardItem>
+        val context: Context,
+        val cardList: MutableList<CardItem>,
+        val recyclerView: RecyclerView
 ) : RecyclerView.Adapter<CardRecyclerViewAdapter.ViewHolder>() {
+
+    var isDeletePhase = false
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     private val layoutInflater = LayoutInflater.from(context)
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private var onCardLongClickListener: ((View?) -> Unit)? = null
 
-        private val titleView = view.findViewById<TextView>(R.id.title)
-        private val leadTimeView = view.findViewById<TextView>(R.id.leadTime)
-        private val daysView = view.findViewById<TextView>(R.id.days)
+    inner class ViewHolder(view: View)
+        : RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener {
 
-        fun setData() {
+        private val endTimeTextView = view.findViewById<TextView>(R.id.endTimeText)
+        private val destinationTextView = view.findViewById<TextView>(R.id.destinationText)
+        private val durationTextView = view.findViewById<TextView>(R.id.durationText)
+        private val daysTextView = view.findViewById<TextView>(R.id.daysText)
+        private val deleteBtnView = view.findViewById<ImageView>(R.id.deleteBtn)
+        private val activeSwitchView = view.findViewById<Switch>(R.id.activeSwitch)
+        private val memoLayout = view.findViewById<ConstraintLayout>(R.id.memoLayout)
+        private val memoText = view.findViewById<TextView>(R.id.memoText)
+        private val memoBtn = view.findViewById<ImageButton>(R.id.memoBtn)
+
+        init {
+            memoLayout.visibility = View.INVISIBLE
+            memoLayout.alpha = 0.8f
+            view.setOnClickListener(this)
+            view.setOnLongClickListener(this)
+
+            memoBtn.setOnClickListener {
+                if(memoLayout.visibility == View.VISIBLE) {
+                    val slideUpAnim = AnimationUtils.loadAnimation(context, R.anim.slide_down)
+                    memoLayout.startAnimation(slideUpAnim)
+                    memoLayout.visibility = View.INVISIBLE
+                } else {
+                    val slideDownAnim = AnimationUtils.loadAnimation(context, R.anim.slide_up)
+                    memoLayout.startAnimation(slideDownAnim)
+                    memoLayout.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        fun bind() {
             this@CardRecyclerViewAdapter.cardList[super.getAdapterPosition()]
                     .also {
-                        titleView.text = it.title
-                        leadTimeView.text = it.getTime()
-                        daysView.text = it.days.toString()
+                        endTimeTextView.text = it.endTime
+                        destinationTextView.text = it.destination
+                        durationTextView.text = it.getTime()
+                        daysTextView.text = it.days.toString()
+                        memoText.text = it.memo
                     }
+
+            if (isDeletePhase) {
+                deleteBtnView.visibility = View.VISIBLE
+                activeSwitchView.visibility = View.INVISIBLE
+            } else {
+                deleteBtnView.visibility = View.INVISIBLE
+                activeSwitchView.visibility = View.VISIBLE
+            }
+        }
+
+        override fun onClick(v: View?) {
+            Log.d("SWIPE_TEXT", "onClick")
+            recyclerView.smoothScrollToPosition(super.getAdapterPosition())
+        }
+
+        override fun onLongClick(v: View?): Boolean {
+            if (!isDeletePhase) {
+                this@CardRecyclerViewAdapter.onCardLongClickListener?.invoke(v)
+            }
+
+            return true
         }
     }
 
@@ -38,6 +103,9 @@ class CardRecyclerViewAdapter(
             ViewHolder(layoutInflater.inflate(R.layout.item_card, viewGroup, false))
 
     override fun onBindViewHolder(viewHolder: ViewHolder, index: Int) =
-            viewHolder.setData()
+            viewHolder.bind()
 
+    fun setOnCardLongClickListener(onCardLongClickListener: (View?) -> (Unit)) {
+        this.onCardLongClickListener = onCardLongClickListener
+    }
 }

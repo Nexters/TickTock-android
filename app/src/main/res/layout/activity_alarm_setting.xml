@@ -38,7 +38,7 @@
                     <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="최단시간"/>
+                        android:inputType="" android:text="최단시간"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
                     <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="현위치"/>
+                        android:inputType="" android:text="현위치"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -63,7 +63,7 @@
                     <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="종각 스터디룸인"
+                        android:inputType="" android:text="종각 스터디룸인"
                         android:layout_weight="1"/>
 
                     <TextView
@@ -108,7 +108,7 @@
                     <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2시간 3분"
+                        android:inputType="" android:text="2시간 3분"
                         android:focusableInTouchMode="false"/>
                 </LinearLayout>
 
@@ -129,7 +129,7 @@
                     <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="10분"/>
+                        android:inputType="" android:text="10분"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

@@ -3,4 +3,7 @@
     <string name="timer_finished">Timer Finished!</string>
     <string name="lead_time">소요시간</string>
     <string name="date">날짜</string>
+
+    <string name="header1">인생은 타이밍,\n\'성실갑\'되러 가볼까요?</string>
+    <string name="deleteCheckMessage">%1$s를\n삭제하시는 게 맞나요?</string>
 </resources>
