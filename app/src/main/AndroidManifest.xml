@@ -29,6 +29,7 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".autocomplete.AutoCompleteActivity"/>
+        <activity android:name=".alarmsetting.AlarmSettingFirstActivity" />
         <service android:name=".autocomplete.GPSInfo"/>
     </application>
 
