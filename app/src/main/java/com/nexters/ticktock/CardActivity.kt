@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SnapHelper
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
@@ -30,14 +29,17 @@ class CardActivity : OrmAppCompatActivity() {
         header.text = resources.getString(R.string.header1)
 
         cardList = mutableListOf(
-                CardItem("종각역 마이크임팩트", "15:00", "20", DayGroup(mutableListOf("월", "수", "금")), "어머나 세상에 이런 일이"),
-                CardItem("강남역", "12:00", "60", DayGroup(mutableListOf("월", "금")), "경무와 약속"),
-                CardItem("사당역", "17:00", "30", DayGroup(mutableListOf("수", "금")), "PM 님과 약속")
+                CardItem("종각역 마이크임팩트", "15:00", "20", DayGroup(mutableListOf("월", "수", "금")), "어머나 세상에 이런 일이", "#e1d7c0"),
+                CardItem("강남역", "12:00", "60", DayGroup(mutableListOf("월", "금")), "경무와 약속", "#ff3b3f"),
+                CardItem("사당역", "17:00", "30", DayGroup(mutableListOf("수", "금")), "PM 님과 약속", "#caebf2"),
+                CardItem("용산역", "17:00", "30", DayGroup(mutableListOf("수", "금")), "PM 님과 약속", "#9fad94")
         )
 
         deleteCheckMessageText.text = String.format(resources.getString(R.string.deleteCheckMessage), cardList[0].destination)
 
-        cardRecyclerViewAdapter = CardRecyclerViewAdapter(this, cardList, recyclerView).apply {
+        val snapHelper = ControllableSnapHelper()
+
+        cardRecyclerViewAdapter = CardRecyclerViewAdapter(this, cardList, recyclerView, snapHelper).apply {
             this.setOnCardLongClickListener {
                 (activity_card_layout.background as TransitionDrawable).startTransition(DURATION_OF_BG_TRANSITION)
                 addBtn.visibility = View.INVISIBLE
@@ -47,8 +49,6 @@ class CardActivity : OrmAppCompatActivity() {
                 this.isDeletePhase = true
             }
         }
-
-        val snapHelper = ControllableSnapHelper()
 
         recyclerView.apply {
             layoutManager = SpeedControllableLinearLayoutManager(
@@ -74,8 +74,9 @@ class CardActivity : OrmAppCompatActivity() {
                 }
 
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    val snapPosition = snapHelper.getAdapterSnapPosition(recyclerView)
+                    val snapPosition = snapHelper.getAdapterSnapPosition()
                     val snapPositionChanged = this.snapPosition != snapPosition
+
                     if (snapPositionChanged && cardRecyclerViewAdapter.isDeletePhase) {
 
                         deleteCheckMessageText.startAnimation(anim)
@@ -96,11 +97,5 @@ class CardActivity : OrmAppCompatActivity() {
                 cardRecyclerViewAdapter.isDeletePhase = false
             }
         }
-    }
-
-    fun SnapHelper.getAdapterSnapPosition(recyclerView: RecyclerView): Int {
-        val layoutManager = recyclerView.layoutManager ?: return RecyclerView.NO_POSITION
-        val snapView = findSnapView(layoutManager) ?: return RecyclerView.NO_POSITION
-        return recyclerView.getChildAdapterPosition(snapView)
     }
 }

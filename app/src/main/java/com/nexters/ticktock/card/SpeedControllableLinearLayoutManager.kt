@@ -11,15 +11,20 @@ class SpeedControllableLinearLayoutManager(
         private val millisecondsPerInch: Float
 ) : LinearLayoutManager(context, orientation, reverseLayout) {
 
-    private val linearSmoothScroller = object : LinearSmoothScroller(recyclerView?.context) {
-
-        override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics?): Float {
-            return millisecondsPerInch / displayMetrics!!.densityDpi
-        }
-    }
-
+    // SmoothScroller 는 무조건 새로 만들어서 실행시켜야 함
     override fun smoothScrollToPosition(recyclerView: RecyclerView?, state: RecyclerView.State?, position: Int) {
-        super.smoothScrollToPosition(recyclerView, state, position)
+        val linearSmoothScroller = object : LinearSmoothScroller(recyclerView?.context) {
+
+            // 이동 속도 조정
+            override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics?): Float {
+                return millisecondsPerInch / displayMetrics!!.densityDpi
+            }
+
+            // center fit
+            override fun calculateDtToFit(viewStart: Int, viewEnd: Int, boxStart: Int, boxEnd: Int, snapPreference: Int): Int {
+                return boxStart + (boxEnd - boxStart) / 2 - (viewStart + (viewEnd - viewStart) / 2)
+            }
+        }
 
         linearSmoothScroller.targetPosition = position
         startSmoothScroll(linearSmoothScroller)

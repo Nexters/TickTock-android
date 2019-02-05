@@ -1,9 +1,9 @@
 package com.nexters.ticktock.card
 
 import android.content.Context
+import android.graphics.Color
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +12,13 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
-import com.nexters.ticktock.CardActivity
 import com.nexters.ticktock.R
 
 class CardRecyclerViewAdapter(
         val context: Context,
         val cardList: MutableList<CardItem>,
-        val recyclerView: RecyclerView
+        val recyclerView: RecyclerView,
+        val snapHelper: ControllableSnapHelper
 ) : RecyclerView.Adapter<CardRecyclerViewAdapter.ViewHolder>() {
 
     var isDeletePhase = false
@@ -43,10 +43,11 @@ class CardRecyclerViewAdapter(
         private val memoLayout = view.findViewById<ConstraintLayout>(R.id.memoLayout)
         private val memoText = view.findViewById<TextView>(R.id.memoText)
         private val memoBtn = view.findViewById<ImageButton>(R.id.memoBtn)
+        private val cardLayout = view.findViewById<ConstraintLayout>(R.id.cardLayout)
 
         init {
             memoLayout.visibility = View.INVISIBLE
-            memoLayout.alpha = 0.8f
+            memoLayout.alpha = 0.6f
             view.setOnClickListener(this)
             view.setOnLongClickListener(this)
 
@@ -71,6 +72,7 @@ class CardRecyclerViewAdapter(
                         durationTextView.text = it.getTime()
                         daysTextView.text = it.days.toString()
                         memoText.text = it.memo
+                        cardLayout.setBackgroundColor(Color.parseColor(it.color))
                     }
 
             if (isDeletePhase) {
@@ -83,8 +85,9 @@ class CardRecyclerViewAdapter(
         }
 
         override fun onClick(v: View?) {
-            Log.d("SWIPE_TEXT", "onClick")
-            recyclerView.smoothScrollToPosition(super.getAdapterPosition())
+            if (snapHelper.getAdapterSnapPosition() != super.getAdapterPosition()) {
+                recyclerView.smoothScrollToPosition(super.getAdapterPosition())
+            }
         }
 
         override fun onLongClick(v: View?): Boolean {
