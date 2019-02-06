@@ -8,7 +8,7 @@
         <LinearLayout
             android:id="@+id/second_setting_head"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:orientation="vertical">
 
             <Button
@@ -25,16 +25,18 @@
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/second_setting_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/second_setting_head">
+            android:layout_below="@+id/second_setting_head"
+            android:layout_above="@+id/second_setting_next_button">
 
         </android.support.v7.widget.RecyclerView>
 
         <Button
             android:id="@+id/second_setting_next_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_alignParentBottom="true"
             android:text="다음"/>
 
