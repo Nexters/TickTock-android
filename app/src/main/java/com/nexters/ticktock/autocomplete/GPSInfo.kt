@@ -248,6 +248,7 @@ class GPSInfo(private var activity: AppCompatActivity) : Service(), LocationList
              */
         } else {
             result = PlaceAutocompleteAdapter.PlaceAutocomplete(GPS_PLACE_ID, "현위치 탐색중", "잠시만 기다려주세요")
+            result.latLng = null
             Log.d(TAG, "cannot find")
         }
         return result

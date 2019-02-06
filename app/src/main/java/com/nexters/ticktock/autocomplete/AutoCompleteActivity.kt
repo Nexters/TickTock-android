@@ -30,7 +30,7 @@ import java.lang.Exception
 import kotlin.collections.ArrayList
 
 
-class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResultCallbackListener, PlaceAutocompleteAdapter.PlaceAutoCompleteInterface, GoogleApiClient.OnConnectionFailedListener,
+class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, PlaceAutocompleteAdapter.PlaceAutoCompleteInterface, GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks, TextWatcher, View.OnFocusChangeListener {
 
     private lateinit var binding: ActivityAutoCompleteBinding // 데이터 바인딩
@@ -65,8 +65,6 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
         odsayService.setReadTimeout(5000);
         // 데이터 획득 제한 시간(단위(초), default : 5초)
         odsayService.setConnectionTimeout(5000);
-
-        binding.btnSaveData.setOnClickListener(this)
 
         initPlace()
     }
@@ -160,6 +158,7 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
             toLatLng = latLng
             binding.edSearchTo.setText(placeTitle)
         }
+        getDirection() // 장소 선택될 경우 텍스트 채워지면서 길찾기 수행
     }
 
     override fun onConnectionFailed(p0: ConnectionResult) {
@@ -178,7 +177,6 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
     }
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        placeAutocompleteAdapter.placeGPS = gps.getGPSLocation() // gps 현위치 추가
         if (count > 0) {
             binding.listSearch.setVisibility(View.VISIBLE)
         } else {
@@ -186,6 +184,8 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
             binding.listSearch.setVisibility(View.GONE)
         }
         if (!s.toString().equals("") && googleApiClient.isConnected) {
+            binding.viewpagerDirection.visibility = View.GONE // 텍스트가 변경될때 길찾기 정보는 보여지지 않음
+            placeAutocompleteAdapter.placeGPS = gps.getGPSLocation() // gps 현위치 추가
             placeAutocompleteAdapter.filter.filter(s.toString())
         } else if (!googleApiClient.isConnected) {
             Log.e("", "NOT CONNECTED")
@@ -208,37 +208,58 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
     * 종료
     */
 
-    override fun onClick(v: View?) {
-        when (v?.id) {
-            binding.btnSaveData.id -> {
-                odsayService.requestSearchPubTransPath(
-                        fromLatLng!!.longitude.toString(),
-                        fromLatLng!!.latitude.toString(),
-                        toLatLng!!.longitude.toString(),
-                        toLatLng!!.latitude.toString(),
-                        "0",
-                        "0",
-                        "0",
-                        this)
-            }
-        }
-    }
-
     /*
      * 오디세이 api 사용을 위한 메소드 시작
      */
+    fun getDirection() {
+        if(fromLatLng != null && toLatLng != null) {
+            odsayService.requestSearchPubTransPath(
+                    fromLatLng!!.longitude.toString(),
+                    fromLatLng!!.latitude.toString(),
+                    toLatLng!!.longitude.toString(),
+                    toLatLng!!.latitude.toString(),
+                    "0",
+                    "0",
+                    "0",
+                    this)
+            binding.listSearch.visibility = View.GONE
+            binding.viewpagerDirection.visibility = View.VISIBLE
+        }
+    }
+
     override fun onSuccess(odsayData: ODsayData, api: API?) {
         try {
             // API Value 는 API 호출 메소드 명을 따라갑니다.
             if (api == API.SEARCH_PUB_TRANS_PATH) {
                 val jArray: JSONArray = odsayData.getJson().getJSONObject("result").getJSONArray("path")
-                val jObject: JSONObject = jArray.getJSONObject(0).getJSONObject("info") // 최단시간
-                val totalTime = jObject.getInt("totalTime")
+                val transPathList = ArrayList<SearchPubTransPath>()
 
-                val intent = Intent()
-                intent.putExtra("totalTime", totalTime)
-                setResult(Activity.RESULT_OK, intent)
-                finish()
+                for (i in 0..jArray.length()-1) { // 출력결과 만큼 출력 jArray.length()
+                    val jObject = jArray.getJSONObject(i)
+                    val jInfo = jObject.getJSONObject("info")
+                    val jSubPath = jObject.getJSONArray("subPath")
+                    val subPathList = ArrayList<SearchPubTransPath.SubPath>()
+                    var totalWalk = 0
+                    var walkCount = 0
+                    for (j in 0..jSubPath.length()-1) {
+                        val subPath = jSubPath.getJSONObject(j)
+                        if (subPath.getInt("trafficType") == 3) { // 도보
+                            if(subPath.getInt("sectionTime") > 0) {
+                                subPathList.add(SearchPubTransPath.SubPath(subPath.getInt("trafficType"), subPath.getInt("sectionTime"), SearchPubTransPath.Lane(null, null), "", ""))
+                                totalWalk += subPath.getInt("sectionTime")
+                                walkCount += 1
+                            }
+                        }
+                        else if (subPath.getInt("trafficType") == 1) // 지하철
+                            subPathList.add(SearchPubTransPath.SubPath(subPath.getInt("trafficType"), subPath.getInt("sectionTime"), SearchPubTransPath.Lane(subPath.getJSONArray("lane").getJSONObject(0).getString("name"), null), subPath.getString("startName"), subPath.getString("endName")))
+                        else if (subPath.getInt("trafficType") == 2) // 버스
+                            subPathList.add(SearchPubTransPath.SubPath(subPath.getInt("trafficType"), subPath.getInt("sectionTime"), SearchPubTransPath.Lane(null, subPath.getJSONArray("lane").getJSONObject(0).getString("busNo")), subPath.getString("startName"), subPath.getString("endName")))
+                    }
+                    val transPath = SearchPubTransPath(jObject.getInt("pathType"), SearchPubTransPath.Path(totalWalk, jInfo.getInt("totalTime"), jInfo.getInt("payment"), walkCount), subPathList)
+                    transPathList.add(transPath)
+                }
+                val directionPagerAdapter = DirectionPagerAdapter(supportFragmentManager, transPathList)
+                binding.viewpagerDirection.adapter = directionPagerAdapter
             }
         }catch (e: JSONException) {
             e.printStackTrace();

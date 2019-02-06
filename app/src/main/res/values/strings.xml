@@ -3,9 +3,9 @@
     <string name="timer_finished">Timer Finished!</string>
 
     <!-- activity_auto_complete -->
-    <string name="ed_search_from_hint">출발지</string>
+    <string name="ed_search_from_hint">출발지 입력</string>
     <string name="tv_from_text">에서</string>
-    <string name="ed_search_to_hint">도착지</string>
+    <string name="ed_search_to_hint">도착지 입력</string>
     <string name="tv_to_text">까지</string>
     <string name="btn_save_data_text">확인</string>
 
