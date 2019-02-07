@@ -41,7 +41,7 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
 
         fun bind(item: PrepareModel) {
             itemView.prepare_name_text.text = item.name
-            itemView.prepare_time_text.text = item.time.toString().plus("")
+            itemView.prepare_time_text.text = item.time.toString().plus("분")
             itemView.list_order_change.setOnTouchListener { _, motionEvent ->
                 if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                     startDragListener.onStartDrag(this)
