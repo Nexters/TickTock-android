@@ -2,12 +2,14 @@ package com.nexters.ticktock.alarmsetting
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.nexters.ticktock.R
 import kotlinx.android.synthetic.main.item_prepare.view.*
+import kotlinx.android.synthetic.main.item_prepare_edit.view.*
 import java.util.*
 
 
@@ -25,8 +27,13 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ItemPrepareHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.item_prepare, parent, false)
-        return ItemPrepareHolder(view)
+        val editView = LayoutInflater.from(context).inflate(R.layout.item_prepare_edit, parent, false)
+        val changeView = LayoutInflater.from(context).inflate(R.layout.item_prepare, parent, false)
+
+        return if (AlarmSettingSecondActivity.editMode == 1)
+            ItemPrepareHolder(editView)
+        else
+            ItemPrepareHolder(changeView)
     }
 
     override fun getItemCount(): Int {
@@ -34,12 +41,20 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
     }
 
     override fun onBindViewHolder(holder: ItemPrepareHolder, position: Int) {
-        holder.bind(prepareList[position])
+        if (AlarmSettingSecondActivity.editMode == 1)
+            holder.bindEditMode(prepareList[position])
+        else
+            holder.bindChangeMode(prepareList[position])
     }
 
     inner class ItemPrepareHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(item: PrepareModel) {
+        fun bindEditMode(item: PrepareModel) {
+            itemView.prepare_name_edit.text = Editable.Factory.getInstance().newEditable(item.name)
+            itemView.prepare_time_edit.text = Editable.Factory.getInstance().newEditable(item.time.toString().plus("분"))
+        }
+
+        fun bindChangeMode(item: PrepareModel) {
             itemView.prepare_name_text.text = item.name
             itemView.prepare_time_text.text = item.time.toString().plus("분")
             itemView.list_order_change.setOnTouchListener { _, motionEvent ->

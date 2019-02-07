@@ -10,13 +10,16 @@ import com.nexters.ticktock.databinding.ActivityAlarmSettingSecondBinding
 
 class AlarmSettingSecondActivity : OrmAppCompatActivity(), PrepareAdapter.OnStartDragListener {
 
+    companion object {
+        var editMode : Int = 1
+    }
+
     lateinit var binding: ActivityAlarmSettingSecondBinding
     lateinit var itemTouchHelper: ItemTouchHelper
 
     override fun onStartDrag(itemPrepareHolder: PrepareAdapter.ItemPrepareHolder) {
         itemTouchHelper.startDrag(itemPrepareHolder)
     }
-
 
     var prepareList: ArrayList<PrepareModel> = arrayListOf(
             PrepareModel("데이트", 1),
