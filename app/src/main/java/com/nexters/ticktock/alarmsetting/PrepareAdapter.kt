@@ -42,18 +42,16 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
 
     inner class ItemPrepareHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
-
-
-        @SuppressLint("ClickableViewAccessibility")
         fun bind(item: PrepareModel) {
             itemView.findViewById<TextView>(R.id.prepare_name_text).text = item.name
             itemView.findViewById<TextView>(R.id.prepare_time_text).text = item.time.toString().plus("분")
             itemView.findViewById<ImageView>(R.id.list_order_change).setOnTouchListener {
-                view, event -> if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                view, event -> if (event.action == MotionEvent.ACTION_DOWN) {
                 startDragListener.onStartDrag(this)
-            }
+                }
                 return@setOnTouchListener false
             }
         }
     }
 }
+
