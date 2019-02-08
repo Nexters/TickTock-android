@@ -57,6 +57,12 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
         fun bindChangeMode(item: PrepareModel) {
             itemView.prepare_name_text.text = item.name
             itemView.prepare_time_text.text = item.time.toString().plus("분")
+            itemView.list_recycle.setOnTouchListener { _, _ ->
+                prepareList.removeAt(adapterPosition)
+                notifyItemRemoved(adapterPosition)
+
+                return@setOnTouchListener false
+            }
             itemView.list_order_change.setOnTouchListener { _, motionEvent ->
                 if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                     startDragListener.onStartDrag(this)
