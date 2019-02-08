@@ -1,15 +1,13 @@
 package com.nexters.ticktock.autocomplete
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
+import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.TextView
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.PendingResult
 import com.google.android.gms.common.api.Status
@@ -20,20 +18,22 @@ import com.google.android.gms.location.places.Places
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.nexters.ticktock.R
+import com.nexters.ticktock.databinding.ItemPlaceAutocompleteBinding
 import java.util.concurrent.TimeUnit
 
 
-class PlaceAutocompleteAdapter(
+class PlaceAutocompleteRecyclerAdapter(
         private val context: Context,
-        private val resource:Int,
         private val googleApiClient: GoogleApiClient,
         private var bounds:LatLngBounds?,
         private var filter:AutocompleteFilter?
-): RecyclerView.Adapter<PlaceAutocompleteAdapter.PlaceViewHolder>(), Filterable{
+): RecyclerView.Adapter<PlaceAutocompleteRecyclerAdapter.PlaceViewHolder>(), Filterable{
 
     interface PlaceAutoCompleteInterface {
         fun onPlaceClick(resultList:ArrayList<PlaceAutocomplete>, position:Int)
     }
+
+    private lateinit var binding: ItemPlaceAutocompleteBinding
 
     private var listener: PlaceAutoCompleteInterface
     private val TAG = "PLACE_AUTOCOMPLETE_ADAPTER"
@@ -134,32 +134,31 @@ class PlaceAutocompleteAdapter(
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): PlaceViewHolder {
         val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-        val convertView: View = layoutInflater.inflate(resource, viewGroup, false)
-        val predictionHolder = PlaceViewHolder(convertView)
+        // 데이터바인딩
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_place_autocomplete, viewGroup, false)
 
-        return predictionHolder
+        val placeHolder = PlaceViewHolder(binding)
+
+        return placeHolder
     }
 
     override fun getItemCount(): Int {
         return resultList.size
     }
 
-    override fun onBindViewHolder(predictionHolder: PlaceViewHolder, i: Int) {
-        predictionHolder.addressTitle.text = resultList.get(i).title
-        if(resultList.get(i).description.substring(0,4).equals("대한민국"))
-            predictionHolder.addressDetail.text = resultList.get(i).description.substring(5)
-        else
-            predictionHolder.addressDetail.text = resultList.get(i).description
-        predictionHolder.parentLayout.setOnClickListener({
+    override fun onBindViewHolder(placeHolder: PlaceViewHolder, i: Int) {
+        binding.layoutPlaceAutocomplete.setOnClickListener( {
             listener.onPlaceClick(resultList, i)
         })
+        binding.tvAddressTitle.text = resultList.get(i).title
+
+        if(resultList.get(i).description.substring(0,4).equals("대한민국"))
+            binding.tvAddressDetail.text = resultList.get(i).description.substring(5)
+        else
+            binding.tvAddressDetail.text = resultList.get(i).description
     }
 
-    class PlaceViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val parentLayout = itemView.findViewById(R.id.predicted_row) as ConstraintLayout
-        val addressTitle = itemView.findViewById(R.id.tv_address_title) as TextView
-        val addressDetail = itemView.findViewById(R.id.tv_address_detail) as TextView
-    }
+    class PlaceViewHolder(binding: ItemPlaceAutocompleteBinding): RecyclerView.ViewHolder(binding.root)
 
     // 지역정보 소유자 데이터 자동완성 API 결과
     class PlaceAutocomplete(var placeId: CharSequence, var title:CharSequence, var description: CharSequence) {
