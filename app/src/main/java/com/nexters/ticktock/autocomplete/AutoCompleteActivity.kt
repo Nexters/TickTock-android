@@ -35,15 +35,10 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
     private lateinit var binding: ActivityAutoCompleteBinding // 데이터 바인딩
     private val TAG:String = "AutoCompleteActivity"
 
-    private val GPS_ENABLE_REQUEST_CODE = 2001
-    private val GPS_PLACE_ID: String = "-1"
-
     private var isFrom:Boolean = true
 
     private var fromLatLng:LatLng? = null
     private var toLatLng:LatLng? = null
-
-    private lateinit var gps: GPSInfo // gps
 
     private lateinit var googleApiClient: GoogleApiClient // 구글 검색 api 사용을 위함
     private lateinit var placeAutocompleteRecyclerAdapter: PlaceAutocompleteRecyclerAdapter // 자동완성 리사이클러뷰 어댑터
@@ -56,9 +51,6 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_auto_complete)
 
-        gps = GPSInfo(this) // GPS
-        gps.isGPSConnected()
-
         // 싱글톤 생성, Key 값을 활용하여 객체 생성
         odsayService = ODsayService.init(this, getResources().getString(R.string.odsay_key));
         // 서버 연결 제한 시간(단위(초), default : 5초)
@@ -67,6 +59,7 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
         odsayService.setConnectionTimeout(5000);
 
         initPlace()
+        getGPSLocation() // gps 내위치 정보 있다면 set
     }
 
     // 구글 클라이언트 연결
@@ -84,8 +77,15 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
 
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            // gps 설정 변경 후 재연결
-            GPS_ENABLE_REQUEST_CODE -> gps.getLocation()
+
+        }
+    }
+
+    fun getGPSLocation() {
+        val gps = intent.getParcelableExtra<GPSInfo.Result>("GPS_RESULT")
+        if (gps.address != "") {
+            binding.edSearchFrom.setText("내위치: ${gps.address}")
+            fromLatLng = LatLng(gps.latitude, gps.longitude)
         }
     }
 
@@ -136,22 +136,16 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
             try {
                 val placeId: String = resultList.get(position).placeId.toString()
                 val placeTitle: String = resultList.get(position).title.toString()
-                val placeLatLng: LatLng? = resultList.get(position).latLng
 
-                if (placeId == GPS_PLACE_ID) { // 현위치
-                    setEditTextLatLng(placeTitle, placeLatLng)
-                }
-                else { // placeId에 해당하는 좌표 찾아서 반환
-                    val placeResult: PendingResult<PlaceBuffer> = Places.GeoDataApi.getPlaceById(googleApiClient, placeId)
-                    placeResult.setResultCallback {
-                        if(it.count == 1) { // 선택한 위치 좌표 set
-                            val latLng = LatLng(it.get(0).latLng.latitude, it.get(0).latLng.longitude)
-                            setEditTextLatLng(placeTitle, latLng)
-                            placeAutocompleteRecyclerAdapter.clearList() // finally 부분 ui스레드 종료시에도 해당 콜백메소드가 실행되어
-                            binding.recyclerviewAutocomplete.setVisibility(View.GONE) // 정상적으로 리사이클뷰가 닫히지 않아 이중으로 작성 **
-                        } else {
-                            // error
-                        }
+                val placeResult: PendingResult<PlaceBuffer> = Places.GeoDataApi.getPlaceById(googleApiClient, placeId)
+                placeResult.setResultCallback {
+                    if(it.count == 1) { // 선택한 위치 좌표 set
+                        val latLng = LatLng(it.get(0).latLng.latitude, it.get(0).latLng.longitude)
+                        setEditTextLatLng(placeTitle, latLng)
+                        placeAutocompleteRecyclerAdapter.clearList() // finally 부분 ui스레드 종료시에도 해당 콜백메소드가 실행되어
+                        binding.recyclerviewAutocomplete.setVisibility(View.GONE) // 정상적으로 리사이클뷰가 닫히지 않아 이중으로 작성 **
+                    } else {
+                        // error
                     }
                 }
             } catch (e: Exception) {
@@ -196,7 +190,6 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
         }
         if (!s.toString().equals("") && googleApiClient.isConnected) {
             binding.recyclerviewDirection.visibility = View.GONE // 텍스트가 변경될때 길찾기 정보는 보여지지 않음
-            placeAutocompleteRecyclerAdapter.placeGPS = gps.getGPSLocation() // gps 현위치 추가
             placeAutocompleteRecyclerAdapter.filter.filter(s.toString())
         } else if (!googleApiClient.isConnected) {
             Log.e("", "NOT CONNECTED")

@@ -37,10 +37,8 @@ class PlaceAutocompleteRecyclerAdapter(
 
     private var listener: PlaceAutoCompleteInterface
     private val TAG = "PLACE_AUTOCOMPLETE_ADAPTER"
-    private val GPS_PLACE_ID: String = "-1"
 
     private var resultList:ArrayList<PlaceAutocomplete> = ArrayList()
-    public var placeGPS: PlaceAutocomplete = PlaceAutocomplete(GPS_PLACE_ID, "현위치 탐색중", "잠시만 기다려주세요") // 현위치
 
     init {
         listener = context as PlaceAutoCompleteInterface
@@ -113,10 +111,7 @@ class PlaceAutocompleteRecyclerAdapter(
             // AutocompletePrediction 객체는 API 응답 (장소 ID 및 설명)을 캡슐화합니다.
             val iterator:Iterator<AutocompletePrediction> = autocompletePredictions.iterator()
 
-            val resultList:ArrayList<PlaceAutocomplete> = ArrayList(autocompletePredictions.count + 1)
-
-            // 현위치 추가
-            resultList.add(placeGPS)
+            val resultList:ArrayList<PlaceAutocomplete> = ArrayList(autocompletePredictions.count)
 
             while (iterator.hasNext()) {
                 val prediction = iterator.next()
