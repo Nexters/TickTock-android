@@ -15,7 +15,7 @@ import java.text.DecimalFormat
 class DirectionRecyclerAdapter(
         val context: Context?,
         val display: Display,
-        val transPath: ArrayList<SearchPubTransPath>
+        var transPath: ArrayList<SearchPubTransPath>
 ): RecyclerView.Adapter<DirectionRecyclerAdapter.DirectionViewHolder>() {
 
     private lateinit var binding: ItemDirectionBinding
@@ -35,7 +35,14 @@ class DirectionRecyclerAdapter(
     fun getWidth(): Int {
         val point = Point()
         display.getSize(point)
-        return point.x
+        return point.x - 40
+    }
+
+    fun dataChange(tp: ArrayList<SearchPubTransPath>) {
+        notifyItemRangeRemoved(0, transPath.size)
+        transPath.clear()
+        transPath.addAll(tp)
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: DirectionViewHolder, i: Int) {

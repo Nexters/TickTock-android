@@ -1,5 +1,6 @@
 package com.nexters.ticktock.autocomplete
 
+import android.app.Activity
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.support.v7.app.AppCompatActivity
@@ -45,7 +46,8 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
     private lateinit var gps: GPSInfo // gps
 
     private lateinit var googleApiClient: GoogleApiClient // 구글 검색 api 사용을 위함
-    private lateinit var placeAutocompleteRecyclerAdapter: PlaceAutocompleteRecyclerAdapter // 리사이클러뷰 어댑터
+    private lateinit var placeAutocompleteRecyclerAdapter: PlaceAutocompleteRecyclerAdapter // 자동완성 리사이클러뷰 어댑터
+    private lateinit var directionRecyclerAdapter: DirectionRecyclerAdapter // 길찾기 리사이클러뷰 어댑터
 
     private lateinit var odsayService: ODsayService // 오디세이
 
@@ -97,15 +99,30 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
                 .addApi(Places.GEO_DATA_API)
                 .build()
 
-        binding.listSearch.setHasFixedSize(true)
-        binding.listSearch.layoutManager = LinearLayoutManager(this)
+        binding.recyclerviewAutocomplete.setHasFixedSize(true)
+        binding.recyclerviewAutocomplete.layoutManager = LinearLayoutManager(this)
 
         val typeFilter = AutocompleteFilter.Builder()
                 .setCountry("KR")
                 .build()
 
         placeAutocompleteRecyclerAdapter = PlaceAutocompleteRecyclerAdapter(this, googleApiClient, null, typeFilter)
-        binding.listSearch.adapter = placeAutocompleteRecyclerAdapter
+        binding.recyclerviewAutocomplete.adapter = placeAutocompleteRecyclerAdapter
+
+        binding.recyclerviewDirection.layoutManager = LinearLayoutManager(this)
+        directionRecyclerAdapter = DirectionRecyclerAdapter(this, windowManager.defaultDisplay, ArrayList())
+        binding.recyclerviewDirection.adapter = directionRecyclerAdapter
+        binding.recyclerviewDirection.addOnItemTouchListener(RecyclerItemClickListener(this, binding.recyclerviewDirection, object: RecyclerItemClickListener.OnItemClickListener {
+
+            override fun onItemClick(view: View, position: Int) {
+                val intent = Intent()
+                intent.putExtra("totalTime", directionRecyclerAdapter.transPath.get(position).path.totalTime)
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+            }
+
+            override fun onLongItemClick(view: View, position: Int) {}
+        }))
 
         binding.edSearchFrom.addTextChangedListener(this)
         binding.edSearchTo.addTextChangedListener(this)
@@ -131,7 +148,7 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
                             val latLng = LatLng(it.get(0).latLng.latitude, it.get(0).latLng.longitude)
                             setEditTextLatLng(placeTitle, latLng)
                             placeAutocompleteRecyclerAdapter.clearList() // finally 부분 ui스레드 종료시에도 해당 콜백메소드가 실행되어
-                            binding.listSearch.setVisibility(View.GONE) // 정상적으로 리사이클뷰가 닫히지 않아 이중으로 작성 **
+                            binding.recyclerviewAutocomplete.setVisibility(View.GONE) // 정상적으로 리사이클뷰가 닫히지 않아 이중으로 작성 **
                         } else {
                             // error
                         }
@@ -142,7 +159,7 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
             } finally {
                 runOnUiThread { run {
                     placeAutocompleteRecyclerAdapter.clearList()
-                    binding.listSearch.setVisibility(View.GONE)
+                    binding.recyclerviewAutocomplete.setVisibility(View.GONE)
                 } }
             }
         }
@@ -156,33 +173,29 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
             toLatLng = latLng
             binding.edSearchTo.setText(placeTitle)
         }
+        // directionRecyclerAdapter.clear() // 길찾기 수행 이전 리사이클러뷰 초기화
         getDirection() // 장소 선택될 경우 텍스트 채워지면서 길찾기 수행
     }
 
-    override fun onConnectionFailed(p0: ConnectionResult) {
-    }
+    override fun onConnectionFailed(p0: ConnectionResult) {}
 
-    override fun onConnected(p0: Bundle?) {
-    }
+    override fun onConnected(p0: Bundle?) {}
 
-    override fun onConnectionSuspended(p0: Int) {
-    }
+    override fun onConnectionSuspended(p0: Int) {}
 
-    override fun afterTextChanged(s: Editable?) {
-    }
+    override fun afterTextChanged(s: Editable?) {}
 
-    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-    }
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         if (count > 0) {
-            binding.listSearch.setVisibility(View.VISIBLE)
+            binding.recyclerviewAutocomplete.setVisibility(View.VISIBLE)
         } else {
             placeAutocompleteRecyclerAdapter.clearList()
-            binding.listSearch.setVisibility(View.GONE)
+            binding.recyclerviewAutocomplete.setVisibility(View.GONE)
         }
         if (!s.toString().equals("") && googleApiClient.isConnected) {
-            binding.viewpagerDirection.visibility = View.GONE // 텍스트가 변경될때 길찾기 정보는 보여지지 않음
+            binding.recyclerviewDirection.visibility = View.GONE // 텍스트가 변경될때 길찾기 정보는 보여지지 않음
             placeAutocompleteRecyclerAdapter.placeGPS = gps.getGPSLocation() // gps 현위치 추가
             placeAutocompleteRecyclerAdapter.filter.filter(s.toString())
         } else if (!googleApiClient.isConnected) {
@@ -194,11 +207,11 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
         when (v?.id) {
             binding.edSearchFrom.id -> {
                 isFrom = true
-                binding.listSearch.setVisibility(View.GONE)
+                binding.recyclerviewAutocomplete.setVisibility(View.GONE)
             }
             binding.edSearchTo.id -> {
                 isFrom = false
-                binding.listSearch.setVisibility(View.GONE)
+                binding.recyclerviewAutocomplete.setVisibility(View.GONE)
             }
         }
     }
@@ -220,8 +233,7 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
                     "0",
                     "0",
                     this)
-            binding.listSearch.visibility = View.GONE
-            binding.viewpagerDirection.visibility = View.VISIBLE
+            binding.recyclerviewAutocomplete.visibility = View.GONE
         }
     }
 
@@ -256,8 +268,9 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
                     val transPath = SearchPubTransPath(jObject.getInt("pathType"), SearchPubTransPath.Path(totalWalk, jInfo.getInt("totalTime"), jInfo.getInt("payment"), walkCount), subPathList)
                     transPathList.add(transPath)
                 }
-                val directionPagerAdapter = DirectionPagerAdapter(supportFragmentManager, transPathList)
-                binding.viewpagerDirection.adapter = directionPagerAdapter
+
+                directionRecyclerAdapter.dataChange(transPathList)
+                binding.recyclerviewDirection.visibility = View.VISIBLE
             }
         }catch (e: JSONException) {
             e.printStackTrace();

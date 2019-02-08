@@ -7,18 +7,14 @@
         android:id="@+id/layout_place_autocomplete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:background="@android:color/white">
 
         <TextView
             android:id="@+id/tv_address_title"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
             android:gravity="center_vertical"
             android:text="@string/tv_address_title_text"
             android:textColor="@color/colorBlack"
@@ -32,8 +28,6 @@
             android:id="@+id/tv_address_detail"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:gravity="center_vertical"
             android:text="@string/tv_address_detail_text"
