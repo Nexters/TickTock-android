@@ -52,6 +52,10 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
         fun bindEditMode(item: PrepareModel) {
             itemView.prepare_name_edit.text = Editable.Factory.getInstance().newEditable(item.name)
             itemView.prepare_time_edit.text = Editable.Factory.getInstance().newEditable(item.time.toString().plus("분"))
+            itemView.prepare_plus_button.setOnClickListener {
+                item.time++
+                notifyDataSetChanged()
+            }
         }
 
         fun bindChangeMode(item: PrepareModel) {
