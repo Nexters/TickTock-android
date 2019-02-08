@@ -9,7 +9,7 @@
     <string name="tv_to_text">까지</string>
     <string name="btn_save_data_text">확인</string>
 
-    <!-- item_search -->
+    <!-- item_place_autocomplete -->
     <string name="tv_address_title_text">이름</string>
     <string name="tv_address_detail_text">상세주소</string>
 

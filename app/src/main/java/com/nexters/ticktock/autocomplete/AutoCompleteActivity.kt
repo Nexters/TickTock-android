@@ -1,6 +1,5 @@
 package com.nexters.ticktock.autocomplete
 
-import android.app.Activity
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.support.v7.app.AppCompatActivity
@@ -25,12 +24,11 @@ import com.odsay.odsayandroidsdk.ODsayService
 import com.odsay.odsayandroidsdk.OnResultCallbackListener
 import org.json.JSONArray
 import org.json.JSONException
-import org.json.JSONObject
 import java.lang.Exception
 import kotlin.collections.ArrayList
 
 
-class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, PlaceAutocompleteAdapter.PlaceAutoCompleteInterface, GoogleApiClient.OnConnectionFailedListener,
+class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, PlaceAutocompleteRecyclerAdapter.PlaceAutoCompleteInterface, GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks, TextWatcher, View.OnFocusChangeListener {
 
     private lateinit var binding: ActivityAutoCompleteBinding // 데이터 바인딩
@@ -47,7 +45,7 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
     private lateinit var gps: GPSInfo // gps
 
     private lateinit var googleApiClient: GoogleApiClient // 구글 검색 api 사용을 위함
-    private lateinit var placeAutocompleteAdapter: PlaceAutocompleteAdapter // 리사이클러뷰 어댑터
+    private lateinit var placeAutocompleteRecyclerAdapter: PlaceAutocompleteRecyclerAdapter // 리사이클러뷰 어댑터
 
     private lateinit var odsayService: ODsayService // 오디세이
 
@@ -106,8 +104,8 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
                 .setCountry("KR")
                 .build()
 
-        placeAutocompleteAdapter = PlaceAutocompleteAdapter(this, R.layout.item_search, googleApiClient, null, typeFilter)
-        binding.listSearch.adapter = placeAutocompleteAdapter
+        placeAutocompleteRecyclerAdapter = PlaceAutocompleteRecyclerAdapter(this, googleApiClient, null, typeFilter)
+        binding.listSearch.adapter = placeAutocompleteRecyclerAdapter
 
         binding.edSearchFrom.addTextChangedListener(this)
         binding.edSearchTo.addTextChangedListener(this)
@@ -116,7 +114,7 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
         binding.edSearchTo.setOnFocusChangeListener(this)
     }
 
-    override fun onPlaceClick(resultList: ArrayList<PlaceAutocompleteAdapter.PlaceAutocomplete>, position: Int) {
+    override fun onPlaceClick(resultList: ArrayList<PlaceAutocompleteRecyclerAdapter.PlaceAutocomplete>, position: Int) {
         if(resultList.size > 0) {
             try {
                 val placeId: String = resultList.get(position).placeId.toString()
@@ -132,7 +130,7 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
                         if(it.count == 1) { // 선택한 위치 좌표 set
                             val latLng = LatLng(it.get(0).latLng.latitude, it.get(0).latLng.longitude)
                             setEditTextLatLng(placeTitle, latLng)
-                            placeAutocompleteAdapter.clearList() // finally 부분 ui스레드 종료시에도 해당 콜백메소드가 실행되어
+                            placeAutocompleteRecyclerAdapter.clearList() // finally 부분 ui스레드 종료시에도 해당 콜백메소드가 실행되어
                             binding.listSearch.setVisibility(View.GONE) // 정상적으로 리사이클뷰가 닫히지 않아 이중으로 작성 **
                         } else {
                             // error
@@ -143,7 +141,7 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
 
             } finally {
                 runOnUiThread { run {
-                    placeAutocompleteAdapter.clearList()
+                    placeAutocompleteRecyclerAdapter.clearList()
                     binding.listSearch.setVisibility(View.GONE)
                 } }
             }
@@ -180,13 +178,13 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
         if (count > 0) {
             binding.listSearch.setVisibility(View.VISIBLE)
         } else {
-            placeAutocompleteAdapter.clearList()
+            placeAutocompleteRecyclerAdapter.clearList()
             binding.listSearch.setVisibility(View.GONE)
         }
         if (!s.toString().equals("") && googleApiClient.isConnected) {
             binding.viewpagerDirection.visibility = View.GONE // 텍스트가 변경될때 길찾기 정보는 보여지지 않음
-            placeAutocompleteAdapter.placeGPS = gps.getGPSLocation() // gps 현위치 추가
-            placeAutocompleteAdapter.filter.filter(s.toString())
+            placeAutocompleteRecyclerAdapter.placeGPS = gps.getGPSLocation() // gps 현위치 추가
+            placeAutocompleteRecyclerAdapter.filter.filter(s.toString())
         } else if (!googleApiClient.isConnected) {
             Log.e("", "NOT CONNECTED")
         }

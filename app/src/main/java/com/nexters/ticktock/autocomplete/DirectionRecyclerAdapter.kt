@@ -12,7 +12,11 @@ import com.nexters.ticktock.R
 import com.nexters.ticktock.databinding.ItemDirectionBinding
 import java.text.DecimalFormat
 
-class DirectionRecyclerAdapter(val context: Context?, val display: Display, val transPath: ArrayList<SearchPubTransPath>): RecyclerView.Adapter<DirectionRecyclerAdapter.DirectionViewHolder>() {
+class DirectionRecyclerAdapter(
+        val context: Context?,
+        val display: Display,
+        val transPath: ArrayList<SearchPubTransPath>
+): RecyclerView.Adapter<DirectionRecyclerAdapter.DirectionViewHolder>() {
 
     private lateinit var binding: ItemDirectionBinding
 

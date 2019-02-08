@@ -218,8 +218,8 @@ class GPSInfo(private var activity: AppCompatActivity) : Service(), LocationList
         return address
     }
 
-    fun getGPSLocation(): PlaceAutocompleteAdapter.PlaceAutocomplete {
-        lateinit var result: PlaceAutocompleteAdapter.PlaceAutocomplete
+    fun getGPSLocation(): PlaceAutocompleteRecyclerAdapter.PlaceAutocomplete {
+        lateinit var result: PlaceAutocompleteRecyclerAdapter.PlaceAutocomplete
         if (isGetLocation) {
             var latitude = latitude
             var longitude = longitude
@@ -241,13 +241,13 @@ class GPSInfo(private var activity: AppCompatActivity) : Service(), LocationList
             /*
              *  현위치 정보 set
              */
-            result = PlaceAutocompleteAdapter.PlaceAutocomplete(GPS_PLACE_ID, "현위치", description)
+            result = PlaceAutocompleteRecyclerAdapter.PlaceAutocomplete(GPS_PLACE_ID, "현위치", description)
             result.latLng = LatLng(latitude, longitude)
             /*
              *  완료
              */
         } else {
-            result = PlaceAutocompleteAdapter.PlaceAutocomplete(GPS_PLACE_ID, "현위치 탐색중", "잠시만 기다려주세요")
+            result = PlaceAutocompleteRecyclerAdapter.PlaceAutocomplete(GPS_PLACE_ID, "현위치 탐색중", "잠시만 기다려주세요")
             result.latLng = null
             Log.d(TAG, "cannot find")
         }
