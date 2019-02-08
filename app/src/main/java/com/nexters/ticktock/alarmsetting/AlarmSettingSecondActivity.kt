@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.widget.Toast
 import com.nexters.ticktock.OrmAppCompatActivity
 import com.nexters.ticktock.R
 import com.nexters.ticktock.databinding.ActivityAlarmSettingSecondBinding
@@ -49,5 +50,17 @@ class AlarmSettingSecondActivity : OrmAppCompatActivity(), PrepareAdapter.OnStar
         itemTouchHelper.attachToRecyclerView(binding.secondSettingRecycler)
 
         binding.secondSettingRecycler.adapter = adapter
+
+        /* TODO: 다음버튼 -> 편집 버튼으로 바꾸자 */
+        binding.secondSettingNextButton.setOnClickListener {view ->
+            editMode = if (editMode == 1) {
+                2
+            } else {
+                1
+            }
+            
+            adapter.notifyDataSetChanged()
+            binding.secondSettingRecycler.adapter = adapter
+        }
     }
 }
