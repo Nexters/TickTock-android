@@ -1,6 +1,7 @@
 package com.nexters.ticktock.card
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
@@ -13,6 +14,7 @@ import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
 import com.nexters.ticktock.R
+import com.nexters.ticktock.alarmsetting.AlarmSettingFirstActivity
 
 class CardRecyclerViewAdapter(
         val context: Context,
@@ -87,6 +89,9 @@ class CardRecyclerViewAdapter(
         override fun onClick(v: View?) {
             if (snapHelper.getAdapterSnapPosition() != super.getAdapterPosition()) {
                 recyclerView.smoothScrollToPosition(super.getAdapterPosition())
+            } else {
+                val alarmSettingIntent : Intent = Intent(context, AlarmSettingFirstActivity::class.java)
+                context.startActivity(alarmSettingIntent)
             }
         }
 
