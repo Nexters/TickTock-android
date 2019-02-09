@@ -62,8 +62,8 @@ class GPSInfo(private var activity: AppCompatActivity) : Service(), LocationList
     var isGetLocation = false
 
     internal var location: Location? = null
-    internal var lat: Double = 0.toDouble() // 위도
-    internal var lon: Double = 0.toDouble() // 경도
+    internal var lat: Double = 0.0 // 위도
+    internal var lon: Double = 0.0 // 경도
 
     protected var locationManager: LocationManager? = null
 
@@ -282,6 +282,9 @@ class GPSInfo(private var activity: AppCompatActivity) : Service(), LocationList
 
     fun getResult(): Result {
         val result = Result("", 0.0, 0.0)
+
+        if (latitude == 0.0 && longitude == 0.0)
+            return result
 
         if (isGetLocation) {
             var latitude = latitude
