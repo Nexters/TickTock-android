@@ -29,9 +29,9 @@ class TimerActivity : AppCompatActivity() {
     private val START_TIME_IN_MILLIS: Long = 600000
     private val TIMER_LENGTH : Long = 10
 
-    private var mCountDownTimer: CountDownTimer? = null // same
+    var mCountDownTimer: CountDownTimer? = null // same
 
-    private var mProgressBarAnimator: ObjectAnimator? = null
+
 
     private var mTimerRunning: Boolean = false
     private enum class TimerState {
@@ -48,6 +48,8 @@ class TimerActivity : AppCompatActivity() {
 
     private lateinit var mPreferences : PrefUtils
 
+    var mProgressBarAnimator: ObjectAnimator? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_timer)
@@ -57,8 +59,7 @@ class TimerActivity : AppCompatActivity() {
                 TimerStepItem("머리말리기", "00:10:00"),
                 TimerStepItem("옷입기", "00:15:00")
         )
-
-        val snapHelper = ControllableTimerSnapHelper()
+        val snapHelper = ControllableTimerSnapHelper(this, binding.CircularProgressBar)
 
         timerRecyclerViewAdapter = TimerRecyclerViewAdapter(this, stepList, binding.rvTimer, snapHelper)
 
@@ -107,7 +108,7 @@ class TimerActivity : AppCompatActivity() {
         animate(progressBar, listener, progress, duration)
     }
 
-    private fun animate(progressBar: CircularProgressbar, listener: AnimatorListener?, progress: Float, duration: Int) {
+    fun animate(progressBar: CircularProgressbar, listener: AnimatorListener?, progress: Float, duration: Int) {
 
         mProgressBarAnimator = ObjectAnimator.ofFloat(progressBar, "progress", progress)
         mProgressBarAnimator!!.duration = duration.toLong()
@@ -174,7 +175,7 @@ class TimerActivity : AppCompatActivity() {
         updateCountDownText()
     }
 
-    private fun onTimerReset() {
+    fun onTimerReset() {
         mPreferences.setStartedTime(0)
         mTimeToGo = TIMER_LENGTH
         binding.buttonReset.isEnabled = false
@@ -188,7 +189,7 @@ class TimerActivity : AppCompatActivity() {
         updateCountDownText()
     }
 
-    private fun startTimer() {
+    fun startTimer() {
         mCountDownTimer = object : CountDownTimer(mTimeLeftInMillis, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 //mTimeLeftInMillis = millisUntilFinished
@@ -223,7 +224,8 @@ class TimerActivity : AppCompatActivity() {
 
     private fun updateCountDownText() {
         binding.buttonStartPause.isEnabled = mState != TimerState.RUNNING
-        val timeLeft = String.format(Locale.getDefault(), "00:%02d", mTimeToGo)
+
+        val timeLeft = String.format(Locale.getDefault(), "00:00:%02d", mTimeToGo)
         //Log.d("ProgressTime", mProgressTime.toString())
         //binding.textViewCountdown.text = timeLeft
     }
