@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".alarmsetting.AlarmSettingSecondActivity">
+        <activity android:name=".CardActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,6 +30,8 @@
 
         <activity android:name=".autocomplete.AutoCompleteActivity"/>
         <activity android:name=".alarmsetting.AlarmSettingFirstActivity" />
+        <activity android:name=".alarmsetting.AlarmSettingSecondActivity" />
+        <activity android:name=".timer.TimerActivity" />
 
         <service android:name=".autocomplete.GPSInfo"/>
     </application>
