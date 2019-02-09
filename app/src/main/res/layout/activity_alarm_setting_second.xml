@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/second_setting_head"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/second_setting_back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="back"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="뭐부터\n 준비할까요?"
+                android:textSize="20sp"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/second_setting_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/second_setting_head"
+            android:layout_above="@+id/second_setting_next_button">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <Button
+            android:id="@+id/second_setting_next_button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:text="다음"/>
+
+    </RelativeLayout>
+</layout>

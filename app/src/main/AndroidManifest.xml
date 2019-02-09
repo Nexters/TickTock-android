@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".timer.TimerActivity">
+        <activity android:name=".alarmsetting.AlarmSettingSecondActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,6 +29,8 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".autocomplete.AutoCompleteActivity"/>
+        <activity android:name=".alarmsetting.AlarmSettingFirstActivity" />
+
         <service android:name=".autocomplete.GPSInfo"/>
     </application>
 

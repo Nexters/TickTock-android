@@ -6,6 +6,8 @@ import android.os.IBinder
 import android.app.Service
 import android.content.Context
 import android.location.*
+import android.os.Parcel
+import android.os.Parcelable
 import android.provider.Settings
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -18,6 +20,30 @@ class GPSInfo(private var activity: AppCompatActivity) : Service(), LocationList
 
     init {
         getLocation()
+    }
+
+    class Result (var address: String, var latitude: Double, var longitude: Double) : Parcelable {
+        constructor(source: Parcel) : this(
+                source.readString(),
+                source.readDouble(),
+                source.readDouble()
+        )
+
+        override fun describeContents() = 0
+
+        override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+            writeString(address)
+            writeDouble(latitude)
+            writeDouble(longitude)
+        }
+
+        companion object {
+            @JvmField
+            val CREATOR: Parcelable.Creator<Result> = object : Parcelable.Creator<Result> {
+                override fun createFromParcel(source: Parcel): Result = Result(source)
+                override fun newArray(size: Int): Array<Result?> = arrayOfNulls(size)
+            }
+        }
     }
 
     private val TAG:String = "GPSINFO"
@@ -218,8 +244,8 @@ class GPSInfo(private var activity: AppCompatActivity) : Service(), LocationList
         return address
     }
 
-    fun getGPSLocation(): PlaceAutocompleteAdapter.PlaceAutocomplete {
-        lateinit var result: PlaceAutocompleteAdapter.PlaceAutocomplete
+    fun getGPSLocation(): PlaceAutocompleteRecyclerAdapter.PlaceAutocomplete {
+        lateinit var result: PlaceAutocompleteRecyclerAdapter.PlaceAutocomplete
         if (isGetLocation) {
             var latitude = latitude
             var longitude = longitude
@@ -241,13 +267,50 @@ class GPSInfo(private var activity: AppCompatActivity) : Service(), LocationList
             /*
              *  현위치 정보 set
              */
-            result = PlaceAutocompleteAdapter.PlaceAutocomplete(GPS_PLACE_ID, "현위치", description)
+            result = PlaceAutocompleteRecyclerAdapter.PlaceAutocomplete(GPS_PLACE_ID, "현위치", description)
             result.latLng = LatLng(latitude, longitude)
             /*
              *  완료
              */
         } else {
-            result = PlaceAutocompleteAdapter.PlaceAutocomplete(GPS_PLACE_ID, "현위치 탐색중", "잠시만 기다려주세요")
+            result = PlaceAutocompleteRecyclerAdapter.PlaceAutocomplete(GPS_PLACE_ID, "현위치 탐색중", "잠시만 기다려주세요")
+            result.latLng = null
+            Log.d(TAG, "cannot find")
+        }
+        return result
+    }
+
+    fun getResult(): Result {
+        val result = Result("", 0.0, 0.0)
+
+        if (isGetLocation) {
+            var latitude = latitude
+            val longitude = longitude
+
+            var latLng = LatLng(latitude, longitude)
+            var address = getFromLocationToName(latLng)
+
+            while (address == null) {
+                latitude += 0.00000001
+                latLng = LatLng(latitude, longitude)
+                address = getFromLocationToName(latLng)
+            }
+            lateinit var description:CharSequence
+            if(address.getAddressLine(0).substring(0,4).equals("대한민국"))
+                description = address.getAddressLine(0).substring(5)
+            else
+                description = address.getAddressLine(0)
+
+            /*
+             *  현위치 정보 set
+             */
+            result.address = description.toString()
+            result.latitude = latitude
+            result.longitude = longitude
+            /*
+             *  완료
+             */
+        } else {
             Log.d(TAG, "cannot find")
         }
         return result

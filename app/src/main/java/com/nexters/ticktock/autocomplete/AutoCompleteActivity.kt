@@ -25,29 +25,24 @@ import com.odsay.odsayandroidsdk.ODsayService
 import com.odsay.odsayandroidsdk.OnResultCallbackListener
 import org.json.JSONArray
 import org.json.JSONException
-import org.json.JSONObject
 import java.lang.Exception
 import kotlin.collections.ArrayList
 
 
-class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResultCallbackListener, PlaceAutocompleteAdapter.PlaceAutoCompleteInterface, GoogleApiClient.OnConnectionFailedListener,
+class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, PlaceAutocompleteRecyclerAdapter.PlaceAutoCompleteInterface, GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks, TextWatcher, View.OnFocusChangeListener {
 
     private lateinit var binding: ActivityAutoCompleteBinding // 데이터 바인딩
     private val TAG:String = "AutoCompleteActivity"
-
-    private val GPS_ENABLE_REQUEST_CODE = 2001
-    private val GPS_PLACE_ID: String = "-1"
 
     private var isFrom:Boolean = true
 
     private var fromLatLng:LatLng? = null
     private var toLatLng:LatLng? = null
 
-    private lateinit var gps: GPSInfo // gps
-
     private lateinit var googleApiClient: GoogleApiClient // 구글 검색 api 사용을 위함
-    private lateinit var placeAutocompleteAdapter: PlaceAutocompleteAdapter // 리사이클러뷰 어댑터
+    private lateinit var placeAutocompleteRecyclerAdapter: PlaceAutocompleteRecyclerAdapter // 자동완성 리사이클러뷰 어댑터
+    private lateinit var directionRecyclerAdapter: DirectionRecyclerAdapter // 길찾기 리사이클러뷰 어댑터
 
     private lateinit var odsayService: ODsayService // 오디세이
 
@@ -56,9 +51,6 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_auto_complete)
 
-        gps = GPSInfo(this) // GPS
-        gps.isGPSConnected()
-
         // 싱글톤 생성, Key 값을 활용하여 객체 생성
         odsayService = ODsayService.init(this, getResources().getString(R.string.odsay_key));
         // 서버 연결 제한 시간(단위(초), default : 5초)
@@ -66,9 +58,8 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
         // 데이터 획득 제한 시간(단위(초), default : 5초)
         odsayService.setConnectionTimeout(5000);
 
-        binding.btnSaveData.setOnClickListener(this)
-
         initPlace()
+        getGPSLocation() // gps 내위치 정보 있다면 set
     }
 
     // 구글 클라이언트 연결
@@ -86,8 +77,15 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
 
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            // gps 설정 변경 후 재연결
-            GPS_ENABLE_REQUEST_CODE -> gps.getLocation()
+
+        }
+    }
+
+    fun getGPSLocation() {
+        val gps = intent.getParcelableExtra<GPSInfo.Result>("GPS_RESULT")
+        if (gps.address != "") {
+            binding.edSearchFrom.setText("내위치: ${gps.address}")
+            fromLatLng = LatLng(gps.latitude, gps.longitude)
         }
     }
 
@@ -101,15 +99,30 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
                 .addApi(Places.GEO_DATA_API)
                 .build()
 
-        binding.listSearch.setHasFixedSize(true)
-        binding.listSearch.layoutManager = LinearLayoutManager(this)
+        binding.recyclerviewAutocomplete.setHasFixedSize(true)
+        binding.recyclerviewAutocomplete.layoutManager = LinearLayoutManager(this)
 
         val typeFilter = AutocompleteFilter.Builder()
                 .setCountry("KR")
                 .build()
 
-        placeAutocompleteAdapter = PlaceAutocompleteAdapter(this, R.layout.item_search, googleApiClient, null, typeFilter)
-        binding.listSearch.adapter = placeAutocompleteAdapter
+        placeAutocompleteRecyclerAdapter = PlaceAutocompleteRecyclerAdapter(this, googleApiClient, null, typeFilter)
+        binding.recyclerviewAutocomplete.adapter = placeAutocompleteRecyclerAdapter
+
+        binding.recyclerviewDirection.layoutManager = LinearLayoutManager(this)
+        directionRecyclerAdapter = DirectionRecyclerAdapter(this, windowManager.defaultDisplay, ArrayList())
+        binding.recyclerviewDirection.adapter = directionRecyclerAdapter
+        binding.recyclerviewDirection.addOnItemTouchListener(RecyclerItemClickListener(this, binding.recyclerviewDirection, object: RecyclerItemClickListener.OnItemClickListener {
+
+            override fun onItemClick(view: View, position: Int) {
+                val intent = Intent()
+                intent.putExtra("totalTime", directionRecyclerAdapter.transPath.get(position).path.totalTime)
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+            }
+
+            override fun onLongItemClick(view: View, position: Int) {}
+        }))
 
         binding.edSearchFrom.addTextChangedListener(this)
         binding.edSearchTo.addTextChangedListener(this)
@@ -118,35 +131,29 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
         binding.edSearchTo.setOnFocusChangeListener(this)
     }
 
-    override fun onPlaceClick(resultList: ArrayList<PlaceAutocompleteAdapter.PlaceAutocomplete>, position: Int) {
+    override fun onPlaceClick(resultList: ArrayList<PlaceAutocompleteRecyclerAdapter.PlaceAutocomplete>, position: Int) {
         if(resultList.size > 0) {
             try {
                 val placeId: String = resultList.get(position).placeId.toString()
                 val placeTitle: String = resultList.get(position).title.toString()
-                val placeLatLng: LatLng? = resultList.get(position).latLng
 
-                if (placeId == GPS_PLACE_ID) { // 현위치
-                    setEditTextLatLng(placeTitle, placeLatLng)
-                }
-                else { // placeId에 해당하는 좌표 찾아서 반환
-                    val placeResult: PendingResult<PlaceBuffer> = Places.GeoDataApi.getPlaceById(googleApiClient, placeId)
-                    placeResult.setResultCallback {
-                        if(it.count == 1) { // 선택한 위치 좌표 set
-                            val latLng = LatLng(it.get(0).latLng.latitude, it.get(0).latLng.longitude)
-                            setEditTextLatLng(placeTitle, latLng)
-                            placeAutocompleteAdapter.clearList() // finally 부분 ui스레드 종료시에도 해당 콜백메소드가 실행되어
-                            binding.listSearch.setVisibility(View.GONE) // 정상적으로 리사이클뷰가 닫히지 않아 이중으로 작성 **
-                        } else {
-                            // error
-                        }
+                val placeResult: PendingResult<PlaceBuffer> = Places.GeoDataApi.getPlaceById(googleApiClient, placeId)
+                placeResult.setResultCallback {
+                    if(it.count == 1) { // 선택한 위치 좌표 set
+                        val latLng = LatLng(it.get(0).latLng.latitude, it.get(0).latLng.longitude)
+                        setEditTextLatLng(placeTitle, latLng)
+                        placeAutocompleteRecyclerAdapter.clearList() // finally 부분 ui스레드 종료시에도 해당 콜백메소드가 실행되어
+                        binding.recyclerviewAutocomplete.setVisibility(View.GONE) // 정상적으로 리사이클뷰가 닫히지 않아 이중으로 작성 **
+                    } else {
+                        // error
                     }
                 }
             } catch (e: Exception) {
 
             } finally {
                 runOnUiThread { run {
-                    placeAutocompleteAdapter.clearList()
-                    binding.listSearch.setVisibility(View.GONE)
+                    placeAutocompleteRecyclerAdapter.clearList()
+                    binding.recyclerviewAutocomplete.setVisibility(View.GONE)
                 } }
             }
         }
@@ -160,33 +167,30 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
             toLatLng = latLng
             binding.edSearchTo.setText(placeTitle)
         }
+        // directionRecyclerAdapter.clear() // 길찾기 수행 이전 리사이클러뷰 초기화
+        getDirection() // 장소 선택될 경우 텍스트 채워지면서 길찾기 수행
     }
 
-    override fun onConnectionFailed(p0: ConnectionResult) {
-    }
+    override fun onConnectionFailed(p0: ConnectionResult) {}
 
-    override fun onConnected(p0: Bundle?) {
-    }
+    override fun onConnected(p0: Bundle?) {}
 
-    override fun onConnectionSuspended(p0: Int) {
-    }
+    override fun onConnectionSuspended(p0: Int) {}
 
-    override fun afterTextChanged(s: Editable?) {
-    }
+    override fun afterTextChanged(s: Editable?) {}
 
-    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-    }
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        placeAutocompleteAdapter.placeGPS = gps.getGPSLocation() // gps 현위치 추가
         if (count > 0) {
-            binding.listSearch.setVisibility(View.VISIBLE)
+            binding.recyclerviewAutocomplete.setVisibility(View.VISIBLE)
         } else {
-            placeAutocompleteAdapter.clearList()
-            binding.listSearch.setVisibility(View.GONE)
+            placeAutocompleteRecyclerAdapter.clearList()
+            binding.recyclerviewAutocomplete.setVisibility(View.GONE)
         }
         if (!s.toString().equals("") && googleApiClient.isConnected) {
-            placeAutocompleteAdapter.filter.filter(s.toString())
+            binding.recyclerviewDirection.visibility = View.GONE // 텍스트가 변경될때 길찾기 정보는 보여지지 않음
+            placeAutocompleteRecyclerAdapter.filter.filter(s.toString())
         } else if (!googleApiClient.isConnected) {
             Log.e("", "NOT CONNECTED")
         }
@@ -196,11 +200,11 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
         when (v?.id) {
             binding.edSearchFrom.id -> {
                 isFrom = true
-                binding.listSearch.setVisibility(View.GONE)
+                binding.recyclerviewAutocomplete.setVisibility(View.GONE)
             }
             binding.edSearchTo.id -> {
                 isFrom = false
-                binding.listSearch.setVisibility(View.GONE)
+                binding.recyclerviewAutocomplete.setVisibility(View.GONE)
             }
         }
     }
@@ -208,37 +212,58 @@ class AutoCompleteActivity : AppCompatActivity(), View.OnClickListener, OnResult
     * 종료
     */
 
-    override fun onClick(v: View?) {
-        when (v?.id) {
-            binding.btnSaveData.id -> {
-                odsayService.requestSearchPubTransPath(
-                        fromLatLng!!.longitude.toString(),
-                        fromLatLng!!.latitude.toString(),
-                        toLatLng!!.longitude.toString(),
-                        toLatLng!!.latitude.toString(),
-                        "0",
-                        "0",
-                        "0",
-                        this)
-            }
-        }
-    }
-
     /*
      * 오디세이 api 사용을 위한 메소드 시작
      */
+    fun getDirection() {
+        if(fromLatLng != null && toLatLng != null) {
+            odsayService.requestSearchPubTransPath(
+                    fromLatLng!!.longitude.toString(),
+                    fromLatLng!!.latitude.toString(),
+                    toLatLng!!.longitude.toString(),
+                    toLatLng!!.latitude.toString(),
+                    "0",
+                    "0",
+                    "0",
+                    this)
+            binding.recyclerviewAutocomplete.visibility = View.GONE
+        }
+    }
+
     override fun onSuccess(odsayData: ODsayData, api: API?) {
         try {
             // API Value 는 API 호출 메소드 명을 따라갑니다.
             if (api == API.SEARCH_PUB_TRANS_PATH) {
                 val jArray: JSONArray = odsayData.getJson().getJSONObject("result").getJSONArray("path")
-                val jObject: JSONObject = jArray.getJSONObject(0).getJSONObject("info") // 최단시간
-                val totalTime = jObject.getInt("totalTime")
+                val transPathList = ArrayList<SearchPubTransPath>()
 
-                val intent = Intent()
-                intent.putExtra("totalTime", totalTime)
-                setResult(Activity.RESULT_OK, intent)
-                finish()
+                for (i in 0..jArray.length()-1) { // 출력결과 만큼 출력 jArray.length()
+                    val jObject = jArray.getJSONObject(i)
+                    val jInfo = jObject.getJSONObject("info")
+                    val jSubPath = jObject.getJSONArray("subPath")
+                    val subPathList = ArrayList<SearchPubTransPath.SubPath>()
+                    var totalWalk = 0
+                    var walkCount = 0
+                    for (j in 0..jSubPath.length()-1) {
+                        val subPath = jSubPath.getJSONObject(j)
+                        if (subPath.getInt("trafficType") == 3) { // 도보
+                            if(subPath.getInt("sectionTime") > 0) {
+                                subPathList.add(SearchPubTransPath.SubPath(subPath.getInt("trafficType"), subPath.getInt("sectionTime"), SearchPubTransPath.Lane(null, null), "", ""))
+                                totalWalk += subPath.getInt("sectionTime")
+                                walkCount += 1
+                            }
+                        }
+                        else if (subPath.getInt("trafficType") == 1) // 지하철
+                            subPathList.add(SearchPubTransPath.SubPath(subPath.getInt("trafficType"), subPath.getInt("sectionTime"), SearchPubTransPath.Lane(subPath.getJSONArray("lane").getJSONObject(0).getString("name"), null), subPath.getString("startName"), subPath.getString("endName")))
+                        else if (subPath.getInt("trafficType") == 2) // 버스
+                            subPathList.add(SearchPubTransPath.SubPath(subPath.getInt("trafficType"), subPath.getInt("sectionTime"), SearchPubTransPath.Lane(null, subPath.getJSONArray("lane").getJSONObject(0).getString("busNo")), subPath.getString("startName"), subPath.getString("endName")))
+                    }
+                    val transPath = SearchPubTransPath(jObject.getInt("pathType"), SearchPubTransPath.Path(totalWalk, jInfo.getInt("totalTime"), jInfo.getInt("payment"), walkCount), subPathList)
+                    transPathList.add(transPath)
+                }
+
+                directionRecyclerAdapter.dataChange(transPathList)
+                binding.recyclerviewDirection.visibility = View.VISIBLE
             }
         }catch (e: JSONException) {
             e.printStackTrace();

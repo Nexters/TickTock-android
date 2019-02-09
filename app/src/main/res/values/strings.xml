@@ -2,13 +2,13 @@
     <string name="app_name">TickTock</string>
 
     <!-- activity_auto_complete -->
-    <string name="ed_search_from_hint">출발지</string>
+    <string name="ed_search_from_hint">출발지 입력</string>
     <string name="tv_from_text">에서</string>
-    <string name="ed_search_to_hint">도착지</string>
+    <string name="ed_search_to_hint">도착지 입력</string>
     <string name="tv_to_text">까지</string>
     <string name="btn_save_data_text">확인</string>
 
-    <!-- item_search -->
+    <!-- item_place_autocomplete -->
     <string name="tv_address_title_text">이름</string>
     <string name="tv_address_detail_text">상세주소</string>
 
