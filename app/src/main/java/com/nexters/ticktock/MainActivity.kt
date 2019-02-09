@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import android.databinding.DataBindingUtil
+import com.nexters.ticktock.autocomplete.AutoCompleteActivity
 import com.nexters.ticktock.databinding.ActivityMainBinding
 import com.nexters.ticktock.dto.DayGroup
 import com.nexters.ticktock.dto.entity.Article
@@ -33,7 +34,6 @@ class MainActivity : OrmAppCompatActivity(), View.OnClickListener {
             MAIN_ACTIVITY_REQUEST_CODE -> {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-                        Log.d(TAG, "${data?.getIntExtra("totalTime", 0)}")
                         binding.button.text =  "${data?.getIntExtra("totalTime", 0)}분이 걸립니다."
                     }
                 }

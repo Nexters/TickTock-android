@@ -5,10 +5,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".timer.TimerActivity">
+
+
+        <com.nexters.ticktock.timer.CircularProgressbar
+            android:id = "@+id/CircularProgressBar"
+            android:layout_height = "300dp"
+            android:layout_width = "300dp"
+            app:progress = "0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
 
         <TextView
             android:id="@+id/text_view_countdown"
@@ -21,6 +35,8 @@
             android:text="00:00"
             android:textColor="@android:color/black"
             android:textSize="60sp" />
+
+
 
         <Button
             android:id="@+id/button_start_pause"
