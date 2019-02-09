@@ -13,6 +13,9 @@ import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.widget.Toast
 import com.nexters.ticktock.R
@@ -26,9 +29,9 @@ class TimerActivity : AppCompatActivity() {
     private val START_TIME_IN_MILLIS: Long = 600000
     private val TIMER_LENGTH : Long = 10
 
-    private var mCountDownTimer: CountDownTimer? = null // same
+    var mCountDownTimer: CountDownTimer? = null // same
 
-    private var mProgressBarAnimator: ObjectAnimator? = null
+
 
     private var mTimerRunning: Boolean = false
     private enum class TimerState {
@@ -40,11 +43,34 @@ class TimerActivity : AppCompatActivity() {
     private var mTimeToGo : Long? = null
     private var mProgressTime : Float? = null
 
+    private lateinit var timerRecyclerViewAdapter: TimerRecyclerViewAdapter
+    private lateinit var stepList : MutableList<TimerStepItem>
+
     private lateinit var mPreferences : PrefUtils
+
+    var mProgressBarAnimator: ObjectAnimator? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_timer)
+
+        stepList = mutableListOf(
+                TimerStepItem("샤워하기", "00:30:00"),
+                TimerStepItem("머리말리기", "00:10:00"),
+                TimerStepItem("옷입기", "00:15:00")
+        )
+        val snapHelper = ControllableTimerSnapHelper(this, binding.CircularProgressBar)
+
+        timerRecyclerViewAdapter = TimerRecyclerViewAdapter(this, stepList, binding.rvTimer, snapHelper)
+
+        binding.rvTimer.apply {
+            layoutManager = SpeedControllableTimerLayoutManager(
+                    this@TimerActivity, LinearLayoutManager.HORIZONTAL, false, this, 50F)
+            addItemDecoration(OffsetTimerItemDecoration(this@TimerActivity))
+            itemAnimator = DefaultItemAnimator()
+            adapter = timerRecyclerViewAdapter
+            snapHelper.attachToRecyclerView(this)
+        }
 
         mProgressBarAnimator?.cancel()
         //animate(binding.CircularProgressBar, null, 0f, 1000)
@@ -82,7 +108,7 @@ class TimerActivity : AppCompatActivity() {
         animate(progressBar, listener, progress, duration)
     }
 
-    private fun animate(progressBar: CircularProgressbar, listener: AnimatorListener?, progress: Float, duration: Int) {
+    fun animate(progressBar: CircularProgressbar, listener: AnimatorListener?, progress: Float, duration: Int) {
 
         mProgressBarAnimator = ObjectAnimator.ofFloat(progressBar, "progress", progress)
         mProgressBarAnimator!!.duration = duration.toLong()
@@ -149,7 +175,7 @@ class TimerActivity : AppCompatActivity() {
         updateCountDownText()
     }
 
-    private fun onTimerReset() {
+    fun onTimerReset() {
         mPreferences.setStartedTime(0)
         mTimeToGo = TIMER_LENGTH
         binding.buttonReset.isEnabled = false
@@ -163,7 +189,7 @@ class TimerActivity : AppCompatActivity() {
         updateCountDownText()
     }
 
-    private fun startTimer() {
+    fun startTimer() {
         mCountDownTimer = object : CountDownTimer(mTimeLeftInMillis, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 //mTimeLeftInMillis = millisUntilFinished
@@ -198,9 +224,10 @@ class TimerActivity : AppCompatActivity() {
 
     private fun updateCountDownText() {
         binding.buttonStartPause.isEnabled = mState != TimerState.RUNNING
-        val timeLeft = String.format(Locale.getDefault(), "00:%02d", mTimeToGo)
+
+        val timeLeft = String.format(Locale.getDefault(), "00:00:%02d", mTimeToGo)
         //Log.d("ProgressTime", mProgressTime.toString())
-        binding.textViewCountdown.text = timeLeft
+        //binding.textViewCountdown.text = timeLeft
     }
 
     private fun setAlarm() {
