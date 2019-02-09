@@ -23,4 +23,7 @@
 
     <string name="header1">인생은 타이밍,\n\'성실갑\'되러 가볼까요?</string>
     <string name="deleteCheckMessage">%1$s를\n삭제하시는 게 맞나요?</string>
+
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyD6VA4avLrMculLuMc1syKWQC5cLcYwaN0</string>
+    <string name="odsay_key" templateMergeStrategy="preserve" translatable="false">hjUaKuQAwMYFVku9GzMLbD9ft5lBIx9g7d9j+DLfXfs</string>
 </resources>
