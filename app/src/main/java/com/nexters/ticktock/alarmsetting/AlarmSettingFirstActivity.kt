@@ -1,5 +1,6 @@
 package com.nexters.ticktock.alarmsetting
 
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import com.nexters.ticktock.OrmAppCompatActivity
@@ -13,5 +14,11 @@ class AlarmSettingFirstActivity : OrmAppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_setting_first)
+
+        binding.firstSettingNextButton.setOnClickListener {view ->
+            val intent: Intent = Intent(this, AlarmSettingSecondActivity::class.java)
+
+            startActivity(intent)
+        }
     }
 }
