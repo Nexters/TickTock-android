@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/prepare_name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="50dp"
+            android:textSize="20sp"
+            android:text="경무와 데이트"/>
+
+        <ImageView
+            android:id="@+id/list_order_change"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/list_change"
+            android:layout_centerVertical="true"/>
+
+        <ImageView
+            android:id="@+id/list_recycle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/recycle_bin"
+            android:layout_toStartOf="@+id/list_order_change"
+            android:layout_marginEnd="10dp"/>
+
+        <TextView
+            android:id="@+id/prepare_time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="5분"
+            android:textSize="20sp"
+            android:layout_toStartOf="@+id/list_recycle"
+            android:layout_marginEnd="20dp"/>
+
+    </RelativeLayout>
+</layout>
