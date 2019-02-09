@@ -15,7 +15,7 @@ class OffsetTimerItemDecoration(
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
 
         super.getItemOffsets(outRect, view, parent, state)
-        val offset = (getScreenWidth() / 2F).toInt() - view.layoutParams.width / 2
+        val offset = 0
         val lp = view.layoutParams as ViewGroup.MarginLayoutParams
         if (parent.getChildAdapterPosition(view) == 0) {
             lp.leftMargin = 0
