@@ -1,5 +1,6 @@
 package com.nexters.ticktock.alarmsetting
 
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -8,6 +9,7 @@ import android.widget.Toast
 import com.nexters.ticktock.OrmAppCompatActivity
 import com.nexters.ticktock.R
 import com.nexters.ticktock.databinding.ActivityAlarmSettingSecondBinding
+import com.nexters.ticktock.timer.TimerActivity
 
 class AlarmSettingSecondActivity : OrmAppCompatActivity(), PrepareAdapter.OnStartDragListener {
 
@@ -51,16 +53,23 @@ class AlarmSettingSecondActivity : OrmAppCompatActivity(), PrepareAdapter.OnStar
 
         binding.secondSettingRecycler.adapter = adapter
 
-        /* TODO: 다음버튼 -> 편집 버튼으로 바꾸자 */
-        binding.secondSettingNextButton.setOnClickListener {view ->
+
+        /* TODO: 뒤로가기 버튼 -> 편집 버튼으로 바꾸자 */
+        binding.secondSettingBackButton.setOnClickListener {view ->
             editMode = if (editMode == 1) {
                 2
             } else {
                 1
             }
-            
+
             adapter.notifyDataSetChanged()
             binding.secondSettingRecycler.adapter = adapter
+        }
+
+        // 다음 타이머 엑티비티로 넘김
+        binding.secondSettingNextButton.setOnClickListener {view ->
+            val intent: Intent = Intent(this, TimerActivity::class.java)
+            startActivity(intent)
         }
     }
 }
