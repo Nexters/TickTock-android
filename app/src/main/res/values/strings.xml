@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">TickTock</string>
-    <string name="timer_finished">Timer Finished!</string>
 
     <!-- activity_auto_complete -->
     <string name="ed_search_from_hint">출발지 입력</string>
@@ -18,4 +17,10 @@
     <string name="tv_direction_walk_time_text">도보 10분</string>
     <string name="tv_direction_divide_text">|</string>
     <string name="tv_direction_cost_text">1,250원</string>
+    <string name="timer_finished">Timer Finished!</string>
+    <string name="lead_time">소요시간</string>
+    <string name="date">날짜</string>
+
+    <string name="header1">인생은 타이밍,\n\'성실갑\'되러 가볼까요?</string>
+    <string name="deleteCheckMessage">%1$s를\n삭제하시는 게 맞나요?</string>
 </resources>
