@@ -27,7 +27,7 @@ class TimerActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityTimerBinding
     private val START_TIME_IN_MILLIS: Long = 600000
-    var TIMER_LENGTH : Long = 20
+    var TIMER_LENGTH : Long = 0
 
     var mCountDownTimer: CountDownTimer? = null // same
 
@@ -161,6 +161,7 @@ class TimerActivity : AppCompatActivity() {
             if(mTimeToGo!! <= 0) { // Timer expired
                 mTimeToGo = TIMER_LENGTH
                 mState = TimerState.STOPPED
+                binding.CircularProgressBar.progress = 0.0f
                 onTimerFinished()
             }
             else {
@@ -171,6 +172,13 @@ class TimerActivity : AppCompatActivity() {
         else {
             mTimeToGo = TIMER_LENGTH
             mState = TimerState.STOPPED
+
+            //타이머 처음 스탭부터 자동시작
+            val time : List<String> = stepList[0].time.split(":")
+            val realTime : Long = (time[2].toLong() + time[1].toLong() * 60  + time[0].toLong() * 3600)
+            TIMER_LENGTH = realTime
+            mTimeToGo = realTime
+            binding.buttonStartPause.performClick()
         }
         updateCountDownText()
     }
@@ -205,7 +213,6 @@ class TimerActivity : AppCompatActivity() {
                     mCountDownTimer!!.cancel()
                     mPreferences.setStartedTime(0)
                     mState = TimerState.STOPPED
-                    mTimeToGo = TIMER_LENGTH
                 }
 
                 updateCountDownText()
