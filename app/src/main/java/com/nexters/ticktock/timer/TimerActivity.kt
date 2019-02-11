@@ -27,7 +27,7 @@ class TimerActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityTimerBinding
     private val START_TIME_IN_MILLIS: Long = 600000
-    private val TIMER_LENGTH : Long = 10
+    var TIMER_LENGTH : Long = 20
 
     var mCountDownTimer: CountDownTimer? = null // same
 
@@ -40,11 +40,11 @@ class TimerActivity : AppCompatActivity() {
     private var mState : TimerState? = null
 
     private var mTimeLeftInMillis = START_TIME_IN_MILLIS
-    private var mTimeToGo : Long? = null
+    var mTimeToGo : Long? = null
     private var mProgressTime : Float? = null
 
     private lateinit var timerRecyclerViewAdapter: TimerRecyclerViewAdapter
-    private lateinit var stepList : MutableList<TimerStepItem>
+    lateinit var stepList : MutableList<TimerStepItem>
 
     private lateinit var mPreferences : PrefUtils
 
@@ -195,9 +195,8 @@ class TimerActivity : AppCompatActivity() {
                 //mTimeLeftInMillis = millisUntilFinished
                 if(mTimeToGo!! > 0) {
                     mTimeToGo = mTimeToGo!! - 1
-                    val percentage = (100 / TIMER_LENGTH).toFloat()
                     mProgressBarAnimator?.cancel()
-                    mProgressTime = ((TIMER_LENGTH - mTimeToGo!!) / percentage)
+                    mProgressTime = Math.abs(1 - mTimeToGo!! / TIMER_LENGTH.toFloat())
                     animate(binding.CircularProgressBar, null, mProgressTime!!, 500)
 
                     Log.d("ProgressTime", mProgressTime.toString())

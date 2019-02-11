@@ -6,7 +6,10 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_timer.view.*
 
-class ControllableTimerSnapHelper(private var context: TimerActivity, private var circularProgressbar: CircularProgressbar, private val onSnapped: ((Int) -> Unit)? = null) : LinearSnapHelper() {
+class ControllableTimerSnapHelper(private var context: TimerActivity,
+                                  private var circularProgressbar: CircularProgressbar,
+                                  private val onSnapped: ((Int) -> Unit)? = null
+) : LinearSnapHelper() {
     private var snappedPosition = 0
     private var snapToNext = false
     private var snapToPrevious = false
@@ -38,6 +41,11 @@ class ControllableTimerSnapHelper(private var context: TimerActivity, private va
                     context.animate(circularProgressbar, null, 0.0f, 1000)
                     context.onTimerReset()
                     context.mCountDownTimer!!.cancel()
+                    val time : List<String> = context.stepList[snappedPosition].time.split(":")
+                    val realTime : Long = (time[2].toLong() + time[1].toLong() * 60  + time[0].toLong() * 3600)
+                    context.mTimeToGo = realTime
+                    Log.d("Real Time", realTime.toString())
+                    context.TIMER_LENGTH = realTime
                     context.startTimer()
                 }
             }
