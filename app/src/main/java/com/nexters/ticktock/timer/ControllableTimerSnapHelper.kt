@@ -13,7 +13,7 @@ class ControllableTimerSnapHelper(private var context: TimerActivity,
     private var snappedPosition = 0
     private var snapToNext = false
     private var snapToPrevious = false
-    private var currentPos = 0
+    var currentPos = 0
     lateinit var recyclerView: RecyclerView
 
     override fun attachToRecyclerView(recyclerView: RecyclerView?) {
@@ -38,6 +38,8 @@ class ControllableTimerSnapHelper(private var context: TimerActivity,
 
                 if(snappedPosition >=0 && snappedPosition < recyclerView.adapter?.itemCount!!) {
                     currentPos = snappedPosition
+
+                    //timer 재시작
                     context.animate(circularProgressbar, null, 0.0f, 1000)
                     context.onTimerReset()
                     context.mCountDownTimer!!.cancel()
@@ -46,6 +48,12 @@ class ControllableTimerSnapHelper(private var context: TimerActivity,
                     context.mTimeToGo = realTime
                     context.mPreferences.setStartedTime(context.getNow())
                     context.TIMER_LENGTH = realTime
+
+
+
+                    //set current position
+                    context.curPos = currentPos
+
                     context.startTimer()
                 }
             }
