@@ -46,7 +46,7 @@ class TimerActivity : AppCompatActivity() {
     private lateinit var timerRecyclerViewAdapter: TimerRecyclerViewAdapter
     lateinit var stepList : MutableList<TimerStepItem>
 
-    private lateinit var mPreferences : PrefUtils
+    lateinit var mPreferences : PrefUtils
 
     var mProgressBarAnimator: ObjectAnimator? = null
 
@@ -147,7 +147,7 @@ class TimerActivity : AppCompatActivity() {
         }
     }
 
-    private fun getNow() : Long {
+    fun getNow() : Long {
         val rightNow : Calendar = Calendar.getInstance()
         return rightNow.timeInMillis / 1000
     }

@@ -44,7 +44,7 @@ class ControllableTimerSnapHelper(private var context: TimerActivity,
                     val time : List<String> = context.stepList[snappedPosition].time.split(":")
                     val realTime : Long = (time[2].toLong() + time[1].toLong() * 60  + time[0].toLong() * 3600)
                     context.mTimeToGo = realTime
-                    Log.d("Real Time", realTime.toString())
+                    context.mPreferences.setStartedTime(context.getNow())
                     context.TIMER_LENGTH = realTime
                     context.startTimer()
                 }
