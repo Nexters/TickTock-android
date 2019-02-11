@@ -6,11 +6,14 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_timer.view.*
 
-class ControllableTimerSnapHelper(private var context: TimerActivity, private var circularProgressbar: CircularProgressbar, private val onSnapped: ((Int) -> Unit)? = null) : LinearSnapHelper() {
+class ControllableTimerSnapHelper(private var context: TimerActivity,
+                                  private var circularProgressbar: CircularProgressbar,
+                                  private val onSnapped: ((Int) -> Unit)? = null
+) : LinearSnapHelper() {
     private var snappedPosition = 0
     private var snapToNext = false
     private var snapToPrevious = false
-    private var currentPos = 0
+    var currentPos = 0
     lateinit var recyclerView: RecyclerView
 
     override fun attachToRecyclerView(recyclerView: RecyclerView?) {
@@ -35,9 +38,22 @@ class ControllableTimerSnapHelper(private var context: TimerActivity, private va
 
                 if(snappedPosition >=0 && snappedPosition < recyclerView.adapter?.itemCount!!) {
                     currentPos = snappedPosition
+
+                    //timer 재시작
                     context.animate(circularProgressbar, null, 0.0f, 1000)
                     context.onTimerReset()
                     context.mCountDownTimer!!.cancel()
+                    val time : List<String> = context.stepList[snappedPosition].time.split(":")
+                    val realTime : Long = (time[2].toLong() + time[1].toLong() * 60  + time[0].toLong() * 3600)
+                    context.mTimeToGo = realTime
+                    context.mPreferences.setStartedTime(context.getNow())
+                    context.TIMER_LENGTH = realTime
+
+
+
+                    //set current position
+                    context.curPos = currentPos
+
                     context.startTimer()
                 }
             }

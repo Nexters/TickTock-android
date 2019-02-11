@@ -27,11 +27,11 @@ class TimerActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityTimerBinding
     private val START_TIME_IN_MILLIS: Long = 600000
-    private val TIMER_LENGTH : Long = 10
+    var TIMER_LENGTH : Long = 0
 
     var mCountDownTimer: CountDownTimer? = null // same
 
-
+    var curPos = 0
 
     private var mTimerRunning: Boolean = false
     private enum class TimerState {
@@ -40,15 +40,17 @@ class TimerActivity : AppCompatActivity() {
     private var mState : TimerState? = null
 
     private var mTimeLeftInMillis = START_TIME_IN_MILLIS
-    private var mTimeToGo : Long? = null
+    var mTimeToGo : Long? = null
     private var mProgressTime : Float? = null
 
     private lateinit var timerRecyclerViewAdapter: TimerRecyclerViewAdapter
-    private lateinit var stepList : MutableList<TimerStepItem>
+    lateinit var stepList : MutableList<TimerStepItem>
 
-    private lateinit var mPreferences : PrefUtils
+    lateinit var mPreferences : PrefUtils
 
     var mProgressBarAnimator: ObjectAnimator? = null
+
+    private var snapHelper: ControllableTimerSnapHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,9 +61,9 @@ class TimerActivity : AppCompatActivity() {
                 TimerStepItem("머리말리기", "00:10:00"),
                 TimerStepItem("옷입기", "00:15:00")
         )
-        val snapHelper = ControllableTimerSnapHelper(this, binding.CircularProgressBar)
+        snapHelper = ControllableTimerSnapHelper(this, binding.CircularProgressBar)
 
-        timerRecyclerViewAdapter = TimerRecyclerViewAdapter(this, stepList, binding.rvTimer, snapHelper)
+        timerRecyclerViewAdapter = TimerRecyclerViewAdapter(this, stepList, binding.rvTimer, snapHelper!!)
 
         binding.rvTimer.apply {
             layoutManager = SpeedControllableTimerLayoutManager(
@@ -69,7 +71,7 @@ class TimerActivity : AppCompatActivity() {
             addItemDecoration(OffsetTimerItemDecoration(this@TimerActivity))
             itemAnimator = DefaultItemAnimator()
             adapter = timerRecyclerViewAdapter
-            snapHelper.attachToRecyclerView(this)
+            snapHelper!!.attachToRecyclerView(this)
         }
 
         mProgressBarAnimator?.cancel()
@@ -78,6 +80,8 @@ class TimerActivity : AppCompatActivity() {
 
         mPreferences = PrefUtils(this)
         binding.buttonReset.isEnabled = false
+
+
         binding.buttonStartPause.setOnClickListener {
             if(mState == TimerState.STOPPED) {
                 mPreferences.setStartedTime(getNow())
@@ -87,6 +91,7 @@ class TimerActivity : AppCompatActivity() {
             }
         }
 
+        mPreferences.setStartedTime(0)
         binding.buttonReset.setOnClickListener {
             if(mState == TimerState.RUNNING) {
                 mCountDownTimer!!.cancel()
@@ -147,7 +152,7 @@ class TimerActivity : AppCompatActivity() {
         }
     }
 
-    private fun getNow() : Long {
+    fun getNow() : Long {
         val rightNow : Calendar = Calendar.getInstance()
         return rightNow.timeInMillis / 1000
     }
@@ -161,6 +166,9 @@ class TimerActivity : AppCompatActivity() {
             if(mTimeToGo!! <= 0) { // Timer expired
                 mTimeToGo = TIMER_LENGTH
                 mState = TimerState.STOPPED
+                binding.CircularProgressBar.progress = 0.0f
+                Log.d("CurrentPos", "Finished " + startTime.toString())
+                //binding.buttonStartPause.performClick()
                 onTimerFinished()
             }
             else {
@@ -171,6 +179,13 @@ class TimerActivity : AppCompatActivity() {
         else {
             mTimeToGo = TIMER_LENGTH
             mState = TimerState.STOPPED
+
+            //타이머 처음 스탭부터 자동시작
+            val time : List<String> = stepList[0].time.split(":")
+            val realTime : Long = (time[2].toLong() + time[1].toLong() * 60  + time[0].toLong() * 3600)
+            TIMER_LENGTH = realTime
+            mTimeToGo = realTime
+            binding.buttonStartPause.performClick()
         }
         updateCountDownText()
     }
@@ -190,14 +205,14 @@ class TimerActivity : AppCompatActivity() {
     }
 
     fun startTimer() {
+        //Log.d("CurrentPos", curPos.toString())
         mCountDownTimer = object : CountDownTimer(mTimeLeftInMillis, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 //mTimeLeftInMillis = millisUntilFinished
                 if(mTimeToGo!! > 0) {
                     mTimeToGo = mTimeToGo!! - 1
-                    val percentage = (100 / TIMER_LENGTH).toFloat()
                     mProgressBarAnimator?.cancel()
-                    mProgressTime = ((TIMER_LENGTH - mTimeToGo!!) / percentage)
+                    mProgressTime = Math.abs(1 - mTimeToGo!! / TIMER_LENGTH.toFloat())
                     animate(binding.CircularProgressBar, null, mProgressTime!!, 500)
 
                     Log.d("ProgressTime", mProgressTime.toString())
@@ -206,7 +221,6 @@ class TimerActivity : AppCompatActivity() {
                     mCountDownTimer!!.cancel()
                     mPreferences.setStartedTime(0)
                     mState = TimerState.STOPPED
-                    mTimeToGo = TIMER_LENGTH
                 }
 
                 updateCountDownText()
@@ -225,9 +239,18 @@ class TimerActivity : AppCompatActivity() {
     private fun updateCountDownText() {
         binding.buttonStartPause.isEnabled = mState != TimerState.RUNNING
 
-        val timeLeft = String.format(Locale.getDefault(), "00:00:%02d", mTimeToGo)
-        //Log.d("ProgressTime", mProgressTime.toString())
-        //binding.textViewCountdown.text = timeLeft
+        if((mTimeToGo != null) and (mTimeToGo != 0L)) {
+            Log.d("TimeToGO", mTimeToGo.toString())
+            var curTime = mTimeToGo
+            val hour = curTime!! / 3600
+            curTime /= 3600
+            val minute = (mTimeToGo!! - (hour * curTime)) / 60
+            val second = mTimeToGo!! - (hour * 3600) - (minute * 60)
+
+            val timeLeft = String.format(Locale.getDefault(), "%02d:%02d:%02d", hour, minute, second)
+            stepList[curPos].time = timeLeft
+            binding.rvTimer.adapter!!.notifyDataSetChanged()
+        }
     }
 
     private fun setAlarm() {
