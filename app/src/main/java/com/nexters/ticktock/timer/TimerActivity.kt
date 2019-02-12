@@ -12,6 +12,7 @@ import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.support.v4.content.ContextCompat.getSystemService
 import android.support.v4.view.ViewCompat.animate
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
@@ -53,6 +54,8 @@ class TimerActivity : AppCompatActivity() {
     var mProgressBarAnimator: ObjectAnimator? = null
 
     private var snapHelper: ControllableTimerSnapHelper? = null
+
+    var expiredTimeIdx : Int? = 0
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -214,6 +217,7 @@ class TimerActivity : AppCompatActivity() {
     }
 
     fun onTimerReset() {
+        expiredTimeIdx = 0
         mPreferences.setStartedTime(0)
         mTimeToGo = TIMER_LENGTH
         updateCountDownText()
@@ -231,18 +235,15 @@ class TimerActivity : AppCompatActivity() {
         mCountDownTimer = object : CountDownTimer(mTimeLeftInMillis, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 //mTimeLeftInMillis = millisUntilFinished
-                if(mTimeToGo!! > 0) {
+                if(mTimeToGo!! > 0 && expiredTimeIdx == 0) {
                     mTimeToGo = mTimeToGo!! - 1
                     mProgressBarAnimator?.cancel()
                     mProgressTime = Math.abs(1 - mTimeToGo!! / TIMER_LENGTH.toFloat())
                     animate(binding.CircularProgressBar, null, mProgressTime!!, 500)
-
-                    Log.d("ProgressTime", mProgressTime.toString())
                 }
                 else {
-                    mCountDownTimer!!.cancel()
-                    mPreferences.setStartedTime(0)
-                    mState = TimerState.STOPPED
+                    expiredTimeIdx = expiredTimeIdx!! - 1
+                    mTimeToGo = Math.abs(expiredTimeIdx!!.toLong())
                 }
 
                 updateCountDownText()
@@ -261,7 +262,7 @@ class TimerActivity : AppCompatActivity() {
     private fun updateCountDownText() {
         binding.buttonStartPause.isEnabled = mState != TimerState.RUNNING
 
-        if((mTimeToGo != null) and (mTimeToGo != 0L)) {
+        if((mTimeToGo != null)) {
             Log.d("TimeToGO", mTimeToGo.toString())
             var curTime = mTimeToGo
             val hour = curTime!! / 3600
