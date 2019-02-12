@@ -222,6 +222,7 @@ class TimerActivity : AppCompatActivity() {
         expiredTimeIdx = 0
         mPreferences.setStartedTime(0)
         mTimeToGo = TIMER_LENGTH
+        binding.timerLayout.setBackgroundColor(Color.parseColor("#ffffff"))
         updateCountDownText()
     }
 
