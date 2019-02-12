@@ -12,9 +12,11 @@ import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.support.v4.view.ViewCompat.animate
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.PagerSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.widget.Toast
@@ -51,7 +53,7 @@ class TimerActivity : AppCompatActivity() {
     var mProgressBarAnimator: ObjectAnimator? = null
 
     private var snapHelper: ControllableTimerSnapHelper? = null
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_timer)
@@ -79,7 +81,6 @@ class TimerActivity : AppCompatActivity() {
 
 
         mPreferences = PrefUtils(this)
-        binding.buttonReset.isEnabled = false
 
 
         binding.buttonStartPause.setOnClickListener {
@@ -87,20 +88,42 @@ class TimerActivity : AppCompatActivity() {
                 mPreferences.setStartedTime(getNow())
                 startTimer()
                 mState = TimerState.RUNNING
-                binding.buttonReset.isEnabled = true
+            }
+        }
+
+        binding.buttonNext.setOnClickListener {
+
+            if(curPos < stepList.size - 1) {
+                binding.rvTimer.smoothScrollToPosition(curPos + 1)
+                animate(binding.CircularProgressBar, null, 0.0f, 1000)
+                onTimerReset()
+                mCountDownTimer!!.cancel()
+                val time: List<String> = stepList[curPos + 1].time.split(":")
+                val realTime: Long = (time[2].toLong() + time[1].toLong() * 60 + time[0].toLong() * 3600)
+                mTimeToGo = realTime
+                Log.d("curPos", "$curPos $realTime")
+                mPreferences.setStartedTime(getNow())
+                TIMER_LENGTH = realTime
+                curPos++
+                startTimer()
             }
         }
 
         mPreferences.setStartedTime(0)
         binding.buttonReset.setOnClickListener {
-            if(mState == TimerState.RUNNING) {
-                mCountDownTimer!!.cancel()
-                mState = TimerState.STOPPED
-                animate(binding.CircularProgressBar, null, 0.0f, 500)
+            if(curPos > 0) {
+                binding.rvTimer.smoothScrollToPosition(curPos - 1)
+                animate(binding.CircularProgressBar, null, 0.0f, 1000)
                 onTimerReset()
+                mCountDownTimer!!.cancel()
+                val time: List<String> = stepList[curPos - 1].time.split(":")
+                val realTime: Long = (time[2].toLong() + time[1].toLong() * 60 + time[0].toLong() * 3600)
+                mTimeToGo = realTime
+                mPreferences.setStartedTime(getNow())
+                TIMER_LENGTH = realTime
+                curPos--
+                startTimer()
             }
-            else
-                animate(binding.CircularProgressBar, null, 0.0f, 500)
         }
 
         updateCountDownText()
@@ -193,7 +216,6 @@ class TimerActivity : AppCompatActivity() {
     fun onTimerReset() {
         mPreferences.setStartedTime(0)
         mTimeToGo = TIMER_LENGTH
-        binding.buttonReset.isEnabled = false
         updateCountDownText()
     }
 

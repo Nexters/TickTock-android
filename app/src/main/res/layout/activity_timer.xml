@@ -40,7 +40,18 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rv_timer"
             android:layout_marginLeft="100dp"
-            android:text="start" />
+            android:text="Start" />
+
+        <Button
+            android:id="@+id/button_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rv_timer"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rv_timer"
+            android:layout_marginLeft="100dp"
+            android:text="Next" />
 
         <Button
             android:id="@+id/button_reset"
@@ -50,7 +61,7 @@
             android:layout_marginRight="10dp"
             app:layout_constraintRight_toLeftOf="@+id/button_start_pause"
             app:layout_constraintTop_toBottomOf="@+id/rv_timer"
-            android:text="reset"
+            android:text="Prev"
             tools:visibility="visible" />
 
     </android.support.constraint.ConstraintLayout>
