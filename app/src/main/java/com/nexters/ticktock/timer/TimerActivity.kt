@@ -4,11 +4,13 @@ import android.animation.Animator
 import android.animation.Animator.AnimatorListener
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator.AnimatorUpdateListener
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -233,6 +235,7 @@ class TimerActivity : AppCompatActivity() {
     fun startTimer() {
         //Log.d("CurrentPos", curPos.toString())
         mCountDownTimer = object : CountDownTimer(mTimeLeftInMillis, 1000) {
+
             override fun onTick(millisUntilFinished: Long) {
                 //mTimeLeftInMillis = millisUntilFinished
                 if(mTimeToGo!! > 0 && expiredTimeIdx == 0) {
@@ -244,6 +247,12 @@ class TimerActivity : AppCompatActivity() {
                 else {
                     expiredTimeIdx = expiredTimeIdx!! - 1
                     mTimeToGo = Math.abs(expiredTimeIdx!!.toLong())
+
+                    //시간 초과되면 신호 알리기
+                    if(mTimeToGo!!.toInt() % 2 == 1)
+                        binding.timerLayout.setBackgroundColor(Color.parseColor("#ffa7a7"))
+                    else
+                        binding.timerLayout.setBackgroundColor(Color.parseColor("#ffffff"))
                 }
 
                 updateCountDownText()
