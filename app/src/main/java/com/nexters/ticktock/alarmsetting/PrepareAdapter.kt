@@ -63,8 +63,8 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
                 notifyDataSetChanged()
             }
 
-            itemView.prepare_name_edit.setOnFocusChangeListener { v, has_focus ->
-                if (adapterPosition == prepareList.size -1 && !has_focus) {
+            itemView.prepare_name_edit.setOnFocusChangeListener { _, hasFocus ->
+                if (adapterPosition == prepareList.size -1 && !hasFocus) {
                     if (!itemView.prepare_name_edit.text.isEmpty()) {
                         val model = PrepareModel("", 0)
                         prepareList.add(model)
@@ -73,8 +73,8 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
                 }
             }
 
-            itemView.prepare_time_edit.setOnFocusChangeListener { v, has_focus ->
-                if (has_focus) {
+            itemView.prepare_time_edit.setOnFocusChangeListener { v, hasFocus ->
+                if (hasFocus) {
                     var temp = v.prepare_time_edit.text.toString()
 
                     temp = temp.substring(0, temp.length - 1)
