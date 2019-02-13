@@ -58,13 +58,17 @@ class TimerActivity : AppCompatActivity() {
     private var snapHelper: ControllableTimerSnapHelper? = null
 
     var expiredTimeIdx : Int? = 0
+
+    var isTimerAlarmed = false
+    var checkIntentAlarm = false;
+    var isStarted = false;
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_timer)
 
         stepList = mutableListOf(
-                TimerStepItem("샤워하기", "00:30:00"),
+                TimerStepItem("샤워하기", "00:00:20"),
                 TimerStepItem("머리말리기", "00:10:00"),
                 TimerStepItem("옷입기", "00:15:00")
         )
@@ -100,13 +104,11 @@ class TimerActivity : AppCompatActivity() {
 
             if(curPos < stepList.size - 1) {
                 binding.rvTimer.smoothScrollToPosition(curPos + 1)
-                animate(binding.CircularProgressBar, null, 0.0f, 1000)
                 onTimerReset()
                 mCountDownTimer!!.cancel()
                 val time: List<String> = stepList[curPos + 1].time.split(":")
                 val realTime: Long = (time[2].toLong() + time[1].toLong() * 60 + time[0].toLong() * 3600)
                 mTimeToGo = realTime
-                Log.d("curPos", "$curPos $realTime")
                 mPreferences.setStartedTime(getNow())
                 TIMER_LENGTH = realTime
                 curPos++
@@ -118,7 +120,6 @@ class TimerActivity : AppCompatActivity() {
         binding.buttonReset.setOnClickListener {
             if(curPos > 0) {
                 binding.rvTimer.smoothScrollToPosition(curPos - 1)
-                animate(binding.CircularProgressBar, null, 0.0f, 1000)
                 onTimerReset()
                 mCountDownTimer!!.cancel()
                 val time: List<String> = stepList[curPos - 1].time.split(":")
@@ -174,7 +175,7 @@ class TimerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        if(mState == TimerState.RUNNING) {
+        if(mState == TimerState.RUNNING && expiredTimeIdx == 0) {
             mCountDownTimer!!.cancel()
             setAlarm()
         }
@@ -190,18 +191,16 @@ class TimerActivity : AppCompatActivity() {
         if(startTime > 0) {
             mTimeToGo = (TIMER_LENGTH - (getNow() - startTime))
 
-
             if(mTimeToGo!! <= 0) { // Timer expired
-                mTimeToGo = TIMER_LENGTH
-                mState = TimerState.STOPPED
-                binding.CircularProgressBar.progress = 0.0f
-                Log.d("CurrentPos", "Finished " + startTime.toString())
-                //binding.buttonStartPause.performClick()
-                onTimerFinished()
+                val curProg = binding.CircularProgressBar.progress
+                binding.CircularProgressBar.progress = 1.0f
+                if(curProg != 1.0f) startTimer()
             }
             else {
-                startTimer()
                 mState = TimerState.RUNNING
+                val curProg = binding.CircularProgressBar.progress
+                Log.d("curPos", "isError")
+                if(curProg != 1.0f) startTimer()
             }
         }
         else {
@@ -228,8 +227,7 @@ class TimerActivity : AppCompatActivity() {
 
     private fun onTimerFinished() {
         Toast.makeText(this, R.string.timer_finished, Toast.LENGTH_LONG).show()
-        mPreferences.setStartedTime(0)
-        mTimeToGo = TIMER_LENGTH
+
         updateCountDownText()
     }
 
@@ -239,7 +237,25 @@ class TimerActivity : AppCompatActivity() {
 
             override fun onTick(millisUntilFinished: Long) {
                 //mTimeLeftInMillis = millisUntilFinished
-                if(mTimeToGo!! > 0 && expiredTimeIdx == 0) {
+
+                //알람 울리고 다시 키면 시간초과 화면 뜨게하기
+                isStarted = true
+                isTimerAlarmed = intent.getBooleanExtra("isAlarmed", false)
+
+                if(isTimerAlarmed && !checkIntentAlarm) {
+                    expiredTimeIdx = expiredTimeIdx!! - 1
+                    mTimeToGo = Math.abs(expiredTimeIdx!!.toLong())
+                    isTimerAlarmed = false
+                    checkIntentAlarm = !checkIntentAlarm
+
+                    binding.timerLayout.apply{
+                        if(mTimeToGo!!.toInt() % 2 == 1)
+                            setBackgroundColor(Color.parseColor("#ffa7a7"))
+                        else
+                            setBackgroundColor(Color.parseColor("#ffffff"))
+                    }
+                }
+                else if(mTimeToGo!! > 0 && expiredTimeIdx == 0) {
                     mTimeToGo = mTimeToGo!! - 1
                     mProgressBarAnimator?.cancel()
                     mProgressTime = Math.abs(1 - mTimeToGo!! / TIMER_LENGTH.toFloat())
@@ -250,10 +266,12 @@ class TimerActivity : AppCompatActivity() {
                     mTimeToGo = Math.abs(expiredTimeIdx!!.toLong())
 
                     //시간 초과되면 신호 알리기
-                    if(mTimeToGo!!.toInt() % 2 == 1)
-                        binding.timerLayout.setBackgroundColor(Color.parseColor("#ffa7a7"))
-                    else
-                        binding.timerLayout.setBackgroundColor(Color.parseColor("#ffffff"))
+                    binding.timerLayout.apply{
+                        if(mTimeToGo!!.toInt() % 2 == 1)
+                            setBackgroundColor(Color.parseColor("#ffa7a7"))
+                        else
+                            setBackgroundColor(Color.parseColor("#ffffff"))
+                    }
                 }
 
                 updateCountDownText()
