@@ -14,8 +14,10 @@ import com.nexters.ticktock.R
 class TimerExpiredReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         val i : Intent = Intent(context, TimerActivity::class.java)
+        i.putExtra("isAlarmed", true)
         intent!!.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        val pIntent : PendingIntent = PendingIntent.getActivity(context, 0, i, 0)
+        val pIntent : PendingIntent = PendingIntent.getActivity(context, 0, i, PendingIntent.FLAG_UPDATE_CURRENT)
+        //val pIntent : PendingIntent = PendingIntent.getBroadcast(context!!.applicationContext, 0, i, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val b : NotificationCompat.Builder = NotificationCompat.Builder(context)
         val notification : Uri? = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)

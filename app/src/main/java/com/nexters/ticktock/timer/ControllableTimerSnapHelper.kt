@@ -41,7 +41,6 @@ class ControllableTimerSnapHelper(private var context: TimerActivity,
                     currentPos = snappedPosition
 
                     //timer 재시작
-                    context.animate(circularProgressbar, null, 0.0f, 1000)
                     context.onTimerReset()
                     context.mCountDownTimer!!.cancel()
                     val time : List<String> = context.stepList[snappedPosition].time.split(":")
