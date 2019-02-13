@@ -72,6 +72,25 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
                     }
                 }
             }
+
+            itemView.prepare_time_edit.setOnFocusChangeListener { v, has_focus ->
+                if (has_focus) {
+                    var temp = v.prepare_time_edit.text.toString()
+
+                    temp = temp.substring(0, temp.length - 1)
+
+                    v.prepare_time_edit.text = Editable.Factory.getInstance().newEditable(temp)
+                } else {
+                    var temp = v.prepare_time_edit.text.toString()
+
+                    prepareList[adapterPosition].time = temp.toInt()
+                    notifyItemChanged(adapterPosition)
+
+                    temp = temp.plus("분")
+
+                    v.prepare_time_edit.text = Editable.Factory.getInstance().newEditable(temp)
+                }
+            }
         }
 
         fun bindChangeMode(item: PrepareModel) {
