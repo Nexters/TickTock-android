@@ -3,6 +3,7 @@ package com.nexters.ticktock.alarmsetting
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -60,6 +61,16 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
             itemView.prepare_minus_button.setOnClickListener {
                 item.time--
                 notifyDataSetChanged()
+            }
+
+            itemView.prepare_name_edit.setOnFocusChangeListener { v, has_focus ->
+                if (adapterPosition == prepareList.size -1 && !has_focus) {
+                    if (!itemView.prepare_name_edit.text.isEmpty()) {
+                        val model = PrepareModel("", 0)
+                        prepareList.add(model)
+                        notifyItemInserted(adapterPosition + 1)
+                    }
+                }
             }
         }
 

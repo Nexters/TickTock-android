@@ -25,17 +25,7 @@ class AlarmSettingSecondActivity : OrmAppCompatActivity(), PrepareAdapter.OnStar
     }
 
     var prepareList: ArrayList<PrepareModel> = arrayListOf(
-            PrepareModel("데이트", 1),
-            PrepareModel("출근", 2),
-            PrepareModel("씻기", 3),
-            PrepareModel("출근", 2),
-            PrepareModel("출근", 2),
-            PrepareModel("출근", 2),
-            PrepareModel("출근", 2),
-            PrepareModel("출근", 2),
-            PrepareModel("출근", 2),
-            PrepareModel("출근", 2),
-            PrepareModel("출근", 2)
+            PrepareModel("", 0)
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
