@@ -70,7 +70,6 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
             itemView.prepare_time_edit.text = Editable.Factory.getInstance().newEditable(item.time.toString().plus("분"))
             itemView.prepare_plus_button.setOnClickListener {
                 item.time++
-                /* TODO: 해당 view만 갱신하게 바꾸자 */
                 notifyItemChanged(adapterPosition, "timeButton")
             }
             itemView.prepare_minus_button.setOnClickListener {
