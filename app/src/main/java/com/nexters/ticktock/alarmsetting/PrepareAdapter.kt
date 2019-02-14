@@ -58,6 +58,8 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
             for (payload in payloads) {
                 if (payload.toString() == "timeFocus" || payload.toString() == "timeButton") {
                     holder.bindTimeEditText(prepareList[position])
+                } else if (payload.toString() == "nameFocus") {
+                    holder.bindNameEditText(prepareList[position])
                 }
             }
         }
@@ -77,7 +79,12 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
                 notifyItemChanged(adapterPosition, "timeButton")
             }
 
-            itemView.prepare_name_edit.setOnFocusChangeListener { _, hasFocus ->
+            itemView.prepare_name_edit.setOnFocusChangeListener { v, hasFocus ->
+                if (!hasFocus && v.prepare_name_edit.text.toString() != item.name) {
+                    item.name = v.prepare_name_edit.text.toString()
+                    notifyItemChanged(adapterPosition, "nameFocus")
+                }
+
                 if (adapterPosition == prepareList.size -1 && !hasFocus) {
                     if (!itemView.prepare_name_edit.text.isEmpty()) {
                         val model = PrepareModel("", 0)
@@ -122,6 +129,10 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
         }
 
         /******************** view event 에 사용되는 bind 함수들 *********************/
+
+        fun bindNameEditText(item: PrepareModel) {
+            itemView.prepare_name_edit.text = Editable.Factory.getInstance().newEditable(item.name)
+        }
 
         fun bindTimeEditText(item: PrepareModel) {
             itemView.prepare_time_edit.text = Editable.Factory.getInstance().newEditable(item.time.toString().plus("분"))
