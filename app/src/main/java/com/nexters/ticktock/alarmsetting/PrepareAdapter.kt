@@ -1,6 +1,7 @@
 package com.nexters.ticktock.alarmsetting
 
 import android.content.Context
+import android.graphics.Rect
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.util.Log
@@ -9,9 +10,11 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.nexters.ticktock.R
+import kotlinx.android.synthetic.main.activity_alarm_setting_second.view.*
 import kotlinx.android.synthetic.main.item_prepare.view.*
 import kotlinx.android.synthetic.main.item_prepare_edit.view.*
 import java.util.*
+import android.view.inputmethod.InputMethodManager
 
 
 class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareModel>, val startDragListener: OnStartDragListener) : RecyclerView.Adapter<PrepareAdapter.ItemPrepareHolder>(), PrepareItemTouchHelperCallback.OnItemMoveListener {
@@ -112,19 +115,23 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
         }
 
         fun bindChangeMode(item: PrepareModel) {
-            itemView.prepare_name_text.text = item.name
-            itemView.prepare_time_text.text = item.time.toString().plus("분")
-            itemView.list_recycle.setOnTouchListener { _, _ ->
-                prepareList.removeAt(adapterPosition)
-                notifyItemRemoved(adapterPosition)
+            if (!item.name.isEmpty()) {
+                itemView.prepare_name_text.text = item.name
+                itemView.prepare_time_text.text = item.time.toString().plus("분")
+                itemView.list_recycle.setOnTouchListener { _, _ ->
+                    prepareList.removeAt(adapterPosition)
+                    notifyItemRemoved(adapterPosition)
 
-                return@setOnTouchListener false
-            }
-            itemView.list_order_change.setOnTouchListener { _, motionEvent ->
-                if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                    startDragListener.onStartDrag(this)
+                    return@setOnTouchListener false
                 }
-                return@setOnTouchListener false
+                itemView.list_order_change.setOnTouchListener { _, motionEvent ->
+                    if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                        startDragListener.onStartDrag(this)
+                    }
+                    return@setOnTouchListener false
+                }
+            } else {
+                itemView.visibility = View.INVISIBLE
             }
         }
 
@@ -132,6 +139,7 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
 
         fun bindNameEditText(item: PrepareModel) {
             itemView.prepare_name_edit.text = Editable.Factory.getInstance().newEditable(item.name)
+            itemView.prepare_name_edit.clearFocus()
         }
 
         fun bindTimeEditText(item: PrepareModel) {
