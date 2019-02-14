@@ -48,6 +48,21 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
             holder.bindChangeMode(prepareList[position])
     }
 
+    override fun onBindViewHolder(holder: ItemPrepareHolder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            if (AlarmSettingSecondActivity.editMode == 1)
+                holder.bindEditMode(prepareList[position])
+            else
+                holder.bindChangeMode(prepareList[position])
+        } else {
+            for (payload in payloads) {
+                if (payload.toString() == "timeFocus") {
+                    holder.bindTimeEditText(prepareList[position])
+                }
+            }
+        }
+    }
+
     inner class ItemPrepareHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindEditMode(item: PrepareModel) {
@@ -73,6 +88,7 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
                 }
             }
 
+            /* TODO: edit중에 버튼을 클릭하면 에러나는 버그를 고치자 */
             itemView.prepare_time_edit.setOnFocusChangeListener { v, hasFocus ->
                 if (hasFocus) {
                     var temp = v.prepare_time_edit.text.toString()
@@ -81,14 +97,10 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
 
                     v.prepare_time_edit.text = Editable.Factory.getInstance().newEditable(temp)
                 } else {
-                    var temp = v.prepare_time_edit.text.toString()
+                    val temp = v.prepare_time_edit.text.toString()
 
                     prepareList[adapterPosition].time = temp.toInt()
-                    notifyItemChanged(adapterPosition)
-
-                    temp = temp.plus("분")
-
-                    v.prepare_time_edit.text = Editable.Factory.getInstance().newEditable(temp)
+                    notifyItemChanged(adapterPosition, "timeFocus")
                 }
             }
         }
@@ -108,6 +120,12 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
                 }
                 return@setOnTouchListener false
             }
+        }
+
+        /******************** view event 에 사용되는 bind 함수들 *********************/
+
+        fun bindTimeEditText(item: PrepareModel) {
+            itemView.prepare_time_edit.text =Editable.Factory.getInstance().newEditable(item.time.toString().plus("분"))
         }
     }
 }
