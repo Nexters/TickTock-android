@@ -5,7 +5,7 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.widget.Toast
+import android.view.MotionEvent
 import com.nexters.ticktock.OrmAppCompatActivity
 import com.nexters.ticktock.R
 import com.nexters.ticktock.databinding.ActivityAlarmSettingSecondBinding
@@ -25,17 +25,7 @@ class AlarmSettingSecondActivity : OrmAppCompatActivity(), PrepareAdapter.OnStar
     }
 
     var prepareList: ArrayList<PrepareModel> = arrayListOf(
-            PrepareModel("데이트", 1),
-            PrepareModel("출근", 2),
-            PrepareModel("씻기", 3),
-            PrepareModel("출근", 2),
-            PrepareModel("출근", 2),
-            PrepareModel("출근", 2),
-            PrepareModel("출근", 2),
-            PrepareModel("출근", 2),
-            PrepareModel("출근", 2),
-            PrepareModel("출근", 2),
-            PrepareModel("출근", 2)
+            PrepareModel("", 0)
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +60,25 @@ class AlarmSettingSecondActivity : OrmAppCompatActivity(), PrepareAdapter.OnStar
         binding.secondSettingNextButton.setOnClickListener {view ->
             val intent: Intent = Intent(this, TimerActivity::class.java)
             startActivity(intent)
+        }
+
+        /* TODO: warning 없애자 */
+        binding.secondSettingRoot.setOnTouchListener { _, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                binding.secondSettingRoot.isFocusableInTouchMode = true
+                binding.secondSettingRoot.requestFocus()
+            }
+
+            return@setOnTouchListener false
+        }
+
+        binding.secondSettingRecycler.setOnTouchListener { _, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                binding.secondSettingRoot.isFocusableInTouchMode = true
+                binding.secondSettingRoot.requestFocus()
+            }
+
+            return@setOnTouchListener false
         }
     }
 }
