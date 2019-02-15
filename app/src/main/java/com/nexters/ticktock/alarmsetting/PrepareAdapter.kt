@@ -1,20 +1,16 @@
 package com.nexters.ticktock.alarmsetting
 
 import android.content.Context
-import android.graphics.Rect
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.nexters.ticktock.R
-import kotlinx.android.synthetic.main.activity_alarm_setting_second.view.*
 import kotlinx.android.synthetic.main.item_prepare.view.*
 import kotlinx.android.synthetic.main.item_prepare_edit.view.*
 import java.util.*
-import android.view.inputmethod.InputMethodManager
 
 
 class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareModel>, val startDragListener: OnStartDragListener) : RecyclerView.Adapter<PrepareAdapter.ItemPrepareHolder>(), PrepareItemTouchHelperCallback.OnItemMoveListener {
@@ -97,19 +93,24 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
                 }
             }
 
-            /* TODO: edit중에 버튼을 클릭하면 에러나는 버그를 고치자 */
             itemView.prepare_time_edit.setOnFocusChangeListener { v, hasFocus ->
                 if (hasFocus) {
                     var temp = v.prepare_time_edit.text.toString()
 
-                    temp = temp.substring(0, temp.length - 1)
+                    temp = temp.replace("분", "")
 
                     v.prepare_time_edit.text = Editable.Factory.getInstance().newEditable(temp)
                 } else {
-                    val temp = v.prepare_time_edit.text.toString()
+                    var temp = v.prepare_time_edit.text.toString()
 
-                    prepareList[adapterPosition].time = temp.toInt()
-                    notifyItemChanged(adapterPosition, "timeFocus")
+                    temp = temp.replace("분", "")
+
+                    if (!temp.isEmpty())
+                        prepareList[layoutPosition].time = temp.toInt()
+                    else
+                        prepareList[layoutPosition].time = 0
+
+                    notifyItemChanged(layoutPosition, "timeFocus")
                 }
             }
         }
