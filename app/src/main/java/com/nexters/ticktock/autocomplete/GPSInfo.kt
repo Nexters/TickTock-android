@@ -10,15 +10,17 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.provider.Settings
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.google.android.gms.maps.model.LatLng
+import com.nexters.ticktock.OrmAppCompatActivity
 import java.io.IOException
 
 
-class GPSInfo(private var activity: AppCompatActivity) : Service(), LocationListener {
-
-    init {
+class GPSInfo(): Service(), LocationListener {
+    
+    constructor(ac: OrmAppCompatActivity): this() {
+        activity = ac
+        geocoder = Geocoder(activity)
         getLocation()
     }
 
@@ -46,11 +48,12 @@ class GPSInfo(private var activity: AppCompatActivity) : Service(), LocationList
         }
     }
 
+    private lateinit var activity: OrmAppCompatActivity
+    private lateinit var geocoder: Geocoder// 좌표 - 주소 변환
+
     private val TAG:String = "GPSINFO"
     private val GPS_ENABLE_REQUEST_CODE = 2001
     private val GPS_PLACE_ID: String = "-1"
-
-    private var geocoder: Geocoder = Geocoder(activity)// 좌표 - 주소 변환
 
     // 현재 GPS 사용유무
     internal var isGPSEnabled = false

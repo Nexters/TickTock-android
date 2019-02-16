@@ -10,4 +10,14 @@
 
     <color name="colorBus">#FF0000</color>
     <color name="colorSubway">#00FF00</color>
+
+    <!-- activity_alarm_setting_third -->
+    <color name="colorCardBorder">#979797</color>
+    <color name="colorCard1">#f46b49</color>
+    <color name="colorCard2">#09b9c2</color>
+    <color name="colorCard3">#ff9f00</color>
+    <color name="colorCard4">#659ff6</color>
+    <color name="colorCard5">#bf75f8</color>
+    <color name="alarmMainColor">#f6460f</color>
+    <color name="quickTimeBorder">#d8d8d8</color>
 </resources>

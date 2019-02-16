@@ -58,7 +58,7 @@ class AlarmSettingSecondActivity : OrmAppCompatActivity(), PrepareAdapter.OnStar
 
         // 다음 타이머 엑티비티로 넘김
         binding.secondSettingNextButton.setOnClickListener {view ->
-            val intent: Intent = Intent(this, TimerActivity::class.java)
+            val intent = Intent(this, AlarmSettingThirdActivity::class.java)
             startActivity(intent)
         }
 
