@@ -30,10 +30,9 @@
 
         </receiver>
 
-        <activity android:name=".CardActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".timer.TimerActivity" />
-        <activity android:name=".timer.PriorTimerActivity"
+        <activity android:name=".CardActivity"
             android:showOnLockScreen="true"
             android:screenOrientation="sensorPortrait">
             <intent-filter>
@@ -52,6 +51,7 @@
         <activity android:name=".alarmsetting.AlarmSettingFirstActivity" />
         <activity android:name=".alarmsetting.AlarmSettingSecondActivity" />
         <activity android:name=".alarmsetting.AlarmSettingThirdActivity" />
+        <activity android:name=".timer.PriorTimerActivity" />
 
         <service android:name=".autocomplete.GPSInfo" />
     </application>

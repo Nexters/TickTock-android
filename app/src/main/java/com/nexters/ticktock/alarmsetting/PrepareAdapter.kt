@@ -113,24 +113,25 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
                     }
                 }
 
-            itemView.prepare_time_edit.setOnFocusChangeListener { v, hasFocus ->
-                if (hasFocus) {
-                    var temp = v.prepare_time_edit.text.toString()
+                itemView.prepare_time_edit.setOnFocusChangeListener { v, hasFocus ->
+                    if (hasFocus) {
+                        var temp = v.prepare_time_edit.text.toString()
 
-                    temp = temp.replace("분", "")
+                        temp = temp.replace("분", "")
 
-                    v.prepare_time_edit.text = Editable.Factory.getInstance().newEditable(temp)
-                } else {
-                    var temp = v.prepare_time_edit.text.toString()
+                        v.prepare_time_edit.text = Editable.Factory.getInstance().newEditable(temp)
+                    } else {
+                        var temp = v.prepare_time_edit.text.toString()
 
-                    temp = temp.replace("분", "")
+                        temp = temp.replace("분", "")
 
-                    if (!temp.isEmpty())
-                        prepareList[layoutPosition].time = temp.toInt()
-                    else
-                        prepareList[layoutPosition].time = 0
+                        if (!temp.isEmpty())
+                            prepareList[layoutPosition].time = temp.toInt()
+                        else
+                            prepareList[layoutPosition].time = 0
 
-                    notifyItemChanged(layoutPosition, "timeFocus")
+                        notifyItemChanged(layoutPosition, "timeFocus")
+                    }
                 }
             }
         }
