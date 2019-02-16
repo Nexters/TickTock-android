@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/second_setting_head"
             android:layout_width="match_parent"
             android:layout_height="100dp"
@@ -16,14 +16,23 @@
                 android:id="@+id/second_setting_back_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="back"/>
+                android:text="back"
+                android:layout_alignParentLeft="true"/>
+
+            <Button
+                android:id="@+id/second_setting_edit_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="편집"
+                android:layout_alignParentRight="true"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="뭐부터\n 준비할까요?"
-                android:textSize="20sp"/>
-        </LinearLayout>
+                android:textSize="20sp"
+                android:layout_below="@+id/second_setting_back_button"/>
+        </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/second_setting_recycler"

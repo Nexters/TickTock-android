@@ -67,31 +67,51 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
     inner class ItemPrepareHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindEditMode(item: PrepareModel) {
-            itemView.prepare_name_edit.text = Editable.Factory.getInstance().newEditable(item.name)
-            itemView.prepare_time_edit.text = Editable.Factory.getInstance().newEditable(item.time.toString().plus("분"))
-            itemView.prepare_plus_button.setOnClickListener {
-                item.time++
-                notifyItemChanged(adapterPosition, "timeButton")
-            }
-            itemView.prepare_minus_button.setOnClickListener {
-                item.time--
-                notifyItemChanged(adapterPosition, "timeButton")
-            }
+            if (adapterPosition == prepareList.size - 1) {
+                itemView.prepare_name_edit.visibility = View.INVISIBLE
+                itemView.prepare_time_edit.visibility = View.INVISIBLE
+                itemView.prepare_plus_button.visibility = View.INVISIBLE
+                itemView.prepare_minus_button.visibility = View.INVISIBLE
 
-            itemView.prepare_name_edit.setOnFocusChangeListener { v, hasFocus ->
-                if (!hasFocus && v.prepare_name_edit.text.toString() != item.name) {
-                    item.name = v.prepare_name_edit.text.toString()
-                    notifyItemChanged(adapterPosition, "nameFocus")
+                itemView.prepare_item_plus_button.visibility = View.VISIBLE
+
+                itemView.prepare_item_plus_button.setOnClickListener { view ->
+                    val model = PrepareModel("", 0)
+                    prepareList.add(model)
+                    notifyItemInserted(adapterPosition)
+                }
+            } else {
+                itemView.prepare_name_edit.text = Editable.Factory.getInstance().newEditable(item.name)
+                itemView.prepare_time_edit.text = Editable.Factory.getInstance().newEditable(item.time.toString().plus("분"))
+                itemView.prepare_plus_button.setOnClickListener {
+                    item.time++
+                    notifyItemChanged(adapterPosition, "timeButton")
+                }
+                itemView.prepare_minus_button.setOnClickListener {
+                    item.time--
+                    notifyItemChanged(adapterPosition, "timeButton")
                 }
 
-                if (adapterPosition == prepareList.size -1 && !hasFocus) {
-                    if (!itemView.prepare_name_edit.text.isEmpty()) {
-                        val model = PrepareModel("", 0)
-                        prepareList.add(model)
-                        notifyItemInserted(adapterPosition + 1)
+                itemView.prepare_name_edit.setOnFocusChangeListener { v, hasFocus ->
+                    if (!hasFocus && v.prepare_name_edit.text.toString() != item.name) {
+                        item.name = v.prepare_name_edit.text.toString()
+                        notifyItemChanged(adapterPosition, "nameFocus")
+                    }
+
+                    if (!hasFocus && v.prepare_name_edit.text.isEmpty()) {
+                        prepareList.remove(item)
+                        notifyItemRemoved(adapterPosition)
+                    }
+
+                    // 마지막꺼일 때 추가
+                    if (adapterPosition == prepareList.size - 1 && !hasFocus) {
+                        if (!itemView.prepare_name_edit.text.isEmpty()) {
+                            val model = PrepareModel("", 0)
+                            prepareList.add(model)
+                            notifyItemInserted(adapterPosition + 1)
+                        }
                     }
                 }
-            }
 
             itemView.prepare_time_edit.setOnFocusChangeListener { v, hasFocus ->
                 if (hasFocus) {
