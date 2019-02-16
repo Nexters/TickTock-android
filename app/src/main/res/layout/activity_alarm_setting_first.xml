@@ -5,7 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/first_setting_head"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -20,12 +20,26 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginLeft="16dp"/>
 
+            <ImageView
+                android:id="@+id/tag_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/tag_one"
+                android:layout_alignLeft="@+id/first_setting_back_button"
+                android:layout_marginLeft="16dp"
+                android:layout_below="@+id/first_setting_back_button"
+                android:layout_marginTop="20dp"/>
+            
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="언제부터 준비를\n시작해야 할까요?"
-                android:textSize="20sp"/>
-        </LinearLayout>
+                android:text="어디로 몇 시까지\n가면 될까요?"
+                android:layout_alignLeft="@+id/tag_one"
+                android:layout_below="@id/tag_one"
+                android:layout_marginTop="6dp"
+                android:textSize="24sp"/>
+
+        </RelativeLayout>
 
         <ScrollView
             android:id="@+id/first_setting_scrollview"
