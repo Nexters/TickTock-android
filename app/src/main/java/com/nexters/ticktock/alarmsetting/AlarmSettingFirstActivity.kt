@@ -49,7 +49,7 @@ class AlarmSettingFirstActivity : OrmAppCompatActivity() {
             MAIN_ACTIVITY_REQUEST_CODE -> {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-                        binding.firstSettingDirectionButton.text =  "${data?.getIntExtra("totalTime", 0)}분"
+                        //binding.firstSettingDirectionButton.text =  "${data?.getIntExtra("totalTime", 0)}분"
                     }
                 }
             }
