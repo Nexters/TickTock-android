@@ -16,7 +16,7 @@
                 android:id="@+id/first_setting_back_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/rectangle"
+                android:src="@drawable/btn_back"
                 android:background="@android:color/transparent"
                 android:layout_marginTop="12dp"
                 android:layout_marginLeft="16dp"/>
@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/first_setting_head"
-            android:layout_above="@+id/first_setting_next_button"
+            android:layout_above="@+id/first_setting_footer"
             android:layout_marginTop="20dp">
 
             <LinearLayout
@@ -122,8 +122,6 @@
                         android:layout_below="@+id/promise_time_text">
                     </TimePicker>
 
-                    <!-- TODO: 구분선 수치 값을 상대 값으로 수정하자 -->
-
                     <View
                         android:id="@+id/first_setting_line"
                         android:layout_width="match_parent"
@@ -209,12 +207,22 @@
             </LinearLayout>
         </ScrollView>
 
-        <ImageView
-            android:id="@+id/first_setting_next_button"
+        <RelativeLayout
+            android:id="@+id/first_setting_footer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_alignParentBottom="true"
-            android:src="@drawable/btn_next_nor"/>
+            android:background="#f6460f">
 
+            <ImageView
+                android:id="@+id/first_setting_next_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_next"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="32dp"/>
+
+        </RelativeLayout>
     </RelativeLayout>
 </layout>
