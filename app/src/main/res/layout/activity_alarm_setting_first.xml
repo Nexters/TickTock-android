@@ -11,11 +11,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <Button
+            <ImageButton
                 android:id="@+id/first_setting_back_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="back"/>
+                android:src="@drawable/rectangle"
+                android:background="@android:color/transparent"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="16dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
