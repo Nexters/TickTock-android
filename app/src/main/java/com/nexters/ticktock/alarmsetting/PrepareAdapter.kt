@@ -88,6 +88,12 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
                     notifyItemChanged(adapterPosition, "nameFocus")
                 }
 
+                if (!hasFocus && v.prepare_name_edit.text.isEmpty()) {
+                    prepareList.remove(item)
+                    notifyItemRemoved(adapterPosition)
+                }
+
+                // 마지막꺼일 때 추가
                 if (adapterPosition == prepareList.size -1 && !hasFocus) {
                     if (!itemView.prepare_name_edit.text.isEmpty()) {
                         val model = PrepareModel("", 0)
