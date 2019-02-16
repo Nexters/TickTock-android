@@ -81,14 +81,13 @@
                         android:src="@drawable/btn_one_plus"
                         android:background="@android:color/transparent"
                         android:layout_below="@id/wasting_time_text"
-                        android:layout_toRightOf="@id/wasting_time_text"
-                        android:layout_marginLeft="23dp"
+                        android:layout_centerHorizontal="true"
                         android:layout_marginTop="15dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="얼마나 걸리는 지 알아볼까요?"
+                        android:text="얼마나 걸리는지 알아볼까요?"
                         android:layout_centerHorizontal="true"
                         android:layout_below="@id/first_setting_direction_button"
                         android:layout_marginTop="7dp"
