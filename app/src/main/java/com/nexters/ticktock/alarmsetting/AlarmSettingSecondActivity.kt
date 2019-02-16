@@ -43,9 +43,7 @@ class AlarmSettingSecondActivity : OrmAppCompatActivity(), PrepareAdapter.OnStar
 
         binding.secondSettingRecycler.adapter = adapter
 
-
-        /* TODO: 뒤로가기 버튼 -> 편집 버튼으로 바꾸자 */
-        binding.secondSettingBackButton.setOnClickListener {view ->
+        binding.secondSettingEditButton.setOnClickListener {view ->
             editMode = if (editMode == 1) {
                 2
             } else {
