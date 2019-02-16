@@ -19,7 +19,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop = "12dp"
             android:layout_marginStart = "16dp"
-            android:backgroundTint="@android:color/white"/>
+            android:backgroundTint="@android:color/transparent"/>
 
         <TextView
             android:id = "@+id/tv_time"
@@ -80,7 +80,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:background="@drawable/button_click"
-            android:layout_marginTop="16dp"
             />
 
     </android.support.constraint.ConstraintLayout>
