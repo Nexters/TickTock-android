@@ -12,29 +12,48 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service
+            android:name=".timer.AlarmService"
+            android:enabled="true"
+            android:exported="true"></service>
 
-        <activity android:name=".CardActivity">
+        <receiver android:name=".timer.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:showOnLockScreen="true"
+            android:screenOrientation="sensorPortrait">
+
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </receiver>
+
+        <activity android:name=".CardActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".timer.TimerActivity" />
+        <activity android:name=".timer.PriorTimerActivity"
+            android:showOnLockScreen="true"
+            android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter></activity>
-        <activity android:name=".MainActivity">
-
+            </intent-filter>
         </activity>
-        <activity android:name=".timer.TimerActivity" />
-        <receiver android:name=".timer.TimerExpiredReceiver"/>
+
+        <receiver android:name=".timer.TimerExpiredReceiver" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".autocomplete.AutoCompleteActivity"/>
+        <activity android:name=".autocomplete.AutoCompleteActivity" />
         <activity android:name=".alarmsetting.AlarmSettingFirstActivity" />
         <activity android:name=".alarmsetting.AlarmSettingSecondActivity" />
         <activity android:name=".alarmsetting.AlarmSettingThirdActivity" />
 
-        <service android:name=".autocomplete.GPSInfo"/>
+        <service android:name=".autocomplete.GPSInfo" />
     </application>
 
 </manifest>

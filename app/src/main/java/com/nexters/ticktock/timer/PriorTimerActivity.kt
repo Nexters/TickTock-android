@@ -1,18 +1,26 @@
 package com.nexters.ticktock.timer
 
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Window
+import android.view.WindowManager
 import com.nexters.ticktock.R
 import com.nexters.ticktock.databinding.ActivityPriorTimerBinding
 import java.text.SimpleDateFormat
 import java.util.*
+
+
 
 class PriorTimerActivity : AppCompatActivity() {
 
@@ -25,7 +33,34 @@ class PriorTimerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_prior_timer)
+        window.addFlags((WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED))
+        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+        binding = DataBindingUtil.setContentView(this, com.nexters.ticktock.R.layout.activity_prior_timer)
+
+        val mCalendar : Calendar = Calendar.getInstance()
+        mCalendar.set(Calendar.HOUR_OF_DAY, 20)
+        mCalendar.set(Calendar.MINUTE, 33)
+        mCalendar.set(Calendar.SECOND, 0)
+
+
+        val mAlarmIntent:Intent = Intent(this, AlarmReceiver::class.java)
+        val pIntent : PendingIntent = PendingIntent.getBroadcast(this, 0, mAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val alarmManager : AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+
+        val rightNow : Calendar = Calendar.getInstance()
+        if(rightNow.timeInMillis < mCalendar.timeInMillis) {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, mCalendar.timeInMillis, pIntent)
+            if(Build.VERSION.SDK_INT >= 23)
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mCalendar.timeInMillis, pIntent)
+            else if(Build.VERSION.SDK_INT >= 19)
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, mCalendar.timeInMillis, pIntent)
+            else
+                alarmManager.set(AlarmManager.RTC_WAKEUP, mCalendar.timeInMillis, pIntent)
+        }
 
 
         binding.btnClose.setOnClickListener {
@@ -63,7 +98,9 @@ class PriorTimerActivity : AppCompatActivity() {
         binding.btnTimerstart.setOnClickListener{
             val intent = Intent(this, TimerActivity::class.java)
             startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
+            overridePendingTransition(com.nexters.ticktock.R.anim.slide_in_up, com.nexters.ticktock.R.anim.slide_out_up)
         }
+
+
     }
 }
