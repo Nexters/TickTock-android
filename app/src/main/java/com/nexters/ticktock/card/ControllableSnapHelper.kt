@@ -1,9 +1,9 @@
 package com.nexters.ticktock.card
 
-import android.support.v7.widget.LinearSnapHelper
+import android.support.v7.widget.PagerSnapHelper
 import android.support.v7.widget.RecyclerView
 
-class ControllableSnapHelper(private val onSnapped: ((Int) -> Unit)? = null) : LinearSnapHelper() {
+class ControllableSnapHelper(private val onSnapped: ((Int) -> Unit)? = null) : PagerSnapHelper() {
     var snappedPosition = 0
     private var snapToNext = false
     private var snapToPrevious = false
