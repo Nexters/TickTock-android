@@ -32,7 +32,7 @@
         <activity android:name=".autocomplete.AutoCompleteActivity"/>
         <activity android:name=".alarmsetting.AlarmSettingFirstActivity" />
         <activity android:name=".alarmsetting.AlarmSettingSecondActivity" />
-        <activity android:name=".timer.TimerActivity" />
+        <activity android:name=".alarmsetting.AlarmSettingThirdActivity" />
 
         <service android:name=".autocomplete.GPSInfo"/>
     </application>
