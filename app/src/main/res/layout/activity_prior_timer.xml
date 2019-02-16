@@ -10,6 +10,17 @@
         android:layout_height="match_parent"
         tools:context=".timer.PriorTimerActivity">
 
+        <ImageButton
+            android:id = "@+id/btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src = "@drawable/rectangle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop = "12dp"
+            android:layout_marginStart = "16dp"
+            android:backgroundTint="@android:color/white"/>
+
         <TextView
             android:id = "@+id/tv_time"
             android:layout_width="wrap_content"
@@ -55,22 +66,22 @@
             android:id="@+id/btn_fivemin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#ffff"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:src="@drawable/btn_timeadd"
+            android:background="@drawable/button_click"
             android:layout_marginBottom="152dp" />
         
         <ImageButton
             android:id = "@+id/btn_timerstart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#ffff"
             app:layout_constraintTop_toBottomOf="@+id/btn_fivemin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:src = "@drawable/btn_timestart"
+            android:background="@drawable/button_click"
             android:layout_marginTop="16dp"
             />
 
