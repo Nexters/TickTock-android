@@ -185,6 +185,10 @@ class TimerActivity : AppCompatActivity() {
         mProgressBarAnimator!!.start()
     }
 
+    override fun onBackPressed() {
+        return
+    }
+
     override fun onResume() {
         super.onResume()
         initTimer()
