@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.DisplayMetrics
 
 class SpeedControllableLinearLayoutManager(
-        context: Context, orientation: Int, reverseLayout: Boolean, recyclerView: RecyclerView?,
+        context: Context, orientation: Int, reverseLayout: Boolean, val recyclerView: RecyclerView,
         private val millisecondsPerInch: Float
 ) : LinearLayoutManager(context, orientation, reverseLayout) {
 

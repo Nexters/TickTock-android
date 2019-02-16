@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#ff4081</color>
 
-    <color name="appMainColor">#BDBDBD</color>
+    <color name="appMainColor">#bdbdbd</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlack">#000000</color>
 
@@ -64,4 +64,17 @@
     <color name="bus_airport">#00A0E9</color>
     <color name="bus_gansun">#0068B7</color>
     <color name="bus_gwangyeok">#E60012</color>
+
+    <color name="middleOpacityWhite">#7fffffff</color>
+    <color name="cardDurationBarCircleColor">#f6460f</color>
+    <color name="cardDurationBarRectangleColor">#d7d7e0</color>
+
+    <color name="cardDisableBGColor">#d7d7e0</color>
+    <color name="cardBgColor1">#09b9c2</color>
+
+    <color name="cardIndicatorColor">#323232</color>
+
+    <color name="mainEditPhaseBGColor">#99000000</color>
+
+    <color name="none">#00000000</color>
 </resources>

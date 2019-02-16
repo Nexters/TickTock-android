@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+            android:top="3dp"
+            android:gravity="center_horizontal">
+        <shape android:shape="rectangle" >
+            <size
+                    android:width="1dp"
+                    android:height="47dp" />
+            <solid
+                    android:color="@color/cardDurationBarRectangleColor" />
+        </shape>
+    </item>
+
+    <item
+            android:bottom="47dp">
+        <shape android:shape="oval" >
+            <size
+                    android:width="7dp"
+                    android:height="7dp" />
+            <solid
+                    android:color="@color/cardDurationBarCircleColor" />
+        </shape>
+    </item>
+
+    <item
+            android:top="47dp"
+            android:bottom="0dp">
+        <shape android:shape="oval" >
+            <size
+                    android:width="7dp"
+                    android:height="7dp" />
+            <solid
+                    android:color="@color/cardDurationBarCircleColor" />
+        </shape>
+    </item>
+</layer-list>

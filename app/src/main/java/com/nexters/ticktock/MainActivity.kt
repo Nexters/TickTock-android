@@ -2,17 +2,12 @@ package com.nexters.ticktock
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import kotlinx.android.synthetic.main.activity_main.*
 import android.databinding.DataBindingUtil
 import com.nexters.ticktock.autocomplete.AutoCompleteActivity
 import com.nexters.ticktock.autocomplete.GPSInfo
 import com.nexters.ticktock.databinding.ActivityMainBinding
-import com.nexters.ticktock.dto.DayGroup
-import com.nexters.ticktock.dto.entity.Article
 
 
 class MainActivity : OrmAppCompatActivity(), View.OnClickListener {

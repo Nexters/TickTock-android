@@ -30,9 +30,6 @@
     <string name="tv_end_name_text">신분당선강남역</string>
     <string name="tv_get_off_text">하차</string>
 
-    <string name="header1">인생은 타이밍,\n\'성실갑\'되러 가볼까요?</string>
-    <string name="deleteCheckMessage">%1$s를\n삭제하시는 게 맞나요?</string>
-
     <!-- activity_alarm_setting_third -->
     <string name="tv_alarm_setting_third_title">몇시에 알람을\n맞출까요?</string>
     <string name="tv_alarm_setting_third_target_time">오후 4시 30분</string>
@@ -44,4 +41,10 @@
     <!-- item_prepare_time -->
     <string name="tv_prepare_time_title">샤워하기</string>
     <string name="tv_prepare_time_description">5분</string>
+    <string name="header1">인생은 타이밍!\n\@성실갑@\되러 가볼까요?</string>
+    <string name="deleteCheckMessage">을\n삭제하시는 게 맞나요?</string>
+    <string name="card_img">카드 이미지</string>
+    <string name="edit">편집</string>
+    <string name="location_default">마포구 합정동</string>
+
 </resources>

@@ -8,14 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 
-class OffsetItemDecoration(
+open class OffsetItemDecoration(
         private val context: Context
 ) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
 
         super.getItemOffsets(outRect, view, parent, state)
-        val offset = (getScreenWidth() / 2F).toInt() - view.layoutParams.width / 2
+        val offset = (getScreenWidth() - view.layoutParams.width) / 2
         val lp = view.layoutParams as ViewGroup.MarginLayoutParams
         if (parent.getChildAdapterPosition(view) == 0) {
             lp.leftMargin = 0
