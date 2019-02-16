@@ -9,21 +9,25 @@
         <RelativeLayout
             android:id="@+id/second_setting_head"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
 
-            <Button
+            <ImageView
                 android:id="@+id/second_setting_back_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="back"
+                android:src="@drawable/btn_back"
+                android:background="@android:color/transparent"
                 android:layout_alignParentLeft="true"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/second_setting_edit_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="편집"
+                android:src="@drawable/btn_main_edit"
+                android:background="@android:color/transparent"
                 android:layout_alignParentRight="true"/>
         </RelativeLayout>
 
@@ -32,6 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/second_setting_head"
             android:layout_above="@id/second_setting_footer">
+            
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
