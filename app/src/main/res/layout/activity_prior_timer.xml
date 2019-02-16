@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".timer.PriorTimerActivity">
+
+        <TextView
+            android:id = "@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="#f6460f"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="136dp"
+            android:textStyle = "bold"
+            android:fontFamily="sans-serif"
+            android:textSize = "50sp"
+            tools:text = "11:30" />
+
+        <TextView
+            android:id = "@+id/tv_ampm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/tv_time"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_time"
+            android:layout_marginBottom="7dp"
+            android:textColor="#f6460f"
+            android:textStyle = "bold"
+            android:fontFamily="sans-serif"
+            android:textSize = "16sp"
+            tools:text = "PM" />
+        
+        <TextView
+            android:id = "@+id/tv_noti"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_time"
+            app:layout_constraintStart_toStartOf="@+id/tv_time"
+            android:textColor = "#323232"
+            android:textSize = "24sp"
+            android:lineSpacingExtra = "7sp"
+            android:textStyle = "bold"
+            tools:text = "지금은 안전하지만\n5분뒤엔 아닐텐데..."/>
+
+
+
+        <ImageButton
+            android:id="@+id/btn_fivemin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#ffff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/btn_timeadd"
+            android:layout_marginBottom="152dp" />
+        
+        <ImageButton
+            android:id = "@+id/btn_timerstart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#ffff"
+            app:layout_constraintTop_toBottomOf="@+id/btn_fivemin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src = "@drawable/btn_timestart"
+            android:layout_marginTop="16dp"
+            />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</layout>
