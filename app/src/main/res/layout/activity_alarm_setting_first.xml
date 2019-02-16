@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#f9f9f9">
 
         <RelativeLayout
             android:id="@+id/first_setting_head"
@@ -57,7 +58,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_margin="30dp">
+                    android:layout_margin="30dp"
+                    android:background="#ffffff">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -75,7 +77,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="30dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:background="#ffffff">
 
                     <TextView
                         android:layout_width="wrap_content"
