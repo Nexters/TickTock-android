@@ -102,15 +102,6 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
                         prepareList.remove(item)
                         notifyItemRemoved(adapterPosition)
                     }
-
-                    // 마지막꺼일 때 추가
-                    if (adapterPosition == prepareList.size - 1 && !hasFocus) {
-                        if (!itemView.prepare_name_edit.text.isEmpty()) {
-                            val model = PrepareModel("", 0)
-                            prepareList.add(model)
-                            notifyItemInserted(adapterPosition + 1)
-                        }
-                    }
                 }
 
                 itemView.prepare_time_edit.setOnFocusChangeListener { v, hasFocus ->
