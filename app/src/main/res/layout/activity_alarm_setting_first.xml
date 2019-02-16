@@ -191,12 +191,12 @@
             </LinearLayout>
         </ScrollView>
 
-        <Button
+        <ImageView
             android:id="@+id/first_setting_next_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:text="다음"/>
+            android:src="@drawable/btn_next_nor"/>
 
     </RelativeLayout>
 </layout>
