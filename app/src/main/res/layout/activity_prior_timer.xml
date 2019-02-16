@@ -46,7 +46,7 @@
             android:textStyle = "bold"
             android:fontFamily="sans-serif"
             android:textSize = "16sp"
-            tools:text = "PM" />
+            android:text = "PM" />
         
         <TextView
             android:id = "@+id/tv_noti"
@@ -57,8 +57,7 @@
             android:textColor = "#323232"
             android:textSize = "24sp"
             android:lineSpacingExtra = "7sp"
-            android:textStyle = "bold"
-            tools:text = "지금은 안전하지만\n5분뒤엔 아닐텐데..."/>
+            android:text = "지금은 안전하지만\n5분뒤엔 아닐텐데..."/>
 
 
 
@@ -80,7 +79,6 @@
             app:layout_constraintTop_toBottomOf="@+id/btn_fivemin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:src = "@drawable/btn_timestart"
             android:background="@drawable/button_click"
             android:layout_marginTop="16dp"
             />

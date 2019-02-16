@@ -57,6 +57,13 @@ class PriorTimerActivity : AppCompatActivity() {
 
         timeHandler = Handler(Looper.getMainLooper())
         timeHandler!!.postDelayed(Runnable, 10)
-    }
 
+
+        //준비시작 버튼 누르면 바로 타이머 시작
+        binding.btnTimerstart.setOnClickListener{
+            val intent = Intent(this, TimerActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
+        }
+    }
 }
