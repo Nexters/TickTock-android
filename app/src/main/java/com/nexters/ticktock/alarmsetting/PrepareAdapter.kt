@@ -117,19 +117,20 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
                     }
                 }
 
-                /* TODO: edit중에 버튼을 클릭하면 에러나는 버그를 고치자 */
                 itemView.prepare_time_edit.setOnFocusChangeListener { v, hasFocus ->
                     if (hasFocus) {
                         var temp = v.prepare_time_edit.text.toString()
 
-                        temp = temp.substring(0, temp.length - 1)
+                        temp = temp.replace("분", "")
 
                         v.prepare_time_edit.text = Editable.Factory.getInstance().newEditable(temp)
                     } else {
-                        val temp = v.prepare_time_edit.text.toString()
+                        var temp = v.prepare_time_edit.text.toString()
 
-                        prepareList[adapterPosition].time = temp.toInt()
-                        notifyItemChanged(adapterPosition, "timeFocus")
+                        temp = temp.replace("분", "")
+
+                        prepareList[layoutPosition].time = temp.toInt()
+                        notifyItemChanged(layoutPosition, "timeFocus")
                     }
                 }
             }
