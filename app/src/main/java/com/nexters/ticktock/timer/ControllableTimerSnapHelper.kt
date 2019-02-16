@@ -5,10 +5,13 @@ import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.PagerSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.widget.Button
 import kotlinx.android.synthetic.main.activity_timer.view.*
 
 class ControllableTimerSnapHelper(private var context: TimerActivity,
                                   private var circularProgressbar: CircularProgressbar,
+                                  private var buttonNext : Button,
+                                  private var buttonReset : Button,
                                   private val onSnapped: ((Int) -> Unit)? = null
 ) : PagerSnapHelper() {
     private var snappedPosition = 0
@@ -37,11 +40,10 @@ class ControllableTimerSnapHelper(private var context: TimerActivity,
             else -> {
                 snappedPosition = super.findTargetSnapPosition(layoutManager, velocityX, velocityY)
 
-                if(snappedPosition >=0 && snappedPosition < recyclerView.adapter?.itemCount!!) {
+                if(snappedPosition >=0 && snappedPosition < recyclerView.adapter?.itemCount!! - 1) {
                     currentPos = snappedPosition
 
                     //timer 재시작
-                    context.animate(circularProgressbar, null, 0.0f, 1000)
                     context.onTimerReset()
                     context.mCountDownTimer!!.cancel()
                     val time : List<String> = context.stepList[snappedPosition].time.split(":")
@@ -50,12 +52,23 @@ class ControllableTimerSnapHelper(private var context: TimerActivity,
                     context.mPreferences.setStartedTime(context.getNow())
                     context.TIMER_LENGTH = realTime
 
+                    if(!buttonNext.isEnabled)
+                        buttonNext.isEnabled = true
 
+                    if(snappedPosition == 0)
+                        buttonReset.isEnabled = false
+                    else if(!buttonReset.isEnabled)
+                        buttonReset.isEnabled = true
 
                     //set current position
                     context.curPos = currentPos
 
                     context.startTimer()
+                }
+                else if(snappedPosition == recyclerView.adapter?.itemCount!! - 1) {
+                    context.onTimerReset()
+                    context.mCountDownTimer!!.cancel()
+                    buttonNext.isEnabled = false
                 }
             }
         }
