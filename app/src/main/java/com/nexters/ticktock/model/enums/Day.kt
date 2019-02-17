@@ -1,16 +1,20 @@
 package com.nexters.ticktock.model.enums
 
+/**
+ * enum 은 UPPERCASE 로 써야 하지만
+ * 요일 편하게 쓰려고 그냥 썼음
+ */
 enum class Day(val dayName: String) {
 
-    MONDAY("월"),
+    Monday("월"),
     Tuesday("화"),
     Wednesday("수"),
     Thursday("목"),
     Friday("금"),
-    WEEKDAY("주중"),
+    Weekday("주중"),
     Saturday("토"),
     Sunday("일"),
-    WEEKEND("주말")
+    Weekend("주말")
     ;
 
     companion object {
