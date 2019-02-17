@@ -32,11 +32,12 @@
         </RelativeLayout>
 
         <ScrollView
+            android:id="@+id/second_setting_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/second_setting_head"
             android:layout_marginTop="20dp"
-            android:layout_above="@id/second_setting_footer">
+            android:layout_above="@id/second_setting_next_button">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -85,14 +86,13 @@
         </ScrollView>
 
         <RelativeLayout
-            android:id="@+id/second_setting_footer"
+            android:id="@+id/second_setting_next_button"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="#f6460f"
             android:layout_alignParentBottom="true">
 
             <ImageView
-                android:id="@+id/second_setting_next_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/btn_next"

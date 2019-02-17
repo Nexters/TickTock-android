@@ -43,7 +43,7 @@ class AlarmSettingSecondActivity : OrmAppCompatActivity(), PrepareAdapter.OnStar
 
         binding.secondSettingRecycler.adapter = adapter
 
-        binding.secondSettingEditButton.setOnClickListener {view ->
+        binding.secondSettingEditButton.setOnClickListener {
             editMode = if (editMode == 1) {
                 2
             } else {
@@ -55,7 +55,7 @@ class AlarmSettingSecondActivity : OrmAppCompatActivity(), PrepareAdapter.OnStar
         }
 
         // 다음 타이머 엑티비티로 넘김
-        binding.secondSettingNextButton.setOnClickListener {view ->
+        binding.secondSettingNextButton.setOnClickListener {
             val intent = Intent(this, AlarmSettingThirdActivity::class.java)
             startActivity(intent)
         }
@@ -71,6 +71,15 @@ class AlarmSettingSecondActivity : OrmAppCompatActivity(), PrepareAdapter.OnStar
         }
 
         binding.secondSettingRecycler.setOnTouchListener { _, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                binding.secondSettingRoot.isFocusableInTouchMode = true
+                binding.secondSettingRoot.requestFocus()
+            }
+
+            return@setOnTouchListener false
+        }
+
+        binding.secondSettingScroll.setOnTouchListener { _, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 binding.secondSettingRoot.isFocusableInTouchMode = true
                 binding.secondSettingRoot.requestFocus()
