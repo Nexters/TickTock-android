@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
+import android.util.Log
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import com.nexters.ticktock.card.*
@@ -37,7 +37,7 @@ class CardActivity : OrmAppCompatActivity() {
                 CardItem(
                         11.hour() + 30.minute(),
                         12.hour() + 30.minute(),
-                        EnumSet.of(Day.MONDAY, Day.Thursday, Day.Friday),
+                        EnumSet.of(Day.Monday, Day.Thursday, Day.Friday),
                         "출근 알림알림알림",
                         "관악구 신림동 1423-8",
                         "사당역 투썸플레이스",
@@ -47,7 +47,7 @@ class CardActivity : OrmAppCompatActivity() {
                 CardItem(
                         15.hour() + 30.minute(),
                         19.hour() + 30.minute(),
-                        EnumSet.of(Day.MONDAY, Day.Saturday),
+                        EnumSet.of(Day.Monday, Day.Saturday, Day.Sunday),
                         "관악구 신림동은 누구 집이야?",
                         "관악구 신림동 1423-8",
                         "사당역 투썸플레이스",
@@ -57,7 +57,7 @@ class CardActivity : OrmAppCompatActivity() {
                 CardItem(
                         7.hour(),
                         8.hour() + 30.minute(),
-                        EnumSet.of(Day.MONDAY, Day.Friday),
+                        EnumSet.of(Day.Monday, Day.Tuesday, Day.Wednesday, Day.Thursday, Day.Friday),
                         "ㅎㅎㅎㅎㅎ",
                         "관악구 신림동 1423-8",
                         "사당역 투썸플레이스",
@@ -122,6 +122,7 @@ class CardActivity : OrmAppCompatActivity() {
 
                     if (snapPositionChanged && cardRecyclerViewAdapter.isEditPhase) {
 
+                        Log.d("TTTTTT", "TEST")
                         deleteCheckMessageText.startAnimation(AlphaAnimation(1F, 0F).apply {
                             duration = 200
                             repeatCount = 1

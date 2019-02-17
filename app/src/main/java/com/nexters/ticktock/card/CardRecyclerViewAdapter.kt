@@ -14,10 +14,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.nexters.ticktock.R
 import com.nexters.ticktock.alarmsetting.AlarmSettingFirstActivity
 import com.nexters.ticktock.card.Static.COLOR_TRANSITION_TIME
 import com.nexters.ticktock.card.Static.MAIN_TOGGLE_DURATION
 import com.nexters.ticktock.model.enums.Day
+import com.nexters.ticktock.utils.getArrangedDays
 import com.nexters.ticktock.utils.invisible
 import com.nexters.ticktock.utils.visible
 
@@ -31,8 +33,6 @@ class CardRecyclerViewAdapter(
 
     companion object {
         const val PAYLOAD_DELETE_TOGGLE = "DELETE_TOGGLE"
-        private const val POW = 2
-        private val interpolator = CustomSpringInterpolator()
     }
 
     var isEditPhase = false
@@ -56,13 +56,15 @@ class CardRecyclerViewAdapter(
         private val cardTopLayout = view.findViewById<ConstraintLayout>(R.id.cardTop)
         private val cardImgView = view.findViewById<ImageView>(R.id.cardImg)
         private val dayList = mapOf<Day, ImageView>(
-                Day.MONDAY to view.findViewById(R.id.mondayImg),
+                Day.Monday to view.findViewById(R.id.mondayImg),
                 Day.Tuesday to view.findViewById(R.id.tuesdayImg),
                 Day.Wednesday to view.findViewById(R.id.wednesdayImg),
                 Day.Thursday to view.findViewById(R.id.thursdayImg),
                 Day.Friday to view.findViewById(R.id.fridayImg),
-                Day.WEEKDAY to view.findViewById(R.id.weekdayImg),
-                Day.WEEKEND to view.findViewById(R.id.weekendImg)
+                Day.Saturday to view.findViewById(R.id.saturdayImg),
+                Day.Sunday to view.findViewById(R.id.sundayImg),
+                Day.Weekday to view.findViewById(R.id.weekdayImg),
+                Day.Weekend to view.findViewById(R.id.weekendImg)
         )
         // card title
         private val cardTitleTxtView = view.findViewById<TextView>(R.id.cardTitleTxt)
@@ -85,12 +87,6 @@ class CardRecyclerViewAdapter(
             view.setOnLongClickListener(this)
             activeSwitchView.setOnCheckedChangeListener(this)
             deleteBtnView.setOnClickListener { deleteCard() }
-            view.setOnTouchListener { _, _ ->
-                if (isEditPhase) {
-                    touchHelper?.startDrag(this)
-                }
-                false
-            }
         }
 
         fun bind() {
@@ -120,11 +116,11 @@ class CardRecyclerViewAdapter(
             }
             alarmSTartTimeMeridiemTxtView.text = item.startTime.meridiem
 
-            dayList.forEach { day, view -> // work with constraint chain
-                if (item.days.contains(day)) {
-                    view.visibility = View.VISIBLE
+            for (dayView in dayList) { // work with constraint chain
+                if (item.days.getArrangedDays().contains(dayView.key)) {
+                    dayView.value.visibility = View.VISIBLE
                 } else {
-                    view.visibility = View.GONE
+                    dayView.value.visibility = View.GONE
                 }
             }
         }
@@ -188,6 +184,9 @@ class CardRecyclerViewAdapter(
 
             cardList.removeAt(position)
             notifyItemRemoved(position)
+            if (itemCount != 0) {
+                notifyItemChanged(itemCount - 1) // 마지막 카드에 itemDecoration 으로 offset 을 주기 위한 notify
+            }
         }
 
         fun editToggle() {

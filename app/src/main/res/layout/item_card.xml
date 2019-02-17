@@ -48,18 +48,27 @@
 
                     <ImageView
                             android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" card_view:srcCompat="@drawable/icn_daily_mon"
+                            android:id="@+id/mondayImg"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/tuesdayImg"
+                            app:layout_constraintHorizontal_bias="0.5"/>
+                    <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" card_view:srcCompat="@drawable/icn_daily_tue"
+                            app:layout_constraintStart_toEndOf="@+id/mondayImg"
+                            android:id="@+id/tuesdayImg"
+                            android:layout_marginStart="8dp" app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/wednesdayImg"
+                            app:layout_constraintHorizontal_bias="0.5"/>
+                    <ImageView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content" card_view:srcCompat="@drawable/icn_daily_wed"
                             android:id="@+id/wednesdayImg" app:layout_constraintStart_toEndOf="@+id/tuesdayImg"
                             android:layout_marginStart="8dp"
                             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintEnd_toStartOf="@+id/thursdayImg"/>
-                    <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" card_view:srcCompat="@drawable/icn_daily_weekday"
-                            android:id="@+id/weekdayImg" app:layout_constraintStart_toEndOf="@+id/fridayImg"
-                            android:layout_marginStart="8dp"
-                            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintEnd_toStartOf="@+id/weekendImg"/>
                     <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" card_view:srcCompat="@drawable/icn_daily_thur"
@@ -76,27 +85,34 @@
                             app:layout_constraintEnd_toStartOf="@+id/weekdayImg"/>
                     <ImageView
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" card_view:srcCompat="@drawable/icn_daily_mon"
-                            android:id="@+id/mondayImg"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/tuesdayImg"
-                            app:layout_constraintHorizontal_bias="0.5"/>
+                            android:layout_height="wrap_content" card_view:srcCompat="@drawable/icn_daily_weekday"
+                            android:id="@+id/weekdayImg" app:layout_constraintStart_toEndOf="@+id/fridayImg"
+                            android:layout_marginStart="8dp"
+                            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintEnd_toStartOf="@+id/saturdayImg"/>
                     <ImageView
                             android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/saturdayImg"
+                            app:layout_constraintStart_toEndOf="@+id/weekdayImg"
+                            app:layout_constraintEnd_toStartOf="@+id/sundayImg"
+                            android:layout_marginStart="8dp"
+                            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.5"
+                            app:srcCompat="@drawable/icn_daily_sat"/>
+                    <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" app:srcCompat="@drawable/icn_daily_sun"
+                            android:id="@+id/sundayImg" app:layout_constraintStart_toEndOf="@+id/saturdayImg"
+                            android:layout_marginStart="8dp"
+                            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintEnd_toStartOf="@+id/weekendImg"/>
+                    <ImageView
+                            android:layout_width="33dp"
                             android:layout_height="wrap_content" card_view:srcCompat="@drawable/icn_daily_weekend"
-                            android:id="@+id/weekendImg" app:layout_constraintStart_toEndOf="@+id/weekdayImg"
+                            android:id="@+id/weekendImg" app:layout_constraintStart_toEndOf="@+id/sundayImg"
                             android:layout_marginStart="8dp"
                             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintEnd_toEndOf="parent"/>
-                    <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" card_view:srcCompat="@drawable/icn_daily_tue"
-                            app:layout_constraintStart_toEndOf="@+id/mondayImg"
-                            android:id="@+id/tuesdayImg"
-                            android:layout_marginStart="8dp" app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/wednesdayImg"
-                            app:layout_constraintHorizontal_bias="0.5"/>
                 </android.support.constraint.ConstraintLayout>
                 <android.support.constraint.ConstraintLayout
                         android:layout_width="wrap_content"
