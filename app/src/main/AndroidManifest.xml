@@ -41,6 +41,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".onboarding.OnBoardingActivity" />
+
         <receiver android:name=".timer.TimerExpiredReceiver" />
 
         <meta-data
