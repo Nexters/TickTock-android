@@ -83,6 +83,11 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
                     notifyItemInserted(adapterPosition)
                 }
             } else {
+                if (!item.name.isEmpty()) {
+                    itemView.prepare_plus_button.setImageResource(R.drawable.btn_min_plus_nor)
+                    itemView.prepare_minus_button.setImageResource(R.drawable.btn_min_minor_nor)
+                }
+
                 itemView.prepare_name_edit.text = Editable.Factory.getInstance().newEditable(item.name)
                 itemView.prepare_time_edit.text = Editable.Factory.getInstance().newEditable(item.time.toString().plus("분"))
                 itemView.prepare_plus_button.setOnClickListener {
