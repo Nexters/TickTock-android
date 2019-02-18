@@ -36,7 +36,7 @@ class DirectionRecyclerAdapter(
     fun getWidth(): Int {
         val point = Point()
         display.getSize(point)
-        return point.x - 50
+        return point.x - 90
     }
 
     fun dataChange(tp: ArrayList<SearchPubTransPath>) {
