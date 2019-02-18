@@ -6,10 +6,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".CardActivity"
-        android:background="@drawable/card_transition_drawable" android:animateLayoutChanges="true"
+        android:background="@drawable/card_transition_drawable"
         android:id="@+id/activityCardLayout"
 >
-
 
     <android.support.constraint.ConstraintLayout
             android:layout_width="0dp"
@@ -82,22 +81,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="48dp"
-            android:layout_marginTop="612dp" app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="1.0"/>
-    <TextView
-            android:text="@string/requireNewCard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/requireNewCardTxt"
-            android:layout_marginTop="86dp"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-            android:textSize="24sp"
-            android:textColor="@color/colorBlack"
-            android:lineSpacingExtra="8sp"
-            android:layout_marginStart="60dp" android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="568dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            android:includeFontPadding="false"/>
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintVertical_bias="1.0" app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+            android:layout_marginTop="40dp"/>
     <ImageView
             android:layout_width="0dp"
             android:layout_height="0dp" app:srcCompat="@drawable/new_card_img"
@@ -106,20 +92,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:visibility="invisible" app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="237dp" android:layout_marginStart="43dp" android:layout_marginEnd="42dp"/>
-    <TextView
-            android:textSize="23sp"
-            android:textColor="#323232"
-            android:lineSpacingExtra="-3sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/mainWord" android:layout_marginTop="86dp"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="60dp"
-            android:includeFontPadding="false"
-            android:text="@string/header1" android:fontFamily="@font/noto_sans_cjk_kr_light"
-            android:layout_marginBottom="568dp" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"/>
     <ImageView
             android:layout_width="0dp"
             android:layout_height="0dp" app:srcCompat="@color/mainEditPhaseBGColor"
@@ -127,15 +99,49 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="invisible"/>
-    <TextView
-            android:text="@string/deleteCheckMessage"
-            android:layout_width="wrap_content"
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="292dp"
             android:layout_height="wrap_content"
-            android:id="@+id/deleteCheckMessageText" android:textColor="@android:color/white"
-            android:textSize="30sp" android:layout_marginTop="86dp" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="60dp"
-            android:visibility="invisible" android:fontFamily="@fonts/noto_sans_cjk_kr_light"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="568dp"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.0"
-            android:includeFontPadding="false"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="86dp">
+
+        <TextView
+                android:text="@string/requireNewCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/requireNewCardTxt"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+                android:textSize="24sp"
+                android:textColor="@color/colorBlack"
+                android:lineSpacingExtra="8sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                android:includeFontPadding="false"/>
+        <TextView
+                android:textSize="23sp"
+                android:textColor="#323232"
+                android:lineSpacingExtra="-3sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/mainWord"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+                android:includeFontPadding="false"
+                android:text="@string/header1" android:fontFamily="@font/noto_sans_cjk_kr_light"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"/>
+        <TextView
+                android:text="@string/deleteCheckMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/deleteCheckMessageText" android:textColor="@android:color/white"
+                android:textSize="24sp" app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:visibility="invisible" android:fontFamily="@font/noto_sans_cjk_kr_light"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.0"
+                android:includeFontPadding="false"/>
+    </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

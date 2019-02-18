@@ -47,7 +47,7 @@
 
     <!-- card activity -->
     <string name="header1">인생은 타이밍!\n\*성실갑*\되러 가볼까요?</string>
-    <string name="deleteCheckMessage">을\n삭제하시는 게 맞나요?</string>
+    <string name="deleteCheckMessage">를\n삭제하시는 게 맞나요?</string>
     <string name="requireNewCard">*새로운 카드*를\n생성해주세요!</string>
 
 </resources>

@@ -208,7 +208,7 @@ class CardActivity : AppCompatActivity() {
             if (cardRecyclerViewAdapter.isEditPhase) {
                 mainEditPhaseBGtFilterImg.invisible(MAIN_TOGGLE_DURATION)
                 mainWord.visible(MAIN_TOGGLE_DURATION)
-                deleteCheckMessageText.visibility = View.INVISIBLE
+                deleteCheckMessageText.invisible(MAIN_TOGGLE_DURATION)
                 cardRecyclerViewAdapter.isEditPhase = false
             }
         }
@@ -227,8 +227,6 @@ class CardActivity : AppCompatActivity() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     val snapPosition = snapHelper.getAdapterSnapPosition()
                     val snapPositionChanged = this.snapPosition != snapPosition
-
-                    Log.d("TTTTT", "TEST")
 
                     if (snapPositionChanged) {
 
