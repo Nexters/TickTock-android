@@ -1,5 +1,7 @@
 package com.nexters.ticktock
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
@@ -14,6 +16,7 @@ import android.view.animation.Animation
 import com.nexters.ticktock.card.*
 import com.nexters.ticktock.card.Static.MAIN_TOGGLE_DURATION
 import com.nexters.ticktock.model.enums.Day
+import com.nexters.ticktock.onboarding.OnBoardingActivity
 import com.nexters.ticktock.utils.hour
 import com.nexters.ticktock.utils.invisible
 import com.nexters.ticktock.utils.minute
@@ -30,6 +33,18 @@ class CardActivity : OrmAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card)
+
+        //set OnBoarding Tutorial
+        val preferences = getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
+
+        if(!preferences.getBoolean("onboarding_complete", false)) {
+
+            val onboarding = Intent(this, OnBoardingActivity::class.java)
+            startActivity(onboarding)
+
+            finish()
+            return
+        }
 
         mainWord.text = getHighlightedString(resources.getString(R.string.header1))
 
