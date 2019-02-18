@@ -1,24 +1,24 @@
 package com.nexters.ticktock.autocomplete
 
-import android.os.Bundle
-import android.content.Intent
-import android.os.IBinder
 import android.app.Service
 import android.content.Context
+import android.content.Intent
 import android.location.*
+import android.os.Bundle
+import android.os.IBinder
 import android.os.Parcel
 import android.os.Parcelable
 import android.provider.Settings
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.google.android.gms.maps.model.LatLng
-import com.nexters.ticktock.OrmAppCompatActivity
 import java.io.IOException
 
 
 class GPSInfo(): Service(), LocationListener {
     
-    constructor(ac: OrmAppCompatActivity): this() {
+    constructor(ac: AppCompatActivity): this() {
         activity = ac
         geocoder = Geocoder(activity)
         getLocation()
@@ -48,7 +48,7 @@ class GPSInfo(): Service(), LocationListener {
         }
     }
 
-    private lateinit var activity: OrmAppCompatActivity
+    private lateinit var activity: AppCompatActivity
     private lateinit var geocoder: Geocoder// 좌표 - 주소 변환
 
     private val TAG:String = "GPSINFO"

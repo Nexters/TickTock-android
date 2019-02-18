@@ -5,12 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.databinding.DataBindingUtil
+import android.support.v7.app.AppCompatActivity
 import com.nexters.ticktock.autocomplete.AutoCompleteActivity
 import com.nexters.ticktock.autocomplete.GPSInfo
 import com.nexters.ticktock.databinding.ActivityMainBinding
 
 
-class MainActivity : OrmAppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     val TAG:String = "MainActivity"
 

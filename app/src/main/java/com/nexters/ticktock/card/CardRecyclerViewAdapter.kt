@@ -2,13 +2,15 @@ package com.nexters.ticktock.card
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
-import android.graphics.drawable.TransitionDrawable
+import android.graphics.drawable.ColorDrawable
 import android.support.constraint.ConstraintLayout
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -43,11 +45,11 @@ class CardRecyclerViewAdapter(
 
     private val layoutInflater = LayoutInflater.from(context)
 
-    private var onCardLongClickListener: ((View?) -> Unit)? = null
+    var onCardEventListener: CardEventListener? = null
 
     inner class ViewHolder(view: View)
         : RecyclerView.ViewHolder(view),
-            View.OnClickListener, View.OnLongClickListener, CompoundButton.OnCheckedChangeListener{
+            View.OnClickListener, View.OnLongClickListener{
 
         private val activeSwitchView = view.findViewById<Switch>(R.id.activeSwitch)
         private val deleteBtnView = view.findViewById<ImageButton>(R.id.deleteBtn)
@@ -71,7 +73,7 @@ class CardRecyclerViewAdapter(
         // alarm start time
         private val alarmStartTimeHourTxtView = view.findViewById<TextView>(R.id.alarmStartTimeHour)
         private val alarmStartTimeMinuteTxtView = view.findViewById<TextView>(R.id.alarmStartTimeMinute)
-        private val alarmSTartTimeMeridiemTxtView = view.findViewById<TextView>(R.id.alarmStartTimeMeridiem) // am or pm
+        private val alarmStartTimeMeridiemTxtView = view.findViewById<TextView>(R.id.alarmStartTimeMeridiem) // am or pm
 
 
         /** card bottom */
@@ -85,12 +87,11 @@ class CardRecyclerViewAdapter(
         init {
             view.setOnClickListener(this)
             view.setOnLongClickListener(this)
-            activeSwitchView.setOnCheckedChangeListener(this)
+            activeSwitchView.setOnCheckedChangeListener { _, isChecked -> cardColorToggle(isChecked) }
             deleteBtnView.setOnClickListener { deleteCard() }
         }
 
         fun bind() {
-
             editToggle()
 
             this@CardRecyclerViewAdapter.cardList[super.getAdapterPosition()].run {
@@ -101,9 +102,18 @@ class CardRecyclerViewAdapter(
         }
 
         private fun bindCardTop(item: CardItem) {
+            cardTopLayout.setBackgroundResource(item.color.cardBgColorId)
+            cardImgView.setImageResource(item.color.cardImgId)
+
             val colorMatrix = ColorMatrix()
             colorMatrix.setSaturation(if (item.enable) 1f else 0f)
             cardImgView.colorFilter = ColorMatrixColorFilter(colorMatrix)
+
+            if (item.enable) {
+                cardTopLayout.setBackgroundResource(item.color.cardBgColorId)
+            } else {
+                cardTopLayout.setBackgroundResource(R.color.cardDisableBGColor)
+            }
 
             cardTitleTxtView.text = item.title
             alarmStartTimeHourTxtView.text = item.startTime.hour.toString()
@@ -114,7 +124,7 @@ class CardRecyclerViewAdapter(
                     it.toString()
                 }
             }
-            alarmSTartTimeMeridiemTxtView.text = item.startTime.meridiem
+            alarmStartTimeMeridiemTxtView.text = item.startTime.meridiem
 
             for (dayView in dayList) { // work with constraint chain
                 if (item.days.getArrangedDays().contains(dayView.key)) {
@@ -143,20 +153,22 @@ class CardRecyclerViewAdapter(
 
         override fun onLongClick(v: View?): Boolean {
             if (!isEditPhase) {
-                this@CardRecyclerViewAdapter.onCardLongClickListener?.invoke(v)
+                isEditPhase = true
+                this@CardRecyclerViewAdapter.onCardEventListener?.onCardLongClick(v)
             }
 
             return true
         }
 
-        override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-            cardList[super.getAdapterPosition()].enable = isChecked
+        private fun cardColorToggle(isChecked: Boolean) {
 
-            val bgColor = (cardTopLayout.background as TransitionDrawable)
+            val cardItem = cardList[super.getAdapterPosition()]
+
+            cardItem.enable = isChecked
 
             val colorMatrix = ColorMatrix()
 
-            val cardColorAnim = ValueAnimator.ofFloat(0f, 1f).apply {
+            ValueAnimator.ofFloat(0f, 1f).apply {
                 duration = COLOR_TRANSITION_TIME
                 addUpdateListener {animator ->
                     colorMatrix.setSaturation(animator.animatedFraction)
@@ -168,24 +180,46 @@ class CardRecyclerViewAdapter(
                         cardImgView.colorFilter = ColorMatrixColorFilter(colorMatrix)
                     }
                 })
+            }.run {
+                if (isChecked) {
+                    start()
+                } else {
+                    reverse()
+                }
             }
 
-            if (isChecked) {
-                bgColor.reverseTransition(COLOR_TRANSITION_TIME.toInt())
-                cardColorAnim.start()
+            val bgColorFrom = (cardTopLayout.background as ColorDrawable).color
+            val bgColorTo = ContextCompat.getColor(context, if (isChecked) {
+                cardItem.color.cardBgColorId
             } else {
-                bgColor.startTransition(COLOR_TRANSITION_TIME.toInt())
-                cardColorAnim.reverse()
-            }
+                R.color.cardDisableBGColor
+            })
+
+            ValueAnimator.ofObject(ArgbEvaluator(), bgColorFrom, bgColorTo).apply {
+                duration = COLOR_TRANSITION_TIME
+                addUpdateListener {
+                    cardTopLayout.setBackgroundColor(it.animatedValue as Int)
+                }
+            }.start()
+
         }
 
         private fun deleteCard() {
             val position = super.getAdapterPosition()
 
             cardList.removeAt(position)
+
+            if (itemCount == 0) {
+                isEditPhase = false
+                this@CardRecyclerViewAdapter.onCardEventListener?.onNoCardThere(this@CardRecyclerViewAdapter)
+            }
+
+            this@CardRecyclerViewAdapter.onCardEventListener?.onCardDelete(position, this@CardRecyclerViewAdapter)
+
             notifyItemRemoved(position)
-            if (itemCount != 0) {
-                notifyItemChanged(itemCount - 1) // 마지막 카드에 itemDecoration 으로 offset 을 주기 위한 notify
+            if (itemCount != 1) {
+                notifyItemChanged(position - 1)
+                notifyItemChanged(position)
             }
         }
 
@@ -215,9 +249,5 @@ class CardRecyclerViewAdapter(
         } else {
             super.onBindViewHolder(holder, position, payloads)
         }
-    }
-
-    fun setOnCardLongClickListener(onCardLongClickListener: (View?) -> (Unit)) {
-        this.onCardLongClickListener = onCardLongClickListener
     }
 }

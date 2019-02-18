@@ -1,6 +1,7 @@
 package com.nexters.ticktock.card
 
 import com.nexters.ticktock.model.enums.Day
+import com.nexters.ticktock.model.enums.TickTockColor
 import com.nexters.ticktock.utils.Time
 import java.util.*
 
@@ -11,6 +12,6 @@ data class CardItem(
         var title: String,
         var startLocation: String,
         var endLocation: String,
-        var color: String,
+        var color: TickTockColor,
         var enable: Boolean
 )
