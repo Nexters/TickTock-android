@@ -31,8 +31,20 @@
     <string name="tv_get_off_text">하차</string>
 
     <!-- activity_alarm_setting_third -->
-    <string name="tv_alarm_setting_third_title">몇시에 알람을\n맞출까요?</string>
-    <string name="tv_alarm_setting_third_target_time">오후 4시 30분</string>
+    <string name="tv_alarm_setting_third_title">*몇시에 알람*을\n맞출까요?</string>
+    <string name="tv_memo_title">카드 별칭</string>
+    <string name="ed_memo_hint">ex. 돈벌러가자</string>
+    <string name="tv_memo_max_text">최대 10글자</string>
+    <string name="tv_color_title">카드 색상</string>
+    <string name="tv_prepare_time_main_title">알람</string>
+    <string name="tv_start_time_title">시작시간</string>
+    <string name="tv_start_time_description">pm *1:30*</string>
+    <string name="tv_quick_time_title">퀵타임</string>
+    <string name="radiobtn_quick_time1_text">적용안함</string>
+    <string name="radiobtn_quick_time2_text">-5분</string>
+    <string name="radiobtn_quick_time3_text">-10분</string>
+    <string name="radiobtn_quick_time4_text">-15분</string>
+    <string name="radiobtn_quick_time5_text">-30분</string>
     <string name="tv_alarm_setting_third_time_to_destination_title">이동시간</string>
     <string name="tv_alarm_setting_third_time_to_destination_description">34분</string>
     <string name="tv_alarm_setting_third_prepare_time_title">준비시간</string>
