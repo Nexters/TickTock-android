@@ -13,11 +13,6 @@
 
     <!-- activity_alarm_setting_third -->
     <color name="colorCardBorder">#979797</color>
-    <color name="colorCard1">#f46b49</color>
-    <color name="colorCard2">#09b9c2</color>
-    <color name="colorCard3">#ff9f00</color>
-    <color name="colorCard4">#659ff6</color>
-    <color name="colorCard5">#bf75f8</color>
     <color name="alarmMainColor">#f6460f</color>
     <color name="quickTimeBorder">#d8d8d8</color>
 
@@ -69,12 +64,22 @@
     <color name="cardDurationBarCircleColor">#f6460f</color>
     <color name="cardDurationBarRectangleColor">#d7d7e0</color>
 
-    <color name="cardDisableBGColor">#d7d7e0</color>
-    <color name="cardBgColor1">#09b9c2</color>
+    <color name="none">#00000000</color>
 
     <color name="cardIndicatorColor">#323232</color>
-
     <color name="mainEditPhaseBGColor">#99000000</color>
 
-    <color name="none">#00000000</color>
+    <color name="cardDisableBGColor">#d7d7e0</color>
+
+    <color name="ticktockRedCardColor">#f6460f</color>
+    <color name="ticktockPurpleCardColor">#bf75f8</color>
+    <color name="ticktockBlueCardColor">#3e86f1</color>
+    <color name="ticktockGreenCardColor">#09b9c2</color>
+    <color name="ticktockYellowCardColor">#09b9c2</color>
+
+    <color name="ticktockRedPickColor">#f46b49</color>
+    <color name="ticktockPurplePickColor">#bf75f8</color>
+    <color name="ticktockBluePickColor">#659ff6</color>
+    <color name="ticktockGreenPickColor">#09b9c2</color>
+    <color name="ticktockYellowPickColor">#ff9f00</color>
 </resources>
