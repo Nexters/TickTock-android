@@ -4,27 +4,24 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.StyleSpan
 import android.util.Log
+import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import com.nexters.ticktock.card.*
 import com.nexters.ticktock.card.Static.MAIN_TOGGLE_DURATION
 import com.nexters.ticktock.model.enums.Day
+import com.nexters.ticktock.model.enums.TickTockColor
+import com.nexters.ticktock.utils.*
 import com.nexters.ticktock.onboarding.OnBoardingActivity
-import com.nexters.ticktock.utils.hour
-import com.nexters.ticktock.utils.invisible
-import com.nexters.ticktock.utils.minute
-import com.nexters.ticktock.utils.visible
 import kotlinx.android.synthetic.main.activity_card.*
 import java.util.*
 
-class CardActivity : OrmAppCompatActivity() {
+class CardActivity : AppCompatActivity() {
 
     private lateinit var cardRecyclerViewAdapter: CardRecyclerViewAdapter
 
@@ -47,6 +44,20 @@ class CardActivity : OrmAppCompatActivity() {
         }
 
         mainWord.text = getHighlightedString(resources.getString(R.string.header1))
+        requireNewCardTxt.text = getHighlightedString(resources.getString(R.string.requireNewCard))
+//        TickTockDatabase.getInstance(this).alarmDao()
+//                .insert(Alarm(
+//                        days = EnumSet.of(Day.Monday),
+//                        startLocation = "관악구 신림동 1423-8",
+//                        endLocation = "사당역 투썸플레이스",
+//                        color = TickTockColor.RED,
+//                        enable = true,
+//                        endTime = 17.hour() + 24.minute(),
+//                        travelTime = 40.minute(),
+//                        title = "알림 알림"
+//                ))
+
+//        Log.d("db test", TickTockDatabase.getInstance(this).alarmDao().findAll().toString())
 
         cardList = mutableListOf(
                 CardItem(
@@ -56,17 +67,17 @@ class CardActivity : OrmAppCompatActivity() {
                         "출근 알림알림알림",
                         "관악구 신림동 1423-8",
                         "사당역 투썸플레이스",
-                        "GREEN",
+                        TickTockColor.GREEN,
                         true
                 ),
                 CardItem(
                         15.hour() + 30.minute(),
                         19.hour() + 30.minute(),
                         EnumSet.of(Day.Monday, Day.Saturday, Day.Sunday),
-                        "관악구 신림동은 누구 집이야?",
+                        "신림동은 누구 집이야?",
                         "관악구 신림동 1423-8",
                         "사당역 투썸플레이스",
-                        "GREEN",
+                        TickTockColor.PURPLE,
                         false
                 ),
                 CardItem(
@@ -76,7 +87,17 @@ class CardActivity : OrmAppCompatActivity() {
                         "ㅎㅎㅎㅎㅎ",
                         "관악구 신림동 1423-8",
                         "사당역 투썸플레이스",
-                        "GREEN",
+                        TickTockColor.RED,
+                        true
+                ),
+                CardItem(
+                        2.hour() + 30.minute(),
+                        3.hour() + 10.minute(),
+                        EnumSet.of(Day.Wednesday, Day.Sunday),
+                        "새벽에 어딜 가려고",
+                        "관악구 신림동 1423-8",
+                        "사당역 투썸플레이스",
+                        TickTockColor.PURPLE,
                         true
                 ),
                 CardItem(
@@ -86,36 +107,124 @@ class CardActivity : OrmAppCompatActivity() {
                         "개발 다 끝난 거지?",
                         "관악구 신림동 1423-8",
                         "사당역 투썸플레이스",
-                        "GREEN",
+                        TickTockColor.BLUE,
+                        true
+                ),
+                CardItem(
+                        11.hour() + 30.minute(),
+                        12.hour() + 30.minute(),
+                        EnumSet.of(Day.Wednesday),
+                        "개발 다 끝난 거지?",
+                        "관악구 신림동 1423-8",
+                        "사당역 투썸플레이스",
+                        TickTockColor.BLUE,
+                        true
+                ),
+                CardItem(
+                        11.hour() + 30.minute(),
+                        12.hour() + 30.minute(),
+                        EnumSet.of(Day.Wednesday),
+                        "개발 다 끝난 거지?",
+                        "관악구 신림동 1423-8",
+                        "사당역 투썸플레이스",
+                        TickTockColor.GREEN,
+                        true
+                ),
+                CardItem(
+                        11.hour() + 30.minute(),
+                        12.hour() + 30.minute(),
+                        EnumSet.of(Day.Wednesday),
+                        "개발 다 끝난 거지?",
+                        "관악구 신림동 1423-8",
+                        "사당역 투썸플레이스",
+                        TickTockColor.RED,
+                        true
+                ),
+                CardItem(
+                        11.hour() + 30.minute(),
+                        12.hour() + 30.minute(),
+                        EnumSet.of(Day.Wednesday),
+                        "개발 다 끝난 거지?",
+                        "관악구 신림동 1423-8",
+                        "사당역 투썸플레이스",
+                        TickTockColor.BLUE,
+                        true
+                ),
+                CardItem(
+                        11.hour() + 30.minute(),
+                        12.hour() + 30.minute(),
+                        EnumSet.of(Day.Wednesday),
+                        "개발 다 끝난 거지?",
+                        "관악구 신림동 1423-8",
+                        "사당역 투썸플레이스",
+                        TickTockColor.BLUE,
                         true
                 )
-        )
 
-        deleteCheckMessageText.text = getHighlightedString("@${cardList[0].title}@${resources.getString(R.string.deleteCheckMessage)}")
+        ).apply { sortedWith(compareBy({ it.startTime }, { it.title })) }
+
+        deleteCheckMessageText.text = getHighlightedString("*${cardList[0].title}*${resources.getString(R.string.deleteCheckMessage)}")
 
         val snapHelper = ControllableSnapHelper()
 
         cardRecyclerViewAdapter = CardRecyclerViewAdapter(this, cardList, recyclerView, snapHelper).apply {
-            setOnCardLongClickListener {
-                mainEditPhaseBGtFilterImg.visible(MAIN_TOGGLE_DURATION)
-                mainWord.invisible(MAIN_TOGGLE_DURATION)
-                deleteCheckMessageText.visible(MAIN_TOGGLE_DURATION)
-                this.isEditPhase = true
+            onCardEventListener = object : CardEventListener {
+                override fun onCardLongClick(view: View?) {
+                    mainEditPhaseBGtFilterImg.visible(MAIN_TOGGLE_DURATION)
+                    mainWord.invisible(MAIN_TOGGLE_DURATION)
+                    deleteCheckMessageText.visible(MAIN_TOGGLE_DURATION)
+                }
+
+                override fun onNoCardThere(adapter: CardRecyclerViewAdapter) {
+                    requireNewCardImg.visible(MAIN_TOGGLE_DURATION)
+                    requireNewCardTxt.visible(MAIN_TOGGLE_DURATION)
+                    mainWord.invisible(MAIN_TOGGLE_DURATION)
+                    mainEditPhaseBGtFilterImg.invisible(MAIN_TOGGLE_DURATION)
+                    deleteCheckMessageText.invisible(MAIN_TOGGLE_DURATION)
+                }
+
+                override fun onFirstCardAdd(adapter: CardRecyclerViewAdapter) {
+                    requireNewCardImg.invisible(MAIN_TOGGLE_DURATION)
+                    requireNewCardTxt.invisible(MAIN_TOGGLE_DURATION)
+                    mainWord.visible(MAIN_TOGGLE_DURATION)
+                }
+
+                override fun onCardDelete(position: Int, adapter: CardRecyclerViewAdapter) {
+                    deleteCheckMessageText.startAnimation(AlphaAnimation(1F, 0F).apply {
+                        duration = 200
+                        repeatCount = 1
+                        repeatMode = Animation.REVERSE
+
+                        setAnimationListener(object : Animation.AnimationListener {
+                            override fun onAnimationEnd(animation: Animation?) { }
+                            override fun onAnimationStart(animation: Animation?) { }
+                            override fun onAnimationRepeat(animation: Animation?) {
+
+                                if (position != RecyclerView.NO_POSITION && position != adapter.itemCount) {
+                                    deleteCheckMessageText.text =
+                                            getHighlightedString("*${cardList[position].title}*${resources.getString(R.string.deleteCheckMessage)}")
+                                }
+                            }
+                        })
+                    })
+                }
             }
         }
 
         editBtn.setOnClickListener {
-            mainEditPhaseBGtFilterImg.visible(MAIN_TOGGLE_DURATION)
-            mainWord.invisible(MAIN_TOGGLE_DURATION)
-            deleteCheckMessageText.visible(MAIN_TOGGLE_DURATION)
-            cardRecyclerViewAdapter.isEditPhase = true
+            if (cardRecyclerViewAdapter.itemCount != 0) {
+                mainEditPhaseBGtFilterImg.visible(MAIN_TOGGLE_DURATION)
+                mainWord.invisible(MAIN_TOGGLE_DURATION)
+                deleteCheckMessageText.visible(MAIN_TOGGLE_DURATION)
+                cardRecyclerViewAdapter.isEditPhase = true
+            }
         }
 
         mainEditPhaseBGtFilterImg.setOnClickListener {
             if (cardRecyclerViewAdapter.isEditPhase) {
                 mainEditPhaseBGtFilterImg.invisible(MAIN_TOGGLE_DURATION)
                 mainWord.visible(MAIN_TOGGLE_DURATION)
-                deleteCheckMessageText.invisible(MAIN_TOGGLE_DURATION)
+                deleteCheckMessageText.visibility = View.INVISIBLE
                 cardRecyclerViewAdapter.isEditPhase = false
             }
         }
@@ -135,48 +244,37 @@ class CardActivity : OrmAppCompatActivity() {
                     val snapPosition = snapHelper.getAdapterSnapPosition()
                     val snapPositionChanged = this.snapPosition != snapPosition
 
-                    if (snapPositionChanged && cardRecyclerViewAdapter.isEditPhase) {
+                    Log.d("TTTTT", "TEST")
 
-                        Log.d("TTTTTT", "TEST")
-                        deleteCheckMessageText.startAnimation(AlphaAnimation(1F, 0F).apply {
-                            duration = 200
-                            repeatCount = 1
-                            repeatMode = Animation.REVERSE
+                    if (snapPositionChanged) {
 
-                            setAnimationListener(object : Animation.AnimationListener {
-                                override fun onAnimationEnd(animation: Animation?) { }
-                                override fun onAnimationStart(animation: Animation?) { }
-                                override fun onAnimationRepeat(animation: Animation?) {
-                                    if (snapPosition != RecyclerView.NO_POSITION) {
-                                        deleteCheckMessageText.text =
-                                                getHighlightedString("@${cardList[snapPosition].title}@${resources.getString(R.string.deleteCheckMessage)}")
+                        if (cardRecyclerViewAdapter.isEditPhase) {
+                            deleteCheckMessageText.startAnimation(AlphaAnimation(1F, 0F).apply {
+                                duration = 200
+                                repeatCount = 1
+                                repeatMode = Animation.REVERSE
+
+                                setAnimationListener(object : Animation.AnimationListener {
+                                    override fun onAnimationEnd(animation: Animation?) {}
+                                    override fun onAnimationStart(animation: Animation?) {}
+                                    override fun onAnimationRepeat(animation: Animation?) {
+                                        if (snapPosition != RecyclerView.NO_POSITION) {
+                                            deleteCheckMessageText.text =
+                                                    getHighlightedString("*${cardList[snapPosition].title}*${resources.getString(R.string.deleteCheckMessage)}")
+                                        }
                                     }
-                                }
+                                })
                             })
-                        })
 
-                        this.snapPosition = snapPosition
+                            this.snapPosition = snapPosition
+                        } else if (snapPosition != RecyclerView.NO_POSITION) {
 
-                    } else if (snapPosition != RecyclerView.NO_POSITION) {
-                        deleteCheckMessageText.text =
-                                getHighlightedString("@${cardList[snapPosition].title}@${resources.getString(R.string.deleteCheckMessage)}")
+                            deleteCheckMessageText.text =
+                                    getHighlightedString("*${cardList[snapPosition].title}*${resources.getString(R.string.deleteCheckMessage)}")
+                        }
                     }
                 }
             })
-        }
-    }
-
-    private fun getHighlightedString(origin: String): SpannableString {
-
-        val originList = origin.split("@")
-
-        val highlightStart = originList[0].length
-        val highlightEnd = originList[1].length + highlightStart
-
-        return SpannableString(origin.replace("@", "")).apply {
-//            val boldFont = Typeface.create(ResourcesCompat.getFont(this@CardActivity, R.font.noto_sans_cjk_kr_bold), Typeface.NORMAL)
-//            val highlightFont = Typeface.createFromAsset(resources.assets, "font/noto_sans_cjk_kr_bold.otf")
-            setSpan(StyleSpan(Typeface.BOLD), highlightStart, highlightEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
     }
 }

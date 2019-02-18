@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Spannable
 import android.text.SpannableString
@@ -13,12 +14,11 @@ import android.text.style.StyleSpan
 import android.view.View
 import android.widget.RadioGroup
 import android.widget.TextView
-import com.nexters.ticktock.OrmAppCompatActivity
 import com.nexters.ticktock.R
 import com.nexters.ticktock.databinding.ActivityAlarmSettingThirdBinding
 import com.nexters.ticktock.timer.TimerActivity
 
-class AlarmSettingThirdActivity : OrmAppCompatActivity(), View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     private lateinit var binding: ActivityAlarmSettingThirdBinding
     private lateinit var prepareTimeRecyclerAdapter: PrepareTimeRecyclerAdapter
