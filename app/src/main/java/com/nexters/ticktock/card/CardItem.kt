@@ -1,15 +1,17 @@
 package com.nexters.ticktock.card
 
-import com.nexters.ticktock.dto.DayGroup
+import com.nexters.ticktock.model.enums.Day
+import com.nexters.ticktock.model.enums.TickTockColor
+import com.nexters.ticktock.utils.Time
+import java.util.*
 
 data class CardItem(
-        var destination: String,
-        var endTime: String,
-        var duration: String,
-        var days: DayGroup,
-        var memo: String,
-        var color: String
-) {
-    fun getTime(): String =
-            "10:00~$endTime"
-}
+        var startTime: Time,
+        var endTime: Time,
+        var days: EnumSet<Day>,
+        var title: String,
+        var startLocation: String,
+        var endLocation: String,
+        var color: TickTockColor,
+        var enable: Boolean
+)

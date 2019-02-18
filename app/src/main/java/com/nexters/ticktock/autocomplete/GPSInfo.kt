@@ -1,11 +1,11 @@
 package com.nexters.ticktock.autocomplete
 
-import android.os.Bundle
-import android.content.Intent
-import android.os.IBinder
 import android.app.Service
 import android.content.Context
+import android.content.Intent
 import android.location.*
+import android.os.Bundle
+import android.os.IBinder
 import android.os.Parcel
 import android.os.Parcelable
 import android.provider.Settings
@@ -16,9 +16,11 @@ import com.google.android.gms.maps.model.LatLng
 import java.io.IOException
 
 
-class GPSInfo(private var activity: AppCompatActivity) : Service(), LocationListener {
-
-    init {
+class GPSInfo(): Service(), LocationListener {
+    
+    constructor(ac: AppCompatActivity): this() {
+        activity = ac
+        geocoder = Geocoder(activity)
         getLocation()
     }
 
@@ -46,11 +48,12 @@ class GPSInfo(private var activity: AppCompatActivity) : Service(), LocationList
         }
     }
 
+    private lateinit var activity: AppCompatActivity
+    private lateinit var geocoder: Geocoder// 좌표 - 주소 변환
+
     private val TAG:String = "GPSINFO"
     private val GPS_ENABLE_REQUEST_CODE = 2001
     private val GPS_PLACE_ID: String = "-1"
-
-    private var geocoder: Geocoder = Geocoder(activity)// 좌표 - 주소 변환
 
     // 현재 GPS 사용유무
     internal var isGPSEnabled = false
@@ -62,8 +65,8 @@ class GPSInfo(private var activity: AppCompatActivity) : Service(), LocationList
     var isGetLocation = false
 
     internal var location: Location? = null
-    internal var lat: Double = 0.toDouble() // 위도
-    internal var lon: Double = 0.toDouble() // 경도
+    internal var lat: Double = 0.0 // 위도
+    internal var lon: Double = 0.0 // 경도
 
     protected var locationManager: LocationManager? = null
 
@@ -282,6 +285,9 @@ class GPSInfo(private var activity: AppCompatActivity) : Service(), LocationList
 
     fun getResult(): Result {
         val result = Result("", 0.0, 0.0)
+
+        if (latitude == 0.0 && longitude == 0.0)
+            return result
 
         if (isGetLocation) {
             var latitude = latitude

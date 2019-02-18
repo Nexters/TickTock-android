@@ -47,6 +47,7 @@ class PlaceAutocompleteRecyclerAdapter(
     fun clearList() {
         if(resultList.size > 0) {
             resultList.clear()
+            notifyDataSetChanged()
         }
     }
 
@@ -79,7 +80,7 @@ class PlaceAutocompleteRecyclerAdapter(
                     notifyDataSetChanged()
                 } else {
                     //API가 결과를 반환하지 않았고 데이터 세트를 무효화
-                    //notifyDataSetInvalidated();
+                    notifyDataSetChanged()
                 }
             }
         }
@@ -145,12 +146,12 @@ class PlaceAutocompleteRecyclerAdapter(
         binding.layoutPlaceAutocomplete.setOnClickListener( {
             listener.onPlaceClick(resultList, i)
         })
-        binding.tvAddressTitle.text = resultList.get(i).title
+        binding.tvTitle.text = resultList.get(i).title
 
         if(resultList.get(i).description.substring(0,4).equals("대한민국"))
-            binding.tvAddressDetail.text = resultList.get(i).description.substring(5)
+            binding.tvDetail.text = resultList.get(i).description.substring(5)
         else
-            binding.tvAddressDetail.text = resultList.get(i).description
+            binding.tvDetail.text = resultList.get(i).description
     }
 
     class PlaceViewHolder(binding: ItemPlaceAutocompleteBinding): RecyclerView.ViewHolder(binding.root)

@@ -1,26 +1,16 @@
 package com.nexters.ticktock.dao
 
-import com.j256.ormlite.dao.Dao
+import android.arch.persistence.room.*
 
-abstract class BaseDAO<T : Any, ID>(
-        private val dao: Dao<T, ID>
-){
-    fun findById(id: ID) =
-            dao.queryForId(id)
+@Dao
+interface BaseDao<in T> {
 
-    fun findAll() =
-            dao.queryForAll()
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(type: T): Long
 
-    fun save(entity: T){
-        dao.createOrUpdate(entity)
-        dao.refresh(entity)
-    }
+    @Update
+    fun update(type: T)
 
-    fun saveAll(entities: Iterable<T>){
-        entities.forEach(this::save)
-    }
-
-    fun delete(entity: T){
-        dao.delete(entity)
-    }
+    @Delete
+    fun delete(type: T)
 }

@@ -2,11 +2,12 @@
     <string name="app_name">TickTock</string>
 
     <!-- activity_auto_complete -->
-    <string name="ed_search_from_hint">출발지 입력</string>
+    <string name="ed_search_from_hint">출발지</string>
     <string name="tv_from_text">에서</string>
-    <string name="ed_search_to_hint">도착지 입력</string>
+    <string name="ed_search_to_hint">도착지</string>
     <string name="tv_to_text">까지</string>
     <string name="btn_save_data_text">확인</string>
+    <string name="tv_direction_description_text">실제 소요시간은 교통상황에 따라 변동될 수 있습니다.</string>
 
     <!-- item_place_autocomplete -->
     <string name="tv_address_title_text">이름</string>
@@ -21,6 +22,32 @@
     <string name="lead_time">소요시간</string>
     <string name="date">날짜</string>
 
-    <string name="header1">인생은 타이밍,\n\'성실갑\'되러 가볼까요?</string>
-    <string name="deleteCheckMessage">%1$s를\n삭제하시는 게 맞나요?</string>
+    <!-- item subpath -->
+    <string name="tv_transport_no_text">740</string>
+    <string name="tv_start_name_text">합정역</string>
+    <string name="tv_subpath_how_text">승차</string>
+    <string name="tv_arrow_text">  \u003E  </string>
+    <string name="tv_end_name_text">신분당선강남역</string>
+    <string name="tv_get_off_text">하차</string>
+
+    <!-- activity_alarm_setting_third -->
+    <string name="tv_alarm_setting_third_title">몇시에 알람을\n맞출까요?</string>
+    <string name="tv_alarm_setting_third_target_time">오후 4시 30분</string>
+    <string name="tv_alarm_setting_third_time_to_destination_title">이동시간</string>
+    <string name="tv_alarm_setting_third_time_to_destination_description">34분</string>
+    <string name="tv_alarm_setting_third_prepare_time_title">준비시간</string>
+    <string name="tv_alarm_setting_third_prepare_time_description">1시간 6분</string>
+
+    <!-- item_prepare_time -->
+    <string name="tv_prepare_time_title">샤워하기</string>
+    <string name="tv_prepare_time_description">5분</string>
+    <string name="card_img">카드 이미지</string>
+    <string name="edit">편집</string>
+    <string name="location_default">마포구 합정동</string>
+
+    <!-- card activity -->
+    <string name="header1">인생은 타이밍!\n\*성실갑*\되러 가볼까요?</string>
+    <string name="deleteCheckMessage">를\n삭제하시는 게 맞나요?</string>
+    <string name="requireNewCard">*새로운 카드*를\n생성해주세요!</string>
+
 </resources>

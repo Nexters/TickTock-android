@@ -3,192 +3,226 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#f9f9f9">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/first_setting_head"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <Button
+            <ImageButton
                 android:id="@+id/first_setting_back_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="back"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="언제부터 준비를\n시작해야 할까요?"
-                android:textSize="20sp"/>
-        </LinearLayout>
+                android:src="@drawable/btn_back"
+                android:background="@android:color/transparent"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="16dp"/>
+        </RelativeLayout>
 
         <ScrollView
             android:id="@+id/first_setting_scrollview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/first_setting_head"
-            android:layout_above="@+id/first_setting_next_button">
+            android:layout_above="@+id/first_setting_footer"
+            android:layout_marginTop="20dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/tag_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/tag_one"
+                        android:layout_marginLeft="32dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="어디로 몇 시까지\n가면 될까요?"
+                        android:layout_alignLeft="@+id/tag_one"
+                        android:layout_below="@id/tag_one"
+                        android:layout_marginTop="6dp"
+                        android:textSize="24sp"/>
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_margin="30dp">
+                    android:layout_marginTop="26dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:background="#ffffff">
+
+                    <TextView
+                        android:id="@+id/wasting_time_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="출발-도착 소요시간"
+                        android:textSize="12sp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="20dp" />
+
+                    <ImageButton
+                        android:id="@+id/first_setting_direction_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/btn_one_plus"
+                        android:background="@android:color/transparent"
+                        android:layout_below="@id/wasting_time_text"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="15dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="출발-도착 소요시간"/>
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="+"/>
+                        android:text="얼마나 걸리는지 알아볼까요?"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@id/first_setting_direction_button"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginBottom="20dp"/>
 
-                </LinearLayout>
+                </RelativeLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="30dp"
-                    android:orientation="vertical">
+                    android:layout_marginTop="12dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:orientation="vertical"
+                    android:background="#ffffff">
 
                     <TextView
+                        android:id="@+id/promise_time_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="약속시간"/>
+                        android:text="약속시간"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:textSize="12sp"/>
 
                     <TimePicker
+                        android:id="@+id/first_setting_time_picker"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:timePickerMode="spinner"
-                        android:layout_gravity="center">
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/promise_time_text">
                     </TimePicker>
 
-                    <!-- TODO: 구분선 수치 값을 상대 값으로 수정하자 -->
-
                     <View
-                        android:layout_width="250dp"
+                        android:id="@+id/first_setting_line"
+                        android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#808080"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="10dp"/>
-                    
-                    <TextView
+                        android:background="#d1d1d1"
+                        android:layout_marginBottom="10dp"
+                        android:layout_below="@id/first_setting_time_picker"/>
+
+                    <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="알림반복"/>
+                        android:layout_below="@id/first_setting_line"
+                        android:layout_marginTop="19dp"
+                        android:layout_marginBottom="22dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:layout_width="50dp"
+                        <TextView
+                            android:id="@+id/first_setting_date_text"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="월"/>
+                            android:text="요일"
+                            android:layout_marginLeft="20dp"/>
 
-                        <Button
-                            android:layout_width="50dp"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="화"/>
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_below="@id/first_setting_date_text"
+                            android:layout_marginTop="16dp">
 
-                        <Button
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content"
-                            android:text="수"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/btn_mon_dis"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"/>
 
-                        <Button
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content"
-                            android:text="목"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/btn_tue_dis"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"/>
 
-                        <Button
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content"
-                            android:text="금"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/btn_wed_dis"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"/>
 
-                        <Button
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content"
-                            android:text="토"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/btn_thur_dis"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"/>
 
-                        <Button
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content"
-                            android:text="일"/>
-                    </LinearLayout>
-                </LinearLayout>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/btn_fri_dis"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_margin="30dp">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/btn_sat_dis"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="약속구분"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/btn_sun_dis"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content"
-                            android:text="O"/>
-
-                        <Button
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content"
-                            android:text="O"/>
-
-                        <Button
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content"
-                            android:text="O"/>
-
-                        <Button
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content"
-                            android:text="O"/>
-
-                        <Button
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content"
-                            android:text="O"/>
-
-                        <Button
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content"
-                            android:text="O"/>
-
-                        <Button
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content"
-                            android:text="O"/>
-
-                    </LinearLayout>
-                </LinearLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
+                </RelativeLayout>
             </LinearLayout>
         </ScrollView>
 
-        <Button
-            android:id="@+id/first_setting_next_button"
+        <RelativeLayout
+            android:id="@+id/first_setting_footer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_alignParentBottom="true"
-            android:text="다음"/>
+            android:background="#f6460f">
 
+            <ImageView
+                android:id="@+id/first_setting_next_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_next"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="32dp"/>
+
+        </RelativeLayout>
     </RelativeLayout>
 </layout>

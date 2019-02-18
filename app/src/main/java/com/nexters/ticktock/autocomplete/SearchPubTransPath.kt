@@ -79,17 +79,19 @@ class SearchPubTransPath(val type: Int, val path: Path, val subPathList: ArrayLi
         }
     }
 
-    class Lane(val name: String?, val busNo: String?) : Parcelable {
+    class Lane(val name: String?, val busNo: String?, val type: Int?, val subwayCode: Int?) : Parcelable {
     /*
      * 1-9-3-5-1 name:      지하철 노선명 (지하철인 경우에만 필수)
      * 1-9-3-5-2 busNo:     버스번호 (버스인 경우에만 필수)
-     *
-     * * * 버스 타입별 분류도 가능하면 시도 할 것
+     * 1-9-3-5-3 type:      버스타입 (버스인 경우에만 필수)
+     * 1-9-3-5-5 subwayCode 지하철 노선 번호(지하철인 경우에만 필수)
      */
 
         constructor(source: Parcel) : this(
                 source.readString(),
-                source.readString()
+                source.readString(),
+                source.readValue(Int::class.java.classLoader) as Int?,
+                source.readValue(Int::class.java.classLoader) as Int?
         )
 
         override fun describeContents() = 0
@@ -97,6 +99,8 @@ class SearchPubTransPath(val type: Int, val path: Path, val subPathList: ArrayLi
         override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
             writeString(name)
             writeString(busNo)
+            writeValue(type)
+            writeValue(subwayCode)
         }
 
         companion object {
@@ -107,6 +111,7 @@ class SearchPubTransPath(val type: Int, val path: Path, val subPathList: ArrayLi
             }
         }
     }
+
 
     constructor(source: Parcel) : this(
             source.readInt(),
