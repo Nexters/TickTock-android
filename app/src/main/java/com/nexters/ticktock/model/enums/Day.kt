@@ -17,13 +17,6 @@ enum class Day(val dayName: String) {
     Weekend("주말")
     ;
 
-    companion object {
-        private val map = Day.values().associate { it.dayName to it }
-
-        fun valueOfDayName(dayName: String): Day =
-                map[dayName] ?: throw IllegalStateException("\"$dayName\" 에 해당하는 타입이 없습니다.")
-    }
-
     override fun toString(): String {
         return dayName
     }
