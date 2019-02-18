@@ -62,4 +62,19 @@
     <string name="deleteCheckMessage">를\n삭제하시는 게 맞나요?</string>
     <string name="requireNewCard">*새로운 카드*를\n생성해주세요!</string>
 
+
+    <!-- setting activity -->
+    <string name="setting_title">설정</string>
+    <string name="timer_manage">타이머 관리</string>
+    <string name="alarm_func">알람기능</string>
+    <string name="system_manage">시스템 관리</string>
+    <string name="item_delete">모든 알람 삭제</string>
+    <string name="init_template">템플릿 초기화</string>
+    <string name="permit_alarm">방해금지 모드에서 알람 허</string>
+    <string name="lock_screen">잠금화면에 알람 표시</string>
+    <string name="use_system_vol">시스템 볼륨 사용</string>
+    <string name="volume">볼륨</string>
+    <string name="app_on_top">다른 앱 위에 앱 표시</string>
+    <string name="push_alarm">푸쉬알림 받기</string>
+    <string name="version">버전</string>
 </resources>

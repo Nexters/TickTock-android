@@ -9,9 +9,11 @@
         android:allowBackup="true"
         android:icon="@drawable/group"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/group"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".setting.SettingActivity"/>
+
         <service
             android:name=".timer.AlarmService"
             android:enabled="true"
@@ -22,12 +24,11 @@
             android:exported="true"
             android:showOnLockScreen="true"
             android:screenOrientation="sensorPortrait">
-
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </receiver>
 
         <activity android:name=".MainActivity" />
@@ -40,7 +41,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".onboarding.OnBoardingActivity" />
 
         <receiver android:name=".timer.TimerExpiredReceiver" />

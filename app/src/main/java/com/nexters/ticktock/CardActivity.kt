@@ -18,6 +18,7 @@ import com.nexters.ticktock.model.enums.Day
 import com.nexters.ticktock.model.enums.TickTockColor
 import com.nexters.ticktock.utils.*
 import com.nexters.ticktock.onboarding.OnBoardingActivity
+import com.nexters.ticktock.setting.SettingActivity
 import kotlinx.android.synthetic.main.activity_card.*
 import java.util.*
 
@@ -227,6 +228,12 @@ class CardActivity : AppCompatActivity() {
                 deleteCheckMessageText.invisible(MAIN_TOGGLE_DURATION)
                 cardRecyclerViewAdapter.isEditPhase = false
             }
+        }
+
+        settingBtn.setOnClickListener {
+            val settingIntent = Intent(this, SettingActivity::class.java)
+            startActivity(settingIntent)
+            overridePendingTransition(R.anim.slide_left, R.anim.slide_right)
         }
 
         recyclerView.apply { // 클래스 분리 해야 하는데 귀찮... ㅎㅎ
