@@ -22,13 +22,11 @@ class TimerRecyclerViewAdapter (val context: Context,
         : RecyclerView.ViewHolder(view), View.OnClickListener {
 
         private var countdownText = view.findViewById<TextView>(R.id.tv_countdown)
-        private var stepText = view.findViewById<TextView>(R.id.tv_step)
 
         fun bind() {
             this@TimerRecyclerViewAdapter.timerStep[super.getAdapterPosition()]
                     .also {
                         countdownText.text = it.time
-                        stepText.text = it.step
                     }
         }
 

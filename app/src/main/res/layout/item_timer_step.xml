@@ -10,27 +10,18 @@
         android:paddingBottom="10dp">
 
         <TextView
-            android:id = "@+id/tv_step"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginBottom = "20dp"
-            tools:text = "샤워하기" />
-
-        <TextView
             android:id="@+id/tv_countdown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_step"
-            tools:text="00:00:00"
+            app:layout_constraintTop_toBottomOf="parent"
+            tools:text="00:00"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="48sp"
             android:layout_marginTop = "20dp"
-            android:textColor="@android:color/black"
-            android:textSize="40sp" />
+            android:textColor="#343434" />
 
     </android.support.constraint.ConstraintLayout>
 

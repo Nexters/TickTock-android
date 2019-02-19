@@ -136,7 +136,7 @@ class CircularProgressbar @JvmOverloads constructor(context: Context, attrs: Att
             }
         }
 
-        mThumbRadius = circleStrokeWidth * 2
+        mThumbRadius = circleStrokeWidth * 3
 
         updateBackgroundColor()
 
