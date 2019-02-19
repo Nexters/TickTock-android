@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".setting.SettingActivity">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_top"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:minHeight="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_title"
+                android:layout_gravity="center"
+                android:fontFamily="@font/noto_sans_cjk_kr_bold"
+                android:textSize = "14sp" />
+
+            <ImageButton
+                android:id = "@+id/back_to_main_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity = "end"
+                android:src = "@drawable/btn_front"
+                android:backgroundTint="@android:color/transparent"
+                android:layout_marginEnd = "10dp"/>
+
+
+        </android.support.v7.widget.Toolbar>
+
+        <ScrollView
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                
+                <include
+                    android:id = "@+id/layout_time_manage"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "wrap_content"
+                    android:layout_marginTop = "20dp"
+                    layout = "@layout/setting_timer_management"/>
+
+                <include
+                    android:id = "@+id/layout_alarm_func"
+                    android:layout_width = "match_parent"
+                    android:layout_height= "wrap_content"
+                    android:layout_marginTop = "3dp"
+                    app:layout_constraintTop_toBottomOf="@+id/layout_time_manage"
+                    layout = "@layout/setting_alarm_func" />
+
+                <include
+                    android:id = "@+id/layout_system_manage"
+                    android:layout_width = "match_parent"
+                    android:layout_height = "match_parent"
+                    android:layout_marginTop = "25.4dp"
+                    app:layout_constraintTop_toBottomOf="@id/layout_alarm_func"
+                    layout = "@layout/setting_system_management" />
+
+            </android.support.constraint.ConstraintLayout>
+        </ScrollView>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

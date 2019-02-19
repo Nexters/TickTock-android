@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.constraint.ConstraintLayout
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id = "@+id/tv_timer_manage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop = "20dp"
+            android:fontFamily="@font/noto_sans_cjk_kr_regular"
+            android:textSize = "12sp"
+            android:textColor = "#6b6b6b"
+            android:text = "@string/timer_manage" />
+
+        <Button
+            android:id = "@+id/alarm_delete_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background = "@android:color/white"
+            android:text = "@string/item_delete"
+            android:gravity = "start"
+            android:paddingStart = "28dp"
+            android:paddingTop = "13dp"
+            android:fontFamily="@font/noto_sans_cjk_kr_regular"
+            android:textSize = "14sp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_timer_manage"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background = "@android:color/white"
+            android:text = "@string/init_template"
+            android:gravity = "start"
+            android:paddingStart = "28dp"
+            android:paddingTop = "13dp"
+            android:fontFamily="@font/noto_sans_cjk_kr_regular"
+            android:textSize = "14sp"
+            app:layout_constraintTop_toBottomOf="@+id/alarm_delete_btn" />
+
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
