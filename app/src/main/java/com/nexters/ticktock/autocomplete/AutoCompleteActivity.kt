@@ -74,8 +74,9 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
     }
 
     fun getGPSLocation() {
-        // val gps = intent.getParcelableExtra<GPSInfo.Result>("GPS_RESULT")
-        val gps: GPSInfo.Result = GPSInfo.Result("", 0.0, 0.0)
+        var gps = intent.getParcelableExtra<GPSInfo.Result>("GPS_RESULT")
+        if (gps == null) gps = GPSInfo.Result("", 0.0, 0.0)
+
         if (gps.address != "") {
             binding.edSearchFrom.setText("내위치: ${gps.address}")
             fromLatLng = LatLng(gps.latitude, gps.longitude)
@@ -92,13 +93,11 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
                 .addApi(Places.GEO_DATA_API)
                 .build()
 
-        binding.recyclerviewAutocomplete.setHasFixedSize(true)
-        binding.recyclerviewAutocomplete.layoutManager = LinearLayoutManager(this)
-
         val typeFilter = AutocompleteFilter.Builder()
                 .setCountry("KR")
                 .build()
 
+        binding.recyclerviewAutocomplete.layoutManager = LinearLayoutManager(this)
         placeAutocompleteRecyclerAdapter = PlaceAutocompleteRecyclerAdapter(this, googleApiClient, null, typeFilter)
         binding.recyclerviewAutocomplete.adapter = placeAutocompleteRecyclerAdapter
 
@@ -128,6 +127,7 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
                 if (!s.toString().equals("") && googleApiClient.isConnected) {
                     binding.layoutDirection.visibility = View.GONE // 텍스트가 변경될때 길찾기 정보는 보여지지 않음
                     placeAutocompleteRecyclerAdapter.filter.filter(s.toString())
+                    placeAutocompleteRecyclerAdapter.notifyDataSetChanged()
                 } else if (!googleApiClient.isConnected) {
                     Log.e("", "NOT CONNECTED")
                 }
@@ -145,6 +145,7 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
                 if (!s.toString().equals("") && googleApiClient.isConnected) {
                     binding.layoutDirection.visibility = View.GONE // 텍스트가 변경될때 길찾기 정보는 보여지지 않음
                     placeAutocompleteRecyclerAdapter.filter.filter(s.toString())
+                    placeAutocompleteRecyclerAdapter.notifyDataSetChanged()
                 } else if (!googleApiClient.isConnected) {
                     Log.e("", "NOT CONNECTED")
                 }

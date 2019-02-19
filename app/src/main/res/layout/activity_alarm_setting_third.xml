@@ -7,15 +7,17 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#f9f9f9">
 
         <ScrollView
+            android:id="@+id/scroll_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/btn_save">
+            app:layout_constraintBottom_toTopOf="@+id/layout_save">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
@@ -23,19 +25,23 @@
 
                 <ImageView
                     android:id="@+id/btn_back"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="36dp"
                     android:layout_marginStart="16dp"
+                    android:src="@drawable/btn_back"
+                    android:contentDescription="@null"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/tv_step_three"
-                    android:layout_width="64dp"
-                    android:layout_height="24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_marginStart="32dp"
+                    android:src="@drawable/tag_thr"
+                    android:contentDescription="@null"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btn_back" />
 
@@ -46,7 +52,7 @@
                     android:layout_marginTop="6dp"
                     android:layout_marginStart="32dp"
                     android:text="@string/tv_alarm_setting_third_title"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="#323232"
                     android:textSize="24sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_step_three" />
@@ -72,7 +78,8 @@
                             android:id="@+id/tv_memo_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="카드 별칭"
+                            android:text="@string/tv_memo_title"
+                            android:textColor="#6b6b6b"
                             android:textSize="12sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -87,7 +94,10 @@
                                 android:id="@+id/ed_memo"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:hint="ex. 돈벌러가자"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:hint="@string/ed_memo_hint"
+                                android:textColorHint="#b6b6b6"
                                 android:textSize="14sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -98,8 +108,11 @@
                                 android:id="@+id/tv_memo_max"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="최대 10글자"
+                                android:layout_marginEnd="10dp"
+                                android:text="@string/tv_memo_max_text"
                                 android:textSize="12sp"
+                                android:textColor="#d1d1d1"
+                                android:visibility="visible"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -128,7 +141,8 @@
                             android:id="@+id/tv_color_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="카드 색상"
+                            android:text="@string/tv_color_title"
+                            android:textColor="#6b6b6b"
                             android:textSize="12sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -209,10 +223,11 @@
                         android:padding="20dp">
 
                         <TextView
-                            android:id="@+id/tv_prepare_time_title"
+                            android:id="@+id/tv_prepare_time_main_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="알람"
+                            android:text="@string/tv_prepare_time_main_title"
+                            android:textColor="#6b6b6b"
                             android:textSize="12sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -221,25 +236,28 @@
                             android:id="@+id/layout_start_time"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
                             app:layout_constraintBottom_toTopOf="@+id/layout_quick_time"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_prepare_time_title">
+                            app:layout_constraintTop_toBottomOf="@id/tv_prepare_time_main_title">
 
                             <TextView
+                                android:id="@+id/tv_start_time_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="시작시간"
+                                android:text="@string/tv_start_time_title"
+                                android:textColor="#6b6b6b"
                                 android:textSize="12sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/tv_start_time"
+                                android:id="@+id/tv_start_time_description"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="pm 1:30"
+                                android:text="@string/tv_start_time_description"
                                 android:textColor="#e14f50"
                                 android:textSize="14sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -251,15 +269,18 @@
                             android:id="@+id/layout_quick_time"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/layout_start_time">
 
                             <TextView
+                                android:id="@+id/tv_quick_time_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="퀵타임"
+                                android:text="@string/tv_quick_time_title"
+                                android:textColor="#6b6b6b"
                                 android:textSize="12sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -282,7 +303,7 @@
                                     android:layout_height="24dp"
                                     android:background="@drawable/radiobutton_quick_time_start"
                                     android:button="@android:color/transparent"
-                                    android:text="적용안함"
+                                    android:text="@string/radiobtn_quick_time1_text"
                                     android:textAlignment="center"
                                     android:textColor="@color/colorWhite"
                                     android:textSize="10sp" />
@@ -293,8 +314,9 @@
                                     android:layout_height="24dp"
                                     android:background="@drawable/radiobutton_quick_time_middle"
                                     android:button="@android:color/transparent"
-                                    android:text="-5분"
+                                    android:text="@string/radiobtn_quick_time2_text"
                                     android:textAlignment="center"
+                                    android:textColor="@color/colorGray"
                                     android:textSize="10sp" />
 
                                 <RadioButton
@@ -303,8 +325,9 @@
                                     android:layout_height="24dp"
                                     android:background="@drawable/radiobutton_quick_time_middle"
                                     android:button="@android:color/transparent"
-                                    android:text="-10분"
+                                    android:text="@string/radiobtn_quick_time3_text"
                                     android:textAlignment="center"
+                                    android:textColor="@color/colorGray"
                                     android:textSize="10sp" />
 
                                 <RadioButton
@@ -313,8 +336,9 @@
                                     android:layout_height="24dp"
                                     android:background="@drawable/radiobutton_quick_time_middle"
                                     android:button="@android:color/transparent"
-                                    android:text="-15분"
+                                    android:text="@string/radiobtn_quick_time4_text"
                                     android:textAlignment="center"
+                                    android:textColor="@color/colorGray"
                                     android:textSize="10sp" />
 
                                 <RadioButton
@@ -323,13 +347,13 @@
                                     android:layout_height="24dp"
                                     android:background="@drawable/radiobutton_quick_time_end"
                                     android:button="@android:color/transparent"
-                                    android:text="-30분"
+                                    android:text="@string/radiobtn_quick_time5_text"
                                     android:textAlignment="center"
+                                    android:textColor="@color/colorGray"
                                     android:textSize="10sp" />
                             </RadioGroup>
                         </android.support.constraint.ConstraintLayout>
                     </android.support.constraint.ConstraintLayout>
-
                 </android.support.v7.widget.CardView>
 
                 <android.support.v7.widget.CardView
@@ -339,10 +363,12 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="1dp"
                     android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="32dp"
                     app:cardCornerRadius="6dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cv_prepare_time_main">
+                    app:layout_constraintTop_toBottomOf="@+id/cv_prepare_time_main"
+                    app:layout_constraintBottom_toBottomOf="parent">
 
                     <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
@@ -361,7 +387,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/tv_alarm_setting_third_time_to_destination_title"
-                                android:textColor="@color/colorBlack"
+                                android:textColor="#343434"
                                 android:textSize="14sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -371,7 +397,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/tv_alarm_setting_third_time_to_destination_description"
-                                android:textColor="@color/colorBlack"
+                                android:textColor="#343434"
                                 android:textSize="14sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -399,7 +425,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/tv_alarm_setting_third_prepare_time_title"
-                                    android:textColor="@color/colorBlack"
+                                    android:textColor="#343434"
                                     android:textSize="14sp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -409,7 +435,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/tv_alarm_setting_third_prepare_time_description"
-                                    android:textColor="@color/colorBlack"
+                                    android:textColor="#343434"
                                     android:textSize="14sp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
@@ -430,10 +456,26 @@
             </android.support.constraint.ConstraintLayout>
         </ScrollView>
 
-        <ImageView
-            android:id="@+id/btn_save"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/layout_save"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:background="#f6460f"
+            app:layout_constraintTop_toBottomOf="@+id/scroll_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:id="@+id/btn_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_save"
+                android:contentDescription="@null"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>
 </layout>

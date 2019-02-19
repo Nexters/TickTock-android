@@ -18,8 +18,8 @@ import com.nexters.ticktock.model.Alarm
 import com.nexters.ticktock.model.enums.Day
 import com.nexters.ticktock.model.enums.TickTockColor
 import com.nexters.ticktock.onboarding.OnBoardingActivity
+import com.nexters.ticktock.setting.SettingActivity
 import com.nexters.ticktock.utils.*
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_card.*
 import java.util.*
 
@@ -28,8 +28,6 @@ class CardActivity : AppCompatActivity() {
     private lateinit var cardRecyclerViewAdapter: CardRecyclerViewAdapter
 
     private lateinit var cardList: MutableList<CardItem>
-
-    private val disposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -233,6 +231,12 @@ class CardActivity : AppCompatActivity() {
                 deleteCheckMessageText.invisible(MAIN_TOGGLE_DURATION)
                 cardRecyclerViewAdapter.isEditPhase = false
             }
+        }
+
+        settingBtn.setOnClickListener {
+            val settingIntent = Intent(this, SettingActivity::class.java)
+            startActivity(settingIntent)
+            overridePendingTransition(R.anim.slide_left, R.anim.slide_right)
         }
 
         recyclerView.apply { // 클래스 분리 해야 하는데 귀찮... ㅎㅎ
