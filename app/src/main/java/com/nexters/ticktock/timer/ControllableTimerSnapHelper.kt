@@ -5,13 +5,17 @@ import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.PagerSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
+import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_timer.view.*
 
 class ControllableTimerSnapHelper(private var context: TimerActivity,
-                                  private var circularProgressbar: CircularProgressbar,
-                                  private var buttonNext : Button,
-                                  private var buttonReset : Button,
+                                  private var stepText : TextView,
+                                  private var stepTimeList : MutableList<String>,
+                                  private var buttonNext : ImageButton,
+                                  private var buttonReset : ImageButton,
                                   private val onSnapped: ((Int) -> Unit)? = null
 ) : PagerSnapHelper() {
     private var snappedPosition = 0
@@ -44,21 +48,24 @@ class ControllableTimerSnapHelper(private var context: TimerActivity,
                     currentPos = snappedPosition
 
                     //timer 재시작
+                    stepText.text = stepTimeList[snappedPosition]
                     context.onTimerReset()
                     context.mCountDownTimer!!.cancel()
                     val time : List<String> = context.stepList[snappedPosition].time.split(":")
-                    val realTime : Long = (time[2].toLong() + time[1].toLong() * 60  + time[0].toLong() * 3600)
+                    val realTime : Long = (time[1].toLong() + time[0].toLong() * 60 )
                     context.mTimeToGo = realTime
                     context.mPreferences.setStartedTime(context.getNow())
                     context.TIMER_LENGTH = realTime
 
-                    if(!buttonNext.isEnabled)
-                        buttonNext.isEnabled = true
+                    if(buttonNext.visibility == View.INVISIBLE)
+                        buttonNext.visibility = View.VISIBLE
 
                     if(snappedPosition == 0)
-                        buttonReset.isEnabled = false
-                    else if(!buttonReset.isEnabled)
-                        buttonReset.isEnabled = true
+                        buttonReset.visibility = View.INVISIBLE
+                    else if(buttonReset.visibility == View.INVISIBLE)
+                        buttonReset.visibility = View.VISIBLE
+
+
 
                     //set current position
                     context.curPos = currentPos
@@ -68,7 +75,7 @@ class ControllableTimerSnapHelper(private var context: TimerActivity,
                 else if(snappedPosition == recyclerView.adapter?.itemCount!! - 1) {
                     context.onTimerReset()
                     context.mCountDownTimer!!.cancel()
-                    buttonNext.isEnabled = false
+                    buttonNext.visibility = View.INVISIBLE
                 }
             }
         }

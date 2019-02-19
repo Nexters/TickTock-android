@@ -11,6 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.Color
+import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -22,6 +23,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PagerSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.nexters.ticktock.R
 import com.nexters.ticktock.databinding.ActivityTimerBinding
@@ -50,6 +52,7 @@ class TimerActivity : AppCompatActivity() {
 
     private lateinit var timerRecyclerViewAdapter: TimerRecyclerViewAdapter
     lateinit var stepList : MutableList<TimerStepItem>
+    lateinit var stepTimeList : MutableList<String>
 
     lateinit var mPreferences : PrefUtils
 
@@ -68,15 +71,29 @@ class TimerActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_timer)
 
         stepList = mutableListOf(
-                TimerStepItem("샤워하기", "00:00:20"),
-                TimerStepItem("머리말리기", "00:10:00"),
-                TimerStepItem("옷입기", "00:15:00"),
-                TimerStepItem("완료", "출발하세요!")
+                TimerStepItem("00:20"),
+                TimerStepItem("10:00"),
+                TimerStepItem("15:00"),
+                TimerStepItem("출발하세요!")
         )
-        snapHelper = ControllableTimerSnapHelper(this, binding.CircularProgressBar, binding.buttonNext, binding.buttonReset)
+
+        stepTimeList = mutableListOf(
+                "샤워하기",
+                "머리말리기",
+                "옷입기"
+        )
+        binding.tvTitle.text = "출근 알람알람알람"
+        binding.tvStep.text = stepTimeList[0]
+        snapHelper = ControllableTimerSnapHelper(this, binding.tvStep, stepTimeList, binding.buttonNext, binding.buttonReset)
 
         timerRecyclerViewAdapter = TimerRecyclerViewAdapter(this, stepList, binding.rvTimer, snapHelper!!)
 
+        binding.closeTimerBtn.setOnClickListener {
+            val intent = Intent(Intent.ACTION_MAIN)
+            intent.addCategory(Intent.CATEGORY_HOME)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(intent)
+        }
         binding.rvTimer.apply {
             layoutManager = SpeedControllableTimerLayoutManager(
                     this@TimerActivity, LinearLayoutManager.HORIZONTAL, false, this, 50F)
@@ -106,13 +123,14 @@ class TimerActivity : AppCompatActivity() {
             if(curPos < stepList.size - 2) {
                 Log.d("curPosition", curPos.toString())
                 binding.rvTimer.smoothScrollToPosition(curPos + 1)
+                binding.tvStep.text = stepTimeList[curPos + 1]
                 onTimerReset()
                 mCountDownTimer!!.cancel()
                 val time: List<String> = stepList[curPos + 1].time.split(":")
-                val realTime: Long = (time[2].toLong() + time[1].toLong() * 60 + time[0].toLong() * 3600)
+                val realTime: Long = (time[1].toLong() + time[0].toLong() * 60)
 
-                if(!binding.buttonReset.isEnabled)
-                    binding.buttonReset.isEnabled = true
+                if(binding.buttonReset.visibility == View.INVISIBLE)
+                    binding.buttonReset.visibility = View.VISIBLE
                 mTimeToGo = realTime
                 mPreferences.setStartedTime(getNow())
                 TIMER_LENGTH = realTime
@@ -123,7 +141,7 @@ class TimerActivity : AppCompatActivity() {
                 binding.rvTimer.smoothScrollToPosition(curPos + 1)
                 onTimerReset()
                 mCountDownTimer!!.cancel()
-                binding.buttonNext.isEnabled = false
+                binding.buttonNext.visibility = View.INVISIBLE
                 curPos++
             }
         }
@@ -132,15 +150,16 @@ class TimerActivity : AppCompatActivity() {
         binding.buttonReset.setOnClickListener {
             if(curPos > 0) {
                 binding.rvTimer.smoothScrollToPosition(curPos - 1)
+                binding.tvStep.text = stepTimeList[curPos - 1]
                 onTimerReset()
                 mCountDownTimer!!.cancel()
                 val time: List<String> = stepList[curPos - 1].time.split(":")
-                val realTime: Long = (time[2].toLong() + time[1].toLong() * 60 + time[0].toLong() * 3600)
+                val realTime: Long = (time[1].toLong() + time[0].toLong() * 60)
 
-                if(!binding.buttonNext.isEnabled)
-                    binding.buttonNext.isEnabled = true
+                if(binding.buttonNext.visibility == View.INVISIBLE)
+                    binding.buttonNext.visibility = View.VISIBLE
                 if(curPos == 1)
-                    binding.buttonReset.isEnabled = false
+                    binding.buttonReset.visibility = View.INVISIBLE
                 mTimeToGo = realTime
                 mPreferences.setStartedTime(getNow())
                 TIMER_LENGTH = realTime
@@ -231,7 +250,7 @@ class TimerActivity : AppCompatActivity() {
 
             //타이머 처음 스탭부터 자동시작
             val time : List<String> = stepList[0].time.split(":")
-            val realTime : Long = (time[2].toLong() + time[1].toLong() * 60  + time[0].toLong() * 3600)
+            val realTime : Long = (time[1].toLong() + time[0].toLong() * 60 )
             TIMER_LENGTH = realTime
             mTimeToGo = realTime
             binding.buttonStartPause.performClick()
@@ -271,8 +290,9 @@ class TimerActivity : AppCompatActivity() {
                     checkIntentAlarm = !checkIntentAlarm
 
                     binding.timerLayout.apply{
-                        if(mTimeToGo!!.toInt() % 2 == 1)
+                        if(mTimeToGo!!.toInt() % 2 == 1) {
                             setBackgroundColor(Color.parseColor("#ffa7a7"))
+                        }
                         else
                             setBackgroundColor(Color.parseColor("#ffffff"))
                     }
@@ -315,12 +335,10 @@ class TimerActivity : AppCompatActivity() {
         if((mTimeToGo != null) and (curPos != stepList.size - 1)) {
             Log.d("TimeToGO", mTimeToGo.toString())
             var curTime = mTimeToGo
-            val hour = curTime!! / 3600
-            curTime /= 3600
-            val minute = (mTimeToGo!! - (hour * curTime)) / 60
-            val second = mTimeToGo!! - (hour * 3600) - (minute * 60)
+            val minute = mTimeToGo!! / 60
+            val second = mTimeToGo!! -  (minute * 60)
 
-            val timeLeft = String.format(Locale.getDefault(), "%02d:%02d:%02d", hour, minute, second)
+            val timeLeft = String.format(Locale.getDefault(), "%02d:%02d", minute, second)
             stepList[curPos].time = timeLeft
             binding.rvTimer.adapter!!.notifyDataSetChanged()
         }
