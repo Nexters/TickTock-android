@@ -23,9 +23,9 @@ enum class TickTockColor(val cardBgColorId: Int, val pickColorId: Int, val cardI
             pickColorId = R.color.ticktockGreenPickColor,
             cardImgId = R.drawable.img_green
     ),
-    YELLOW( // TODO 수정 필요
+    YELLOW(
             cardBgColorId = R.color.ticktockYellowCardColor,
             pickColorId = R.color.ticktockYellowPickColor,
-            cardImgId = R.drawable.img_green
+            cardImgId = R.drawable.img_yellow
     )
 }

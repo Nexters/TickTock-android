@@ -1,7 +1,5 @@
 package com.nexters.ticktock.utils
 
-import android.arch.persistence.room.ColumnInfo
-
 fun Int.hour() =
         Time(this * 60)
 
@@ -17,7 +15,7 @@ fun Long.minute() =
 /** time is minute */
 class Time(time:Int) : Comparable<Time> {
 
-    @ColumnInfo(name = "time") val time: Int = (time + WHOLE_DAY) % WHOLE_DAY // 24h -> 0, -4h -> 20h
+    val time: Int = (time + WHOLE_DAY) % WHOLE_DAY // 24h -> 0, -4h -> 20h
 
     val hour = ((time / ONE_HOUR) % 12).let {
         if (it == 0)
