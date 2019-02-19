@@ -84,7 +84,7 @@ class TimerActivity : AppCompatActivity() {
         )
         binding.tvTitle.text = "출근 알람알람알람"
         binding.tvStep.text = stepTimeList[0]
-        snapHelper = ControllableTimerSnapHelper(this, binding.tvStep, stepTimeList, binding.buttonNext, binding.buttonReset)
+        snapHelper = ControllableTimerSnapHelper(this, binding.tvStep, stepTimeList, binding.tvStepNum, binding.buttonNext, binding.buttonReset)
 
         timerRecyclerViewAdapter = TimerRecyclerViewAdapter(this, stepList, binding.rvTimer, snapHelper!!)
 
@@ -123,6 +123,7 @@ class TimerActivity : AppCompatActivity() {
             if(curPos < stepList.size - 2) {
                 Log.d("curPosition", curPos.toString())
                 binding.rvTimer.smoothScrollToPosition(curPos + 1)
+                binding.tvStepNum.text = getString(R.string.timer_step_num, curPos + 2, stepList.size)
                 binding.tvStep.text = stepTimeList[curPos + 1]
                 onTimerReset()
                 mCountDownTimer!!.cancel()
@@ -139,6 +140,7 @@ class TimerActivity : AppCompatActivity() {
             }
             else if(curPos == stepList.size - 2){
                 binding.rvTimer.smoothScrollToPosition(curPos + 1)
+                binding.tvStepNum.text = getString(R.string.timer_step_num, curPos + 2, stepList.size)
                 onTimerReset()
                 mCountDownTimer!!.cancel()
                 binding.buttonNext.visibility = View.INVISIBLE
@@ -151,6 +153,7 @@ class TimerActivity : AppCompatActivity() {
             if(curPos > 0) {
                 binding.rvTimer.smoothScrollToPosition(curPos - 1)
                 binding.tvStep.text = stepTimeList[curPos - 1]
+                binding.tvStepNum.text = getString(R.string.timer_step_num, curPos , stepList.size)
                 onTimerReset()
                 mCountDownTimer!!.cancel()
                 val time: List<String> = stepList[curPos - 1].time.split(":")

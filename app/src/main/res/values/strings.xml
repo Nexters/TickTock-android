@@ -77,4 +77,7 @@
     <string name="app_on_top">다른 앱 위에 앱 표시</string>
     <string name="push_alarm">푸쉬알림 받기</string>
     <string name="version">버전</string>
+
+    <!-- timer activity -->
+    <string name="timer_step_num">%1$d / %2$d</string>
 </resources>

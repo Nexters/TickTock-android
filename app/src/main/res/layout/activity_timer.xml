@@ -107,5 +107,27 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop = "12dp" />
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src = "@drawable/timer_oval"
+            android:backgroundTint="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/CircularProgressBar"
+            android:layout_marginBottom="43dp"/>
+
+        <TextView
+            android:id = "@+id/tv_step_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize = "12sp"
+            android:textColor = "@android:color/white"
+            android:text = "1 / 4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/CircularProgressBar"
+            android:layout_marginBottom="46dp"/>
+
     </android.support.constraint.ConstraintLayout>
 </layout>

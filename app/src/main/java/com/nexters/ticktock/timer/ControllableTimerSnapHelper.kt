@@ -1,6 +1,7 @@
 package com.nexters.ticktock.timer
 
 import android.content.Context
+import android.content.res.Resources
 import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.PagerSnapHelper
 import android.support.v7.widget.RecyclerView
@@ -9,11 +10,13 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import com.nexters.ticktock.R
 import kotlinx.android.synthetic.main.activity_timer.view.*
 
 class ControllableTimerSnapHelper(private var context: TimerActivity,
                                   private var stepText : TextView,
                                   private var stepTimeList : MutableList<String>,
+                                  private var stepNum : TextView,
                                   private var buttonNext : ImageButton,
                                   private var buttonReset : ImageButton,
                                   private val onSnapped: ((Int) -> Unit)? = null
@@ -49,6 +52,7 @@ class ControllableTimerSnapHelper(private var context: TimerActivity,
 
                     //timer 재시작
                     stepText.text = stepTimeList[snappedPosition]
+                    stepNum.text = context.getString(R.string.timer_step_num, snappedPosition + 1, stepTimeList.size + 1)
                     context.onTimerReset()
                     context.mCountDownTimer!!.cancel()
                     val time : List<String> = context.stepList[snappedPosition].time.split(":")
