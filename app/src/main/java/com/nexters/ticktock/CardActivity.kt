@@ -2,7 +2,6 @@ package com.nexters.ticktock
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
@@ -14,10 +13,13 @@ import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import com.nexters.ticktock.card.*
 import com.nexters.ticktock.card.Static.MAIN_TOGGLE_DURATION
+import com.nexters.ticktock.dao.TickTockDBHelper
+import com.nexters.ticktock.model.Alarm
 import com.nexters.ticktock.model.enums.Day
 import com.nexters.ticktock.model.enums.TickTockColor
-import com.nexters.ticktock.utils.*
 import com.nexters.ticktock.onboarding.OnBoardingActivity
+import com.nexters.ticktock.utils.*
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_card.*
 import java.util.*
 
@@ -26,6 +28,8 @@ class CardActivity : AppCompatActivity() {
     private lateinit var cardRecyclerViewAdapter: CardRecyclerViewAdapter
 
     private lateinit var cardList: MutableList<CardItem>
+
+    private val disposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,21 +47,23 @@ class CardActivity : AppCompatActivity() {
             return
         }
 
+        val alarmDao = TickTockDBHelper.getInstance(this).alarmDao
+
+        alarmDao.save(Alarm(
+                days = EnumSet.of(Day.Monday),
+                title = "이제 개발은 그만~",
+                startLocation = "1",
+                endLocation = "2",
+                color = TickTockColor.RED,
+                enable = true,
+                endTime = Time(40),
+                travelTime = Time(60)
+        ))
+
+        Log.d("database", alarmDao.findAll().joinToString { it.title })
+
         mainWord.text = getHighlightedString(resources.getString(R.string.header1))
         requireNewCardTxt.text = getHighlightedString(resources.getString(R.string.requireNewCard))
-//        TickTockDatabase.getInstance(this).alarmDao()
-//                .insert(Alarm(
-//                        days = EnumSet.of(Day.Monday),
-//                        startLocation = "관악구 신림동 1423-8",
-//                        endLocation = "사당역 투썸플레이스",
-//                        color = TickTockColor.RED,
-//                        enable = true,
-//                        endTime = 17.hour() + 24.minute(),
-//                        travelTime = 40.minute(),
-//                        title = "알림 알림"
-//                ))
-
-//        Log.d("db test", TickTockDatabase.getInstance(this).alarmDao().findAll().toString())
 
         cardList = mutableListOf(
                 CardItem(

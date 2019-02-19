@@ -62,7 +62,4 @@ dependencies {
 
     implementation 'com.google.code.findbugs:jsr305:2.0.1'
     implementation project(':SDK_release_v1.0')
-
-    implementation "android.arch.persistence.room:runtime:1.1.1"
-    kapt "android.arch.persistence.room:compiler:1.1.1"
 }
