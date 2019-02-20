@@ -15,11 +15,16 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.Switch
+import android.widget.TextView
 import com.nexters.ticktock.R
 import com.nexters.ticktock.alarmsetting.AlarmSettingFirstActivity
 import com.nexters.ticktock.card.Static.COLOR_TRANSITION_TIME
 import com.nexters.ticktock.card.Static.MAIN_TOGGLE_DURATION
+import com.nexters.ticktock.card.listener.CardEventListener
+import com.nexters.ticktock.card.listener.CardChangeListener
 import com.nexters.ticktock.model.enums.Day
 import com.nexters.ticktock.utils.getArrangedDays
 import com.nexters.ticktock.utils.invisible
@@ -28,28 +33,28 @@ import com.nexters.ticktock.utils.visible
 
 class CardRecyclerViewAdapter(
         val context: Context,
-        val cardList: MutableList<CardItem>,
+        val cardContext: CardContext,
         val recyclerView: RecyclerView,
         val snapHelper: ControllableSnapHelper
-) : RecyclerView.Adapter<CardRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<CardRecyclerViewAdapter.ViewHolder>(), CardEventListener {
 
     companion object {
         const val PAYLOAD_DELETE_TOGGLE = "DELETE_TOGGLE"
     }
 
-    var isEditPhase = false
-        set(value) {
-            field = value
-            notifyItemRangeChanged(0, itemCount, PAYLOAD_DELETE_TOGGLE)
-        }
-
     private val layoutInflater = LayoutInflater.from(context)
 
-    var onCardEventListener: CardEventListener? = null
+    init {
+        cardContext.addCardEventListener(this)
+    }
+
+    override fun getPriority(): Int = 5
 
     inner class ViewHolder(view: View)
         : RecyclerView.ViewHolder(view),
-            View.OnClickListener, View.OnLongClickListener{
+            View.OnClickListener, View.OnLongClickListener, CardChangeListener {
+
+        override fun getPriority(): Int = 5
 
         private val activeSwitchView = view.findViewById<Switch>(R.id.activeSwitch)
         private val deleteBtnView = view.findViewById<ImageButton>(R.id.deleteBtn)
@@ -87,17 +92,32 @@ class CardRecyclerViewAdapter(
         init {
             view.setOnClickListener(this)
             view.setOnLongClickListener(this)
-            activeSwitchView.setOnCheckedChangeListener { _, isChecked -> cardColorToggle(isChecked) }
-            deleteBtnView.setOnClickListener { deleteCard() }
+            activeSwitchView.setOnCheckedChangeListener { _, isChecked ->
+                cardContext[super.getAdapterPosition()].enable = isChecked
+            }
+            deleteBtnView.setOnClickListener {
+                cardContext.removeAt(super.getAdapterPosition())
+            }
         }
 
         fun bind() {
-            editToggle()
+            bindButton()
 
-            this@CardRecyclerViewAdapter.cardList[super.getAdapterPosition()].run {
+            this@CardRecyclerViewAdapter.cardContext[super.getAdapterPosition()].run {
                 activeSwitchView.isChecked = enable
                 bindCardTop(this)
                 bindCardBottom(this)
+                cardChangeListener = this@ViewHolder
+            }
+        }
+
+        fun bindButton() {
+            if (!cardContext.isEditPhase) {
+                activeSwitchView.visible(MAIN_TOGGLE_DURATION)
+                deleteBtnView.invisible(MAIN_TOGGLE_DURATION)
+            } else {
+                activeSwitchView.invisible(MAIN_TOGGLE_DURATION)
+                deleteBtnView.visible(MAIN_TOGGLE_DURATION)
             }
         }
 
@@ -151,91 +171,56 @@ class CardRecyclerViewAdapter(
             }
         }
 
-        override fun onLongClick(v: View?): Boolean {
-            if (!isEditPhase) {
-                isEditPhase = true
-                this@CardRecyclerViewAdapter.onCardEventListener?.onCardLongClick(v)
-            }
+        override fun onLongClick(v: View?): Boolean =
+            true.apply { if (!cardContext.isEditPhase) {
+                cardContext.isEditPhase = true
+            } }
 
-            return true
-        }
+        override fun onCardChange(changedCard: CardItem, diff: Int) {
+            if (diff == CardChangeListener.ENABLE) {
 
-        private fun cardColorToggle(isChecked: Boolean) {
+                val isChecked = changedCard.enable
+                val colorMatrix = ColorMatrix()
 
-            val cardItem = cardList[super.getAdapterPosition()]
-
-            cardItem.enable = isChecked
-
-            val colorMatrix = ColorMatrix()
-
-            ValueAnimator.ofFloat(0f, 1f).apply {
-                duration = COLOR_TRANSITION_TIME
-                addUpdateListener {animator ->
-                    colorMatrix.setSaturation(animator.animatedFraction)
-                    cardImgView.colorFilter = ColorMatrixColorFilter(colorMatrix)
-                }
-                addListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
-                        colorMatrix.setSaturation(if (isChecked) 1f else 0f)
+                ValueAnimator.ofFloat(0f, 1f).apply {
+                    duration = COLOR_TRANSITION_TIME
+                    addUpdateListener {animator ->
+                        colorMatrix.setSaturation(animator.animatedFraction)
                         cardImgView.colorFilter = ColorMatrixColorFilter(colorMatrix)
                     }
-                })
-            }.run {
-                if (isChecked) {
-                    start()
+                    addListener(object : AnimatorListenerAdapter() {
+                        override fun onAnimationEnd(animation: Animator?) {
+                            colorMatrix.setSaturation(if (isChecked) 1f else 0f)
+                            cardImgView.colorFilter = ColorMatrixColorFilter(colorMatrix)
+                        }
+                    })
+                }.run {
+                    if (isChecked) {
+                        start()
+                    } else {
+                        reverse()
+                    }
+                }
+
+                val bgColorFrom = (cardTopLayout.background as ColorDrawable).color
+                val bgColorTo = ContextCompat.getColor(context, if (isChecked) {
+                    changedCard.color.cardBgColorId
                 } else {
-                    reverse()
-                }
-            }
+                    R.color.cardDisableBGColor
+                })
 
-            val bgColorFrom = (cardTopLayout.background as ColorDrawable).color
-            val bgColorTo = ContextCompat.getColor(context, if (isChecked) {
-                cardItem.color.cardBgColorId
-            } else {
-                R.color.cardDisableBGColor
-            })
-
-            ValueAnimator.ofObject(ArgbEvaluator(), bgColorFrom, bgColorTo).apply {
-                duration = COLOR_TRANSITION_TIME
-                addUpdateListener {
-                    cardTopLayout.setBackgroundColor(it.animatedValue as Int)
-                }
-            }.start()
-
-        }
-
-        private fun deleteCard() {
-            val position = super.getAdapterPosition()
-
-            cardList.removeAt(position)
-
-            if (itemCount == 0) {
-                isEditPhase = false
-                this@CardRecyclerViewAdapter.onCardEventListener?.onNoCardThere(this@CardRecyclerViewAdapter)
-            }
-
-            this@CardRecyclerViewAdapter.onCardEventListener?.onCardDelete(position, this@CardRecyclerViewAdapter)
-
-            notifyItemRemoved(position)
-            if (itemCount != 1) {
-                notifyItemChanged(position - 1)
-                notifyItemChanged(position)
-            }
-        }
-
-        fun editToggle() {
-            if (!isEditPhase) {
-                activeSwitchView.visible(MAIN_TOGGLE_DURATION)
-                deleteBtnView.invisible(MAIN_TOGGLE_DURATION)
-            } else {
-                activeSwitchView.invisible(MAIN_TOGGLE_DURATION)
-                deleteBtnView.visible(MAIN_TOGGLE_DURATION)
+                ValueAnimator.ofObject(ArgbEvaluator(), bgColorFrom, bgColorTo).apply {
+                    duration = COLOR_TRANSITION_TIME
+                    addUpdateListener {
+                        cardTopLayout.setBackgroundColor(it.animatedValue as Int)
+                    }
+                }.start()
             }
         }
     }
 
     override fun getItemCount(): Int =
-            cardList.size
+            cardContext.size
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder =
             ViewHolder(layoutInflater.inflate(R.layout.item_card, viewGroup, false))
@@ -245,9 +230,25 @@ class CardRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
         if (payloads.contains(PAYLOAD_DELETE_TOGGLE)) {
-            holder.editToggle()
+            holder.bindButton()
         } else {
             super.onBindViewHolder(holder, position, payloads)
+        }
+    }
+
+    override fun onPhaseChange(isEditPhase: Boolean) {
+        notifyItemRangeChanged(0, cardContext.size, PAYLOAD_DELETE_TOGGLE)
+    }
+
+    override fun onCardAdd(addedCard: CardItem) {
+        notifyDataSetChanged()
+    }
+
+    override fun onCardRemove(position: Int, removedCard: CardItem) {
+        notifyItemRemoved(position)
+        if (itemCount != 1) {
+            notifyItemChanged(position - 1)
+            notifyItemChanged(position)
         }
     }
 }
