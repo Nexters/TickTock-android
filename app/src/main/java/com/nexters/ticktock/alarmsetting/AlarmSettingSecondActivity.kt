@@ -3,16 +3,15 @@ package com.nexters.ticktock.alarmsetting
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.MotionEvent
 import android.view.View
-import com.nexters.ticktock.OrmAppCompatActivity
 import com.nexters.ticktock.R
 import com.nexters.ticktock.databinding.ActivityAlarmSettingSecondBinding
-import com.nexters.ticktock.timer.TimerActivity
 
-class AlarmSettingSecondActivity : OrmAppCompatActivity(), PrepareAdapter.OnStartDragListener {
+class AlarmSettingSecondActivity : AppCompatActivity(), PrepareAdapter.OnStartDragListener {
 
     companion object {
         var editMode : Int = 1

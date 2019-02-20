@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id = "@+id/tv_alarm_func1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop = "20dp"
+            android:fontFamily="@font/noto_sans_cjk_kr_regular"
+            android:textSize = "12sp"
+            android:textColor = "#6b6b6b"
+            android:text = "@string/alarm_func" />
+
+        <TextView
+            android:id = "@+id/tv_alarm_func2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background = "@android:color/white"
+            android:text = "@string/permit_alarm"
+            android:textColor = "#323232"
+            android:gravity = "start"
+            android:paddingTop = "13dp"
+            android:paddingBottom="13dp"
+            android:paddingStart = "28dp"
+            android:fontFamily="@font/noto_sans_cjk_kr_regular"
+            android:textSize = "14sp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_alarm_func1"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id = "@+id/tv_alarm_func3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background = "@android:color/white"
+            android:text = "@string/lock_screen"
+            android:textColor = "#323232"
+            android:gravity = "start"
+            android:paddingTop = "13dp"
+            android:paddingBottom="13dp"
+            android:paddingStart = "28dp"
+            android:fontFamily="@font/noto_sans_cjk_kr_regular"
+            android:textSize = "14sp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_alarm_func2"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id = "@+id/tv_alarm_func4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background = "@android:color/white"
+            android:text = "@string/use_system_vol"
+            android:textColor = "#323232"
+            android:gravity = "start"
+            android:paddingTop = "13dp"
+            android:paddingBottom="13dp"
+            android:paddingStart = "28dp"
+            android:fontFamily="@font/noto_sans_cjk_kr_regular"
+            android:textSize = "14sp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_alarm_func3"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id = "@+id/tv_alarm_func5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background = "@android:color/white"
+            android:text = "@string/volume"
+            android:textColor = "#323232"
+            android:gravity = "start"
+            android:paddingTop = "13dp"
+            android:paddingBottom="13dp"
+            android:paddingStart = "28dp"
+            android:fontFamily="@font/noto_sans_cjk_kr_regular"
+            android:textSize = "14sp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_alarm_func4"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_alarm_func2"
+            app:layout_constraintBottom_toBottomOf="@id/tv_alarm_func2"
+            android:thumb = "@drawable/setting_switch_thumb"
+            android:track = "@drawable/setting_switch_track"
+            tools:checked="true"
+            android:checked="true"
+            android:layout_marginEnd = "20.7dp"/>
+
+        <Switch
+            android:id="@+id/switch2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_alarm_func3"
+            app:layout_constraintBottom_toBottomOf="@id/tv_alarm_func3"
+            android:thumb = "@drawable/setting_switch_thumb"
+            android:track = "@drawable/setting_switch_track"
+            tools:checked="true"
+            android:checked="true"
+            android:layout_marginEnd = "20.7dp"/>
+
+        <Switch
+            android:id="@+id/switch3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_alarm_func4"
+            app:layout_constraintBottom_toBottomOf="@id/tv_alarm_func4"
+            android:thumb = "@drawable/setting_switch_thumb"
+            android:track = "@drawable/setting_switch_track"
+            tools:checked="true"
+            android:checked="true"
+            android:layout_marginEnd = "20.7dp"/>
+
+        <SeekBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="38dp"
+            android:progress = "50"
+            android:progressBackgroundTint="#bdbdbd"
+            android:progressTint = "#ffa7a7"
+            android:thumb = "@drawable/setting_seekbar_thumb"
+            app:layout_constraintBottom_toBottomOf="@id/tv_alarm_func5"
+            app:layout_constraintStart_toEndOf="@+id/tv_alarm_func5"
+            app:layout_constraintTop_toTopOf="@+id/tv_alarm_func5" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

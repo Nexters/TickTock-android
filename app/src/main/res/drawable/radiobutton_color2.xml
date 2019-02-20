@@ -5,7 +5,7 @@
         <shape>
             <stroke android:color="@android:color/transparent" android:width="3dp" />
             <corners android:radius="15dp" />
-            <solid android:color="@color/colorCard2" />
+            <solid android:color="@color/ticktockGreenPickColor" />
         </shape>
     </item>
     <!-- SELECTED -->
@@ -13,7 +13,7 @@
         <shape>
             <stroke android:color="@color/colorCardBorder" android:width="3dp" />
             <corners android:radius="15dp" />
-            <solid android:color="@color/colorCard2" />
+            <solid android:color="@color/ticktockGreenPickColor" />
         </shape>
     </item>
 </selector>

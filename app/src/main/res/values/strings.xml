@@ -2,11 +2,12 @@
     <string name="app_name">TickTock</string>
 
     <!-- activity_auto_complete -->
-    <string name="ed_search_from_hint">출발지 입력</string>
+    <string name="ed_search_from_hint">출발지</string>
     <string name="tv_from_text">에서</string>
-    <string name="ed_search_to_hint">도착지 입력</string>
+    <string name="ed_search_to_hint">도착지</string>
     <string name="tv_to_text">까지</string>
     <string name="btn_save_data_text">확인</string>
+    <string name="tv_direction_description_text">실제 소요시간은 교통상황에 따라 변동될 수 있습니다.</string>
 
     <!-- item_place_autocomplete -->
     <string name="tv_address_title_text">이름</string>
@@ -21,12 +22,29 @@
     <string name="lead_time">소요시간</string>
     <string name="date">날짜</string>
 
-    <string name="header1">인생은 타이밍,\n\'성실갑\'되러 가볼까요?</string>
-    <string name="deleteCheckMessage">%1$s를\n삭제하시는 게 맞나요?</string>
+    <!-- item subpath -->
+    <string name="tv_transport_no_text">740</string>
+    <string name="tv_start_name_text">합정역</string>
+    <string name="tv_subpath_how_text">승차</string>
+    <string name="tv_arrow_text">  \u003E  </string>
+    <string name="tv_end_name_text">신분당선강남역</string>
+    <string name="tv_get_off_text">하차</string>
 
     <!-- activity_alarm_setting_third -->
-    <string name="tv_alarm_setting_third_title">몇시에 알람을\n맞출까요?</string>
-    <string name="tv_alarm_setting_third_target_time">오후 4시 30분</string>
+    <string name="tv_alarm_setting_third_title">*몇시에 알람*을\n맞출까요?</string>
+    <string name="tv_memo_title">카드 별칭</string>
+    <string name="ed_memo_hint">ex. 돈벌러가자</string>
+    <string name="tv_memo_max_text">최대 10글자</string>
+    <string name="tv_color_title">카드 색상</string>
+    <string name="tv_prepare_time_main_title">알람</string>
+    <string name="tv_start_time_title">시작시간</string>
+    <string name="tv_start_time_description">pm *1:30*</string>
+    <string name="tv_quick_time_title">퀵타임</string>
+    <string name="radiobtn_quick_time1_text">적용안함</string>
+    <string name="radiobtn_quick_time2_text">-5분</string>
+    <string name="radiobtn_quick_time3_text">-10분</string>
+    <string name="radiobtn_quick_time4_text">-15분</string>
+    <string name="radiobtn_quick_time5_text">-30분</string>
     <string name="tv_alarm_setting_third_time_to_destination_title">이동시간</string>
     <string name="tv_alarm_setting_third_time_to_destination_description">34분</string>
     <string name="tv_alarm_setting_third_prepare_time_title">준비시간</string>
@@ -35,4 +53,31 @@
     <!-- item_prepare_time -->
     <string name="tv_prepare_time_title">샤워하기</string>
     <string name="tv_prepare_time_description">5분</string>
+    <string name="card_img">카드 이미지</string>
+    <string name="edit">편집</string>
+    <string name="location_default">마포구 합정동</string>
+
+    <!-- card activity -->
+    <string name="header1">인생은 타이밍!\n\*성실갑*\되러 가볼까요?</string>
+    <string name="deleteCheckMessage">를\n삭제하시는 게 맞나요?</string>
+    <string name="requireNewCard">*새로운 카드*를\n생성해주세요!</string>
+
+
+    <!-- setting activity -->
+    <string name="setting_title">설정</string>
+    <string name="timer_manage">타이머 관리</string>
+    <string name="alarm_func">알람기능</string>
+    <string name="system_manage">시스템 관리</string>
+    <string name="item_delete">모든 알람 삭제</string>
+    <string name="init_template">템플릿 초기화</string>
+    <string name="permit_alarm">방해금지 모드에서 알람 허</string>
+    <string name="lock_screen">잠금화면에 알람 표시</string>
+    <string name="use_system_vol">시스템 볼륨 사용</string>
+    <string name="volume">볼륨</string>
+    <string name="app_on_top">다른 앱 위에 앱 표시</string>
+    <string name="push_alarm">푸쉬알림 받기</string>
+    <string name="version">버전</string>
+
+    <!-- timer activity -->
+    <string name="timer_step_num">%1$d / %2$d</string>
 </resources>

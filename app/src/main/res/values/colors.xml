@@ -4,20 +4,83 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#ff4081</color>
 
-    <color name="appMainColor">#BDBDBD</color>
+    <color name="appMainColor">#bdbdbd</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorGray">#b6b6b6</color>
 
     <color name="colorBus">#FF0000</color>
     <color name="colorSubway">#00FF00</color>
 
     <!-- activity_alarm_setting_third -->
     <color name="colorCardBorder">#979797</color>
-    <color name="colorCard1">#f46b49</color>
-    <color name="colorCard2">#09b9c2</color>
-    <color name="colorCard3">#ff9f00</color>
-    <color name="colorCard4">#659ff6</color>
-    <color name="colorCard5">#bf75f8</color>
     <color name="alarmMainColor">#f6460f</color>
     <color name="quickTimeBorder">#d8d8d8</color>
+
+    <!-- transportation color -->
+    <color name="walk">#d8d8d8</color>
+
+    <color name="subway_line1">#0052A4</color> <!-- default -->
+    <color name="subway_line2">#009D3E</color>
+    <color name="subway_line3">#EF7C1C</color>
+    <color name="subway_line4">#00A5DE</color>
+    <color name="subway_line5">#996CAC</color>
+    <color name="subway_line6">#CD7C2F</color>
+    <color name="subway_line7">#747F00</color>
+    <color name="subway_line8">#EA545D</color>
+    <color name="subway_line9">#A17E46</color>
+    <color name="subway_bundang">#A17E46</color>
+    <color name="subway_airport">#0065B3</color>
+    <color name="subway_gyeongui">#77C4A3</color>
+    <color name="subway_shinbundang">#D4003B</color>
+    <color name="subway_everline">#7DC70C</color>
+    <color name="subway_gyeongchoon">#01CA70</color>
+    <color name="subway_jagi">#FFCD12</color>
+    <color name="subway_uijeongbu">#FDA600</color>
+    <color name="subway_suin">#F5A200</color>
+    <color name="subway_geonggang">#003DA5</color>
+    <color name="subway_wooee">#B0CE18</color>
+    <color name="subway_seohae">#D4003B</color>
+    <color name="subway_incheon1">#7CA8D5</color>
+    <color name="subway_incheon2">#ED8B00</color>
+    <color name="subway_daejeon1">#D4003B</color>
+    <color name="subway_daegu1">#D93F5C</color>
+    <color name="subway_daegu2">#00AA80</color>
+    <color name="subway_daegu3">#FFB100</color>
+    <color name="subway_gwangju1">#009088</color>
+    <color name="subway_busan1">#F06A00</color>
+    <color name="subway_busan2">#81BF48</color>
+    <color name="subway_busan3">#BB7C00</color>
+    <color name="subway_busan4">#217DCB</color>
+    <color name="subway_east">#003DA5</color>
+    <color name="subway_gimhae">#8652A1</color>
+
+    <color name="bus_normal">#009E96</color> <!-- default -->
+    <color name="bus_maeul">#53B332</color>
+    <color name="bus_airport">#00A0E9</color>
+    <color name="bus_gansun">#0068B7</color>
+    <color name="bus_gwangyeok">#E60012</color>
+
+    <color name="middleOpacityWhite">#7fffffff</color>
+    <color name="cardDurationBarCircleColor">#f6460f</color>
+    <color name="cardDurationBarRectangleColor">#d7d7e0</color>
+
+    <color name="none">#00000000</color>
+
+    <color name="cardIndicatorColor">#323232</color>
+    <color name="mainEditPhaseBGColor">#99000000</color>
+
+    <color name="cardDisableBGColor">#d7d7e0</color>
+
+    <color name="ticktockRedCardColor">#f6460f</color>
+    <color name="ticktockPurpleCardColor">#bf75f8</color>
+    <color name="ticktockBlueCardColor">#3e86f1</color>
+    <color name="ticktockGreenCardColor">#09b9c2</color>
+    <color name="ticktockYellowCardColor">#ff9f00</color>
+
+    <color name="ticktockRedPickColor">#f46b49</color>
+    <color name="ticktockPurplePickColor">#bf75f8</color>
+    <color name="ticktockBluePickColor">#659ff6</color>
+    <color name="ticktockGreenPickColor">#09b9c2</color>
+    <color name="ticktockYellowPickColor">#ff9f00</color>
 </resources>
