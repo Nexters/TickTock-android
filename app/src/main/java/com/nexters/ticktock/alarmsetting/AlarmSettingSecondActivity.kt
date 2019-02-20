@@ -47,12 +47,17 @@ class AlarmSettingSecondActivity : OrmAppCompatActivity(), PrepareAdapter.OnStar
 
         binding.secondSettingRecycler.adapter = adapter
 
+        binding.secondSettingBackButton.setOnClickListener {
+            finish()
+        }
+
         binding.secondSettingEditButton.setOnClickListener {
             if (editMode == 1) {
                 editMode = 2
                 binding.secondSettingEditButton.visibility = View.INVISIBLE
                 binding.secondSettingNextImage.visibility = View.INVISIBLE
                 binding.secondSettingSaveImage.visibility = View.VISIBLE
+                binding.secondSettingCourse.visibility = View.GONE
             } else {
                 editMode = 1
             }
@@ -71,6 +76,7 @@ class AlarmSettingSecondActivity : OrmAppCompatActivity(), PrepareAdapter.OnStar
                 binding.secondSettingEditButton.visibility = View.VISIBLE
                 binding.secondSettingNextImage.visibility = View.VISIBLE
                 binding.secondSettingSaveImage.visibility = View.INVISIBLE
+                binding.secondSettingCourse.visibility = View.VISIBLE
 
                 adapter.notifyDataSetChanged()
                 binding.secondSettingRecycler.adapter = adapter

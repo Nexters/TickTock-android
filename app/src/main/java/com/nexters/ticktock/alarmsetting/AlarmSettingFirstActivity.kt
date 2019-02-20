@@ -27,15 +27,19 @@ class AlarmSettingFirstActivity : OrmAppCompatActivity() {
         gps = GPSInfo(this) // GPS
         gps.isGPSConnected()
 
-        binding.firstSettingDirectionButton.setOnClickListener {view ->
+        binding.firstSettingDirectionButton.setOnClickListener {
             val intent = Intent(this, AutoCompleteActivity::class.java)
             intent.putExtra("GPS_RESULT", gps.getResult())
             startActivityForResult(intent, MAIN_ACTIVITY_REQUEST_CODE)
         }
 
-        binding.firstSettingNextButton.setOnClickListener {view ->
-            val intent: Intent = Intent(this, AlarmSettingSecondActivity::class.java)
+        binding.firstSettingBackButton.setOnClickListener {
+            finish()
+        }
 
+        binding.firstSettingNextButton.setOnClickListener {
+            AlarmSettingSecondActivity.editMode = 1
+            val intent: Intent = Intent(this, AlarmSettingSecondActivity::class.java)
             startActivity(intent)
         }
     }

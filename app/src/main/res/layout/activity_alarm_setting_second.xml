@@ -63,15 +63,17 @@
                         android:textSize="24sp"
                         android:layout_below="@+id/tag_two"
                         android:layout_marginTop="6dp"
-                        android:layout_marginLeft="32dp"/>
+                        android:layout_marginLeft="32dp"
+                        android:layout_marginBottom="34dp"/>
 
                     <ImageView
+                        android:id="@+id/second_setting_course"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/btn_two_course_01"
                         android:layout_below="@id/second_setting_text"
-                        android:layout_marginTop="34dp"
-                        android:layout_marginLeft="24dp"/>
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginBottom="10dp"/>
                 </RelativeLayout>
 
                 <android.support.v7.widget.RecyclerView
