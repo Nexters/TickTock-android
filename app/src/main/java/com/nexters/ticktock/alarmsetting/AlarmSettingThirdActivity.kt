@@ -20,6 +20,7 @@ import com.nexters.ticktock.R
 import com.nexters.ticktock.databinding.ActivityAlarmSettingThirdBinding
 import com.nexters.ticktock.timer.TimerActivity
 import com.nexters.ticktock.utils.getHighlightedString
+import com.nexters.ticktock.utils.getResizedString
 
 class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
@@ -32,7 +33,7 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
         binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_setting_third)
 
         binding.tvTitle.text = getHighlightedString(resources.getString(R.string.tv_alarm_setting_third_title))
-        binding.tvStartTimeDescription.text = getHighlightedString(resources.getString(R.string.tv_start_time_description))
+        binding.tvStartTimeDescription.text = getResizedString(resources.getString(R.string.tv_start_time_description), 1.85f)
 
         binding.edMemo.addTextChangedListener(object: TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
