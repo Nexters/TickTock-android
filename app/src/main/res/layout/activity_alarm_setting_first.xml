@@ -63,7 +63,7 @@
                     android:layout_marginTop="26dp"
                     android:layout_marginLeft="24dp"
                     android:layout_marginRight="24dp"
-                    android:background="#ffffff">
+                    android:background="@drawable/edge_round_layout">
 
                     <TextView
                         android:id="@+id/wasting_time_text"
@@ -102,7 +102,7 @@
                     android:layout_marginLeft="24dp"
                     android:layout_marginRight="24dp"
                     android:orientation="vertical"
-                    android:background="#ffffff">
+                    android:background="@drawable/edge_round_layout">
 
                     <TextView
                         android:id="@+id/promise_time_text"

@@ -42,6 +42,9 @@ class AlarmSettingSecondActivity : OrmAppCompatActivity(), PrepareAdapter.OnStar
         itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(binding.secondSettingRecycler)
 
+        val prepareItemDecoration = PrepareItemDecoration(24, 10, this)
+        binding.secondSettingRecycler.addItemDecoration(prepareItemDecoration)
+
         binding.secondSettingRecycler.adapter = adapter
 
         binding.secondSettingEditButton.setOnClickListener {
