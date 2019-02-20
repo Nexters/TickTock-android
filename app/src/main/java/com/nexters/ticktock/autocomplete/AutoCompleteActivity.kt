@@ -30,7 +30,7 @@ import kotlin.collections.ArrayList
 
 
 class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, PlaceAutocompleteRecyclerAdapter.PlaceAutoCompleteInterface, GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks, View.OnFocusChangeListener {
+        GoogleApiClient.ConnectionCallbacks, View.OnFocusChangeListener, View.OnClickListener {
 
     private lateinit var binding: ActivityAutoCompleteBinding // 데이터 바인딩
     private val TAG:String = "AutoCompleteActivity"
@@ -57,6 +57,8 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
         odsayService.setReadTimeout(5000);
         // 데이터 획득 제한 시간(단위(초), default : 5초)
         odsayService.setConnectionTimeout(5000);
+
+        binding.btnClose.setOnClickListener(this)
 
         initPlace()
         getGPSLocation() // gps 내위치 정보 있다면 set
@@ -287,6 +289,12 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
     /*
      * 종료
      */
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            binding.btnClose.id -> finish()
+        }
+    }
 }
 
 
