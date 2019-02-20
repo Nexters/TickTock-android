@@ -93,12 +93,21 @@
             android:layout_alignParentBottom="true">
 
             <ImageView
+                android:id="@+id/second_setting_next_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/btn_next"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="32dp"/>
+
+            <ImageView
+                android:id="@+id/second_setting_save_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/invalid_name"
+                android:layout_centerInParent="true"
+                android:visibility="invisible"/>
 
         </RelativeLayout>
 

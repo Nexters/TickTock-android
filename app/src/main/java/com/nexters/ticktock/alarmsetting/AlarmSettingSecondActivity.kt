@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.MotionEvent
+import android.view.View
 import com.nexters.ticktock.OrmAppCompatActivity
 import com.nexters.ticktock.R
 import com.nexters.ticktock.databinding.ActivityAlarmSettingSecondBinding
@@ -44,10 +45,13 @@ class AlarmSettingSecondActivity : OrmAppCompatActivity(), PrepareAdapter.OnStar
         binding.secondSettingRecycler.adapter = adapter
 
         binding.secondSettingEditButton.setOnClickListener {
-            editMode = if (editMode == 1) {
-                2
+            if (editMode == 1) {
+                editMode = 2
+                binding.secondSettingEditButton.visibility = View.INVISIBLE
+                binding.secondSettingNextImage.visibility = View.INVISIBLE
+                binding.secondSettingSaveImage.visibility = View.VISIBLE
             } else {
-                1
+                editMode = 1
             }
 
             adapter.notifyDataSetChanged()
@@ -56,8 +60,18 @@ class AlarmSettingSecondActivity : OrmAppCompatActivity(), PrepareAdapter.OnStar
 
         // 다음 타이머 엑티비티로 넘김
         binding.secondSettingNextButton.setOnClickListener {
-            val intent = Intent(this, AlarmSettingThirdActivity::class.java)
-            startActivity(intent)
+            if (editMode == 1) {
+                val intent = Intent(this, AlarmSettingThirdActivity::class.java)
+                startActivity(intent)
+            } else if (editMode == 2) {
+                editMode = 1
+                binding.secondSettingEditButton.visibility = View.VISIBLE
+                binding.secondSettingNextImage.visibility = View.VISIBLE
+                binding.secondSettingSaveImage.visibility = View.INVISIBLE
+
+                adapter.notifyDataSetChanged()
+                binding.secondSettingRecycler.adapter = adapter
+            }
         }
 
         /* TODO: warning 없애자 */
