@@ -13,7 +13,7 @@
         <item name="android:statusBarColor">@color/appMainColor</item>
 
         <!-- EditText Color -->
-        <item name="colorControlActivated">@color/colorBlack</item>
+        <item name="colorControlActivated">#f6460f</item>
 
         <item name="circularProgressBarStyle">@style/CircularProgressBar</item>
 

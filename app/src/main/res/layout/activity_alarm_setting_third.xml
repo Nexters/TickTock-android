@@ -98,6 +98,7 @@
                                 android:paddingEnd="10dp"
                                 android:hint="@string/ed_memo_hint"
                                 android:textColorHint="#b6b6b6"
+                                android:textColor="#323232"
                                 android:textSize="14sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
