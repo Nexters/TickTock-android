@@ -74,14 +74,17 @@ class TimerActivity : AppCompatActivity() {
                 TimerStepItem("00:20"),
                 TimerStepItem("10:00"),
                 TimerStepItem("15:00"),
-                TimerStepItem("출발하세요!")
+                TimerStepItem("출발!")
         )
 
         stepTimeList = mutableListOf(
                 "샤워하기",
                 "머리말리기",
-                "옷입기"
+                "옷입기",
+                "완료"
         )
+
+
         binding.tvTitle.text = "출근 알람알람알람"
         binding.tvStep.text = stepTimeList[0]
         snapHelper = ControllableTimerSnapHelper(this, binding.tvStep, stepTimeList, binding.tvStepNum, binding.buttonNext, binding.buttonReset)
@@ -141,6 +144,7 @@ class TimerActivity : AppCompatActivity() {
             else if(curPos == stepList.size - 2){
                 binding.rvTimer.smoothScrollToPosition(curPos + 1)
                 binding.tvStepNum.text = getString(R.string.timer_step_num, curPos + 2, stepList.size)
+                binding.tvStep.text = stepTimeList[curPos + 1]
                 onTimerReset()
                 mCountDownTimer!!.cancel()
                 binding.buttonNext.visibility = View.INVISIBLE
