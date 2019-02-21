@@ -3,6 +3,8 @@ package com.nexters.ticktock.alarmsetting
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -81,16 +83,45 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
                     notifyItemInserted(adapterPosition)
                 }
             } else {
+                if (!item.name.isEmpty()) {
+                    itemView.prepare_plus_button.setImageResource(R.drawable.btn_min_plus_nor)
+                    itemView.prepare_minus_button.setImageResource(R.drawable.btn_min_minor_nor)
+                }
+
                 itemView.prepare_name_edit.text = Editable.Factory.getInstance().newEditable(item.name)
                 itemView.prepare_time_edit.text = Editable.Factory.getInstance().newEditable(item.time.toString().plus("분"))
                 itemView.prepare_plus_button.setOnClickListener {
-                    item.time++
-                    notifyItemChanged(adapterPosition, "timeButton")
+                    if (!itemView.prepare_name_edit.text.isEmpty()) {
+                        item.time++
+                        notifyItemChanged(adapterPosition, "timeButton")
+                    }
                 }
                 itemView.prepare_minus_button.setOnClickListener {
-                    item.time--
-                    notifyItemChanged(adapterPosition, "timeButton")
+                    if (!itemView.prepare_name_edit.text.isEmpty()) {
+                        item.time--
+                        notifyItemChanged(adapterPosition, "timeButton")
+                    }
                 }
+
+                itemView.prepare_name_edit.addTextChangedListener(object: TextWatcher {
+                    override fun afterTextChanged(s: Editable?) {
+                        if (!itemView.prepare_name_edit.text.isEmpty()) {
+                            itemView.prepare_plus_button.setImageResource(R.drawable.btn_min_plus_nor)
+                            itemView.prepare_minus_button.setImageResource(R.drawable.btn_min_minor_nor)
+                        } else {
+                            itemView.prepare_plus_button.setImageResource(R.drawable.btn_min_plus_dis)
+                            itemView.prepare_minus_button.setImageResource(R.drawable.btn_min_minor_dis)
+                        }
+                    }
+
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                        Log.d("", "")
+                    }
+
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                        Log.d("", "")
+                    }
+                })
 
                 itemView.prepare_name_edit.setOnFocusChangeListener { v, hasFocus ->
                     if (!hasFocus && v.prepare_name_edit.text.toString() != item.name) {

@@ -9,46 +9,109 @@
         <RelativeLayout
             android:id="@+id/second_setting_head"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
 
-            <Button
+            <ImageView
                 android:id="@+id/second_setting_back_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="back"
+                android:src="@drawable/btn_back"
+                android:background="@android:color/transparent"
                 android:layout_alignParentLeft="true"/>
 
-            <Button
+            <ImageView
                 android:id="@+id/second_setting_edit_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="편집"
+                android:src="@drawable/btn_main_edit"
+                android:background="@android:color/transparent"
                 android:layout_alignParentRight="true"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="뭐부터\n 준비할까요?"
-                android:textSize="20sp"
-                android:layout_below="@+id/second_setting_back_button"/>
         </RelativeLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/second_setting_recycler"
+        <ScrollView
+            android:id="@+id/second_setting_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/second_setting_head"
-            android:layout_above="@+id/second_setting_next_button">
+            android:layout_marginTop="20dp"
+            android:layout_above="@id/second_setting_next_button">
 
-        </android.support.v7.widget.RecyclerView>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <Button
+                <RelativeLayout
+                    android:id="@+id/tag_two_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/tag_two"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/tag_two"
+                        android:layout_marginLeft="32dp"/>
+
+                    <TextView
+                        android:id="@+id/second_setting_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="어떤 것부터\n준비를 해볼까요?"
+                        android:textSize="24sp"
+                        android:layout_below="@+id/tag_two"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginLeft="32dp"
+                        android:layout_marginBottom="34dp"/>
+
+                    <ImageView
+                        android:id="@+id/second_setting_course"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/btn_two_course_01"
+                        android:layout_below="@id/second_setting_text"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginBottom="10dp"/>
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/second_setting_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:layout_below="@id/tag_two_layout">
+
+                </android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
+        </ScrollView>
+
+        <RelativeLayout
             android:id="@+id/second_setting_next_button"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:text="다음"/>
+            android:layout_height="60dp"
+            android:background="#f6460f"
+            android:layout_alignParentBottom="true">
+
+            <ImageView
+                android:id="@+id/second_setting_next_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_next"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="32dp"/>
+
+            <ImageView
+                android:id="@+id/second_setting_save_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/invalid_name"
+                android:layout_centerInParent="true"
+                android:visibility="invisible"/>
+
+        </RelativeLayout>
 
     </RelativeLayout>
 </layout>

@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/first_setting_head"
-            android:layout_above="@+id/first_setting_footer"
+            android:layout_above="@+id/first_setting_next_button"
             android:layout_marginTop="20dp">
 
             <LinearLayout
@@ -63,7 +63,7 @@
                     android:layout_marginTop="26dp"
                     android:layout_marginLeft="24dp"
                     android:layout_marginRight="24dp"
-                    android:background="#ffffff">
+                    android:background="@drawable/edge_round_layout">
 
                     <TextView
                         android:id="@+id/wasting_time_text"
@@ -102,7 +102,7 @@
                     android:layout_marginLeft="24dp"
                     android:layout_marginRight="24dp"
                     android:orientation="vertical"
-                    android:background="#ffffff">
+                    android:background="@drawable/edge_round_layout">
 
                     <TextView
                         android:id="@+id/promise_time_text"
@@ -208,14 +208,13 @@
         </ScrollView>
 
         <RelativeLayout
-            android:id="@+id/first_setting_footer"
+            android:id="@+id/first_setting_next_button"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_alignParentBottom="true"
             android:background="#f6460f">
 
             <ImageView
-                android:id="@+id/first_setting_next_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/btn_next"
