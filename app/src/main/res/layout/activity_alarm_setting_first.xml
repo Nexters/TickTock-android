@@ -153,6 +153,7 @@
                             android:layout_marginTop="16dp">
 
                             <ImageView
+                                android:id="@+id/first_setting_mon"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/btn_mon_dis"
@@ -160,6 +161,7 @@
                                 android:layout_marginRight="4dp"/>
 
                             <ImageView
+                                android:id="@+id/first_setting_tue"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/btn_tue_dis"
@@ -167,6 +169,7 @@
                                 android:layout_marginRight="4dp"/>
 
                             <ImageView
+                                android:id="@+id/first_setting_wed"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/btn_wed_dis"
@@ -174,6 +177,7 @@
                                 android:layout_marginRight="4dp"/>
 
                             <ImageView
+                                android:id="@+id/first_setting_thur"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/btn_thur_dis"
@@ -181,6 +185,7 @@
                                 android:layout_marginRight="4dp"/>
 
                             <ImageView
+                                android:id="@+id/first_setting_fri"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/btn_fri_dis"
@@ -188,6 +193,7 @@
                                 android:layout_marginRight="4dp"/>
 
                             <ImageView
+                                android:id="@+id/first_setting_sat"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/btn_sat_dis"
@@ -195,6 +201,7 @@
                                 android:layout_marginRight="4dp"/>
 
                             <ImageView
+                                android:id="@+id/first_setting_sun"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/btn_sun_dis"
