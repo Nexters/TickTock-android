@@ -53,6 +53,7 @@
         <activity android:name=".alarmsetting.AlarmSettingFirstActivity" />
         <activity android:name=".alarmsetting.AlarmSettingSecondActivity" />
         <activity android:name=".alarmsetting.AlarmSettingThirdActivity" />
+        <activity android:name=".MainDetailActivity" />
         <activity android:name=".timer.PriorTimerActivity" />
 
         <service android:name=".autocomplete.GPSInfo" />
