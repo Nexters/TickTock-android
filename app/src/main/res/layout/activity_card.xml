@@ -1,147 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".CardActivity"
-        android:background="@drawable/card_transition_drawable"
-        android:id="@+id/activityCardLayout"
->
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CardActivity"
+    android:background="@drawable/card_transition_drawable"
+    android:id="@+id/activityCardLayout"
+    >
 
     <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/mainHeader"
             android:layout_width="0dp"
             android:layout_height="56dp"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/mainHeader">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" app:srcCompat="@drawable/btn_main_setting"
+            <ImageButton
                 android:id="@+id/settingBtn"
-                app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-                android:background="#00000000"
-                android:layout_marginTop="12dp" android:layout_marginStart="15dp"
-                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="12dp"/>
-        <Button
-                android:text="@string/edit"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:textSize="13sp"
-                android:textColor="#323232"
-                android:id="@+id/editBtn"
-                android:background="@android:color/transparent" app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="15dp" app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="12dp" app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="12dp"/>
-        <android.support.constraint.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="#00000000"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:id="@+id/location_layout">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/btn_main_setting" />
 
-            <TextView
-                    android:text="@string/location_default"
+            <Button
+                android:id="@+id/editBtn"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="12dp"
+                android:background="@android:color/transparent"
+                android:text="@string/edit"
+                android:textColor="#323232"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/location_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/locationTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/location_default"
                     android:textColor="#343434"
-                    android:id="@+id/locationTxt" app:layout_constraintStart_toEndOf="@+id/locationIcn"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginStart="4dp"/>
-            <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" app:srcCompat="@drawable/icn_main_marker_copy"
+                    app:layout_constraintStart_toEndOf="@+id/locationIcn"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
                     android:id="@+id/locationIcn"
-                    app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/none"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:background="@color/none"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/icn_main_marker_copy" />
+            </android.support.constraint.ConstraintLayout>
         </android.support.constraint.ConstraintLayout>
-    </android.support.constraint.ConstraintLayout>
-    <android.support.v7.widget.RecyclerView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="144dp"
-            android:translationZ="1000dp" app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="212dp">
-    </android.support.v7.widget.RecyclerView>
-    <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" app:srcCompat="@drawable/btn_main_add"
-            android:id="@+id/addBtn"
-            android:background="@android:color/transparent" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            android:layout_marginBottom="144dp"
+            android:translationZ="1000dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/addBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="48dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintVertical_bias="1.0" app:layout_constraintTop_toBottomOf="@+id/recyclerView"
-            android:layout_marginTop="40dp"/>
-    <ImageView
-            android:layout_width="0dp"
-            android:layout_height="0dp" app:srcCompat="@drawable/new_card_img"
-            android:id="@+id/requireNewCardImg" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="274dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/btn_main_add" />
+
+        <ImageView
+            android:id="@+id/requireNewCardImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="43dp"
+            android:layout_marginTop="274dp"
+            android:layout_marginEnd="42dp"
+            android:layout_marginBottom="237dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="invisible" app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="237dp" android:layout_marginStart="43dp" android:layout_marginEnd="42dp"/>
-    <ImageView
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/new_card_img" />
+
+        <ImageView
+            android:id="@+id/mainEditPhaseBGtFilterImg"
             android:layout_width="0dp"
-            android:layout_height="0dp" app:srcCompat="@color/mainEditPhaseBGColor"
-            android:id="@+id/mainEditPhaseBGtFilterImg" app:layout_constraintTop_toTopOf="parent"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            android:visibility="invisible"/>
-    <android.support.constraint.ConstraintLayout
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@color/mainEditPhaseBGColor" />
+
+        <android.support.constraint.ConstraintLayout
             android:layout_width="292dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="86dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="86dp">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-                android:text="@string/requireNewCard"
+            <TextView
+                android:id="@+id/requireNewCardTxt"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/requireNewCardTxt"
-                app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-                android:textSize="24sp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/noto_sans_cjk_kr_light"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="-2sp"
+                android:text="@string/requireNewCard"
                 android:textColor="@color/colorBlack"
-                android:lineSpacingExtra="8sp"
+                android:textSize="24sp"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                android:includeFontPadding="false"/>
-        <TextView
-                android:textSize="23sp"
-                android:textColor="#323232"
-                android:lineSpacingExtra="-3sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/mainWord"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/mainWord"
-                app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+                android:fontFamily="@font/noto_sans_cjk_kr_light"
                 android:includeFontPadding="false"
-                android:text="@string/header1" android:fontFamily="@font/noto_sans_cjk_kr_light"
+                android:lineSpacingExtra="-3sp"
+                android:text="@string/header1"
+                android:textColor="#323232"
+                android:textSize="23sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"/>
-        <TextView
-                android:text="@string/deleteCheckMessage"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/deleteCheckMessageText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/deleteCheckMessageText" android:textColor="@android:color/white"
-                android:textSize="24sp" app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:visibility="invisible" android:fontFamily="@font/noto_sans_cjk_kr_light"
+                android:fontFamily="@font/noto_sans_cjk_kr_light"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="-2sp"
+                android:text="@string/deleteCheckMessage"
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.0"
-                android:includeFontPadding="false"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>
-</android.support.constraint.ConstraintLayout>
+</ScrollView>
