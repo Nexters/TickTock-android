@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import com.nexters.ticktock.alarmsetting.AlarmSettingFirstActivity
 import com.nexters.ticktock.card.*
 import com.nexters.ticktock.card.Static.MAIN_TOGGLE_DURATION
 import com.nexters.ticktock.card.listener.AnimationAdapter
@@ -104,6 +105,11 @@ class CardActivity : AppCompatActivity() {
 
         // TODO deleteCheckMessageText.text = getHighlightedString("*${cardContext[0].title}*${resources.getString(R.string.deleteCheckMessage)}")
         cardContext.addCardEventListener(cardEventListener)
+
+        addBtn.setOnClickListener {
+            val intent = Intent(this, AlarmSettingFirstActivity::class.java)
+            startActivity(intent)
+        }
 
         editBtn.setOnClickListener {
             if (cardRecyclerViewAdapter.itemCount != 0) {

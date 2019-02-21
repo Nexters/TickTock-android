@@ -5,15 +5,15 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.nexters.ticktock.Constant
+import com.nexters.ticktock.Constant.GPS_ENABLE_REQUEST_CODE
+import com.nexters.ticktock.Constant.MAIN_ACTIVITY_REQUEST_CODE
 import com.nexters.ticktock.R
 import com.nexters.ticktock.autocomplete.AutoCompleteActivity
 import com.nexters.ticktock.autocomplete.GPSInfo
 import com.nexters.ticktock.databinding.ActivityAlarmSettingFirstBinding
 
 class AlarmSettingFirstActivity : AppCompatActivity() {
-
-    private val MAIN_ACTIVITY_REQUEST_CODE = 1111
-    private val GPS_ENABLE_REQUEST_CODE = 2001
 
     private lateinit var binding : ActivityAlarmSettingFirstBinding
 
@@ -30,7 +30,7 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
         binding.firstSettingDirectionButton.setOnClickListener {
             val intent = Intent(this, AutoCompleteActivity::class.java)
             intent.putExtra("GPS_RESULT", gps.getResult())
-            startActivityForResult(intent, MAIN_ACTIVITY_REQUEST_CODE)
+            startActivityForResult(intent, Constant.ALARM_SETTING_FIRST_REQUEST_CODE)
         }
 
         binding.firstSettingBackButton.setOnClickListener {
