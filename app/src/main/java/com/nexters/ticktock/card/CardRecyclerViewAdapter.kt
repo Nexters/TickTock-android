@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.nexters.ticktock.MainDetailActivity
 import com.nexters.ticktock.R
 import com.nexters.ticktock.alarmsetting.AlarmSettingFirstActivity
 import com.nexters.ticktock.card.Static.COLOR_TRANSITION_TIME
@@ -146,8 +147,8 @@ class CardRecyclerViewAdapter(
             if (snapHelper.getAdapterSnapPosition() != super.getAdapterPosition()) {
                 recyclerView.smoothScrollToPosition(super.getAdapterPosition())
             } else {
-                val alarmSettingIntent : Intent = Intent(context, AlarmSettingFirstActivity::class.java)
-                context.startActivity(alarmSettingIntent)
+                val mainDetailIntent : Intent = Intent(context, MainDetailActivity::class.java)
+                context.startActivity(mainDetailIntent)
             }
         }
 

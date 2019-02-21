@@ -6,6 +6,7 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
+import android.text.style.UnderlineSpan
 
 
 fun getHighlightedString(origin: String): SpannableString {
@@ -43,5 +44,16 @@ fun getResizedString(origin: String, size: Float): SpannableString {
 
     return SpannableString(origin.replace("*", "")).apply {
         setSpan(RelativeSizeSpan(size), highlightStart, highlightEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    }
+}
+
+fun getUnderlinedString(origin: String): SpannableString {
+    val originList = origin.split("*")
+
+    val highlightStart = originList[0].length
+    val highlightEnd = originList[1].length + highlightStart
+
+    return SpannableString(origin.replace("*", "")).apply {
+        setSpan(UnderlineSpan(), highlightStart, highlightEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
 }

@@ -215,6 +215,11 @@ class CardActivity : AppCompatActivity() {
             }
         }
 
+        addBtn.setOnClickListener{
+            val alarmSettingIntent = Intent(this, MainDetailActivity::class.java)
+            startActivity(alarmSettingIntent)
+        }
+
         editBtn.setOnClickListener {
             if (cardRecyclerViewAdapter.itemCount != 0) {
                 mainEditPhaseBGtFilterImg.visible(MAIN_TOGGLE_DURATION)
