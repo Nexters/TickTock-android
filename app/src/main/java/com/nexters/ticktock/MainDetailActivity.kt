@@ -13,11 +13,17 @@ import com.nexters.ticktock.Constant.MAIN_DETAIL_ACTIVITY_REQUEST_CODE
 import com.nexters.ticktock.alarmsetting.AlarmSettingSecondActivity
 import com.nexters.ticktock.autocomplete.AutoCompleteActivity
 import com.nexters.ticktock.autocomplete.GPSInfo
+import com.nexters.ticktock.dao.TickTockDBHelper
 import com.nexters.ticktock.databinding.ActivityMainDetailBinding
 import com.nexters.ticktock.utils.getResizedString
 import com.nexters.ticktock.utils.getUnderlinedString
 
-class MainDetailActivity : AppCompatActivity(), View.OnClickListener {
+class MainDetailActivity(): AppCompatActivity(), View.OnClickListener {
+
+    constructor(id: Long): this() {
+        val alarmDao = TickTockDBHelper.getInstance(this).alarmDao
+        val alarm = alarmDao.findById(id)
+    }
 
     private lateinit var binding: ActivityMainDetailBinding
 
@@ -86,6 +92,7 @@ class MainDetailActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     fun setData() {
+
         binding.cbMonday.isChecked
         binding.cbTuesday.isChecked
         binding.cbWednesday.isChecked
