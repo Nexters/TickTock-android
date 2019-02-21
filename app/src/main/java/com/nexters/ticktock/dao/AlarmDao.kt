@@ -16,6 +16,8 @@ class AlarmDao(private val context: Context) {
     private val colorConverter = TickTockColorConverter()
 
     companion object {
+        private const val LOG_TAG = "AlarmDao"
+
         private val SELECT_ALL_ALARM = """
             SELECT
                 *
@@ -88,12 +90,15 @@ class AlarmDao(private val context: Context) {
     }
 
     fun getAlarmCount(): Long {
+        Log.d(LOG_TAG, "getAlarmCount called")
         val readableDB = TickTockDBHelper.getInstance(context).readableDatabase
 
         return readableDB.rawQuery(COUNT_ALARM, null).use { it.getLong(0) }
     }
 
     fun findAll(): List<Alarm> {
+        Log.d(LOG_TAG, "findAll called")
+
         val readableDB = TickTockDBHelper.getInstance(context).readableDatabase
         val cursor = readableDB.rawQuery(SELECT_ALL_ALARM, null)
 
@@ -126,6 +131,7 @@ class AlarmDao(private val context: Context) {
     }
 
     fun findById(id: Long): Alarm? {
+        Log.d(LOG_TAG, "findById called - param: $id")
         val readableDB = TickTockDBHelper.getInstance(context).readableDatabase
         val cursor = readableDB.rawQuery(SELECT_ALL_ALARM_WHERE, null)
 
@@ -147,8 +153,8 @@ class AlarmDao(private val context: Context) {
     }
 
     fun save(alarm: Alarm) {
+        Log.d(LOG_TAG, "save called - param: $alarm")
 
-        Log.d("database", "save")
         if (alarm.id != 0L) {
             update(alarm)
         } else {
@@ -157,6 +163,8 @@ class AlarmDao(private val context: Context) {
     }
 
     private fun insert(alarm: Alarm) {
+        Log.d(LOG_TAG, "insert called - param: $alarm")
+
         val writableDB = TickTockDBHelper.getInstance(context).writableDatabase
         val readableDB = TickTockDBHelper.getInstance(context).readableDatabase
 
@@ -188,6 +196,8 @@ class AlarmDao(private val context: Context) {
     }
 
     private fun update(alarm: Alarm) {
+        Log.d(LOG_TAG, "update called - param: $alarm")
+
         val writableDB = TickTockDBHelper.getInstance(context).writableDatabase
         writableDB.execSQL(UPDATE_ALARM, arrayOf(
                 alarm.days.let { dayConverter.toDatabase(it) },
@@ -213,11 +223,15 @@ class AlarmDao(private val context: Context) {
     }
 
     fun delete(alarm: Alarm) {
+        Log.d(LOG_TAG, "delete called - param: $alarm")
+
         val writableDB = TickTockDBHelper.getInstance(context).writableDatabase
         writableDB.execSQL(DELETE_ALARM_WHERE, arrayOf(alarm.id))
     }
 
     fun deleteAll() {
+        Log.d(LOG_TAG, "deleteAll called")
+
         val writableDB = TickTockDBHelper.getInstance(context).writableDatabase
         writableDB.execSQL(DELETE_ALL_ALARM)
     }

@@ -26,10 +26,15 @@ import com.nexters.ticktock.card.Static.COLOR_TRANSITION_TIME
 import com.nexters.ticktock.card.Static.MAIN_TOGGLE_DURATION
 import com.nexters.ticktock.card.listener.CardEventListener
 import com.nexters.ticktock.card.listener.CardChangeListener
+import com.nexters.ticktock.dao.AlarmDao
+import com.nexters.ticktock.dao.TickTockDBHelper
+import com.nexters.ticktock.model.Alarm
 import com.nexters.ticktock.model.enums.Day
 import com.nexters.ticktock.utils.getArrangedDays
 import com.nexters.ticktock.utils.invisible
 import com.nexters.ticktock.utils.visible
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 
 
 class CardRecyclerViewAdapter(
@@ -44,6 +49,7 @@ class CardRecyclerViewAdapter(
     }
 
     private val layoutInflater = LayoutInflater.from(context)
+    private val alarmDao: AlarmDao = TickTockDBHelper.getInstance(context).alarmDao
 
     init {
         cardContext.addCardEventListener(this)
@@ -166,16 +172,16 @@ class CardRecyclerViewAdapter(
         override fun onClick(v: View?) {
             if (snapHelper.getAdapterSnapPosition() != super.getAdapterPosition()) {
                 recyclerView.smoothScrollToPosition(super.getAdapterPosition())
-            } else {
+            } else if (!cardContext.isEditPhase) {
                 val intent = Intent(context, MainDetailActivity::class.java)
                 context.startActivity(intent)
             }
         }
 
         override fun onLongClick(v: View?): Boolean =
-            true.apply { if (!cardContext.isEditPhase) {
-                cardContext.isEditPhase = true
-            } }
+                true.apply { if (!cardContext.isEditPhase) {
+                    cardContext.isEditPhase = true
+                } }
 
         override fun onCardChange(changedCard: CardItem, diff: Int) {
             if (diff == CardChangeListener.ENABLE) {
@@ -217,6 +223,10 @@ class CardRecyclerViewAdapter(
                     }
                 }.start()
             }
+
+            Observable.just(alarmDao.save(changedCard.toAlarm()))
+                    .subscribeOn(Schedulers.io())
+                    .subscribe()
         }
     }
 
@@ -252,4 +262,21 @@ class CardRecyclerViewAdapter(
             notifyItemChanged(position)
         }
     }
+
+    override fun onActive() {
+        notifyDataSetChanged()
+    }
+
+    fun CardItem.toAlarm() =
+            Alarm(
+                    id = id,
+                    days = days,
+                    title = title,
+                    startLocation = startLocation,
+                    endLocation = endLocation,
+                    color = color,
+                    enable = enable,
+                    endTime = endTime,
+                    travelTime = travelTime
+            )
 }

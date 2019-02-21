@@ -8,4 +8,5 @@ interface CardEventListener : EventListener {
     fun onFirstCardAdd(firstCard: CardItem) { }
     fun onCardAdd(addedCard: CardItem) { }
     fun onPhaseChange(isEditPhase: Boolean) { }
+    fun onActive() { }
 }

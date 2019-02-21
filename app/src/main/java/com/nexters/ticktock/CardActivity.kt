@@ -14,17 +14,35 @@ import com.nexters.ticktock.card.*
 import com.nexters.ticktock.card.Static.MAIN_TOGGLE_DURATION
 import com.nexters.ticktock.card.listener.AnimationAdapter
 import com.nexters.ticktock.card.listener.CardEventListener
-import com.nexters.ticktock.model.enums.Day
-import com.nexters.ticktock.model.enums.TickTockColor
+import com.nexters.ticktock.dao.AlarmDao
+import com.nexters.ticktock.dao.TickTockDBHelper
+import com.nexters.ticktock.model.Alarm
 import com.nexters.ticktock.onboarding.OnBoardingActivity
-import com.nexters.ticktock.utils.*
 import com.nexters.ticktock.setting.SettingActivity
+import com.nexters.ticktock.utils.Time
+import com.nexters.ticktock.utils.getHighlightedString
+import com.nexters.ticktock.utils.invisible
+import com.nexters.ticktock.utils.visible
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_card.*
-import java.util.*
 
 class CardActivity : AppCompatActivity() {
 
     private lateinit var cardRecyclerViewAdapter: CardRecyclerViewAdapter
+
+    private lateinit var cardContext: CardContext
+
+    private lateinit var alarmDao: AlarmDao
+
+    override fun onResume() {
+        super.onResume()
+
+        cardContext.active(alarmDao.findAll()
+                .map { it.toCardItem() }
+                .toList().sortedWith(compareBy({it.startTime}, {it.color}))
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +65,8 @@ class CardActivity : AppCompatActivity() {
 
         val snapHelper = ControllableSnapHelper()
 
-        val cardContext = CardContext(this)
-
+        cardContext = CardContext(this)
+        alarmDao = TickTockDBHelper.getInstance(this).alarmDao
         cardRecyclerViewAdapter = CardRecyclerViewAdapter(this, cardContext, recyclerView, snapHelper)
 
         val cardEventListener = object : CardEventListener {
@@ -88,9 +106,7 @@ class CardActivity : AppCompatActivity() {
                     repeatCount = 1
                     repeatMode = Animation.REVERSE
 
-                    setAnimationListener(object : Animation.AnimationListener {
-                        override fun onAnimationEnd(animation: Animation?) { }
-                        override fun onAnimationStart(animation: Animation?) { }
+                    setAnimationListener(object : AnimationAdapter() {
                         override fun onAnimationRepeat(animation: Animation?) {
 
                             if (position != RecyclerView.NO_POSITION && position != cardRecyclerViewAdapter.itemCount) {
@@ -100,6 +116,10 @@ class CardActivity : AppCompatActivity() {
                         }
                     })
                 })
+
+                Observable.just(alarmDao.delete(removedCard.toAlarm()))
+                        .subscribeOn(Schedulers.io())
+                        .subscribe()
             }
         }
 
@@ -173,136 +193,32 @@ class CardActivity : AppCompatActivity() {
             })
         }
 
-
-//        val alarmDao = TickTockDBHelper.getInstance(this).alarmDao
-//
-//        alarmDao.deleteAll()
-//
-//        alarmDao.save(Alarm(
-//                days = EnumSet.of(Day.Monday),
-//                title = "이제 개발은 그만~",
-//                startLocation = "1",
-//                endLocation = "2",
-//                color = TickTockColor.RED,
-//                enable = true,
-//                endTime = Time(40),
-//                travelTime = Time(60)
-//        ))
-//
-//        Log.d("database", alarmDao.findAll().joinToString { it.title })
-
-        cardContext.active(mutableListOf(
-                CardItem(
-                        1,
-                        11.hour() + 30.minute(),
-                        12.hour() + 30.minute(),
-                        EnumSet.of(Day.Monday, Day.Thursday, Day.Friday),
-                        "출근 알림알림알림",
-                        "관악구 신림동 1423-8",
-                        "사당역 투썸플레이스",
-                        TickTockColor.GREEN,
-                        true
-                ),
-                CardItem(
-                        1,
-                        15.hour() + 30.minute(),
-                        19.hour() + 30.minute(),
-                        EnumSet.of(Day.Monday, Day.Saturday, Day.Sunday),
-                        "신림동은 누구 집이야?",
-                        "관악구 신림동 1423-8",
-                        "사당역 투썸플레이스",
-                        TickTockColor.PURPLE,
-                        false
-                ),
-                CardItem(
-                        1,
-                        7.hour(),
-                        8.hour() + 30.minute(),
-                        EnumSet.of(Day.Monday, Day.Tuesday, Day.Wednesday, Day.Thursday, Day.Friday),
-                        "ㅎㅎㅎㅎㅎ",
-                        "관악구 신림동 1423-8",
-                        "사당역 투썸플레이스",
-                        TickTockColor.RED,
-                        true
-                ),
-                CardItem(
-                        1,
-                        2.hour() + 30.minute(),
-                        3.hour() + 10.minute(),
-                        EnumSet.of(Day.Wednesday, Day.Sunday),
-                        "새벽에 어딜 가려고",
-                        "관악구 신림동 1423-8",
-                        "사당역 투썸플레이스",
-                        TickTockColor.PURPLE,
-                        true
-                ),
-                CardItem(
-                        1,
-                        11.hour() + 30.minute(),
-                        12.hour() + 30.minute(),
-                        EnumSet.of(Day.Wednesday),
-                        "개발 다 끝난 거지?",
-                        "관악구 신림동 1423-8",
-                        "사당역 투썸플레이스",
-                        TickTockColor.BLUE,
-                        true
-                ),
-                CardItem(
-                        1,
-                        11.hour() + 30.minute(),
-                        12.hour() + 30.minute(),
-                        EnumSet.of(Day.Wednesday),
-                        "개발 다 끝난 거지?",
-                        "관악구 신림동 1423-8",
-                        "사당역 투썸플레이스",
-                        TickTockColor.BLUE,
-                        true
-                ),
-                CardItem(
-                        1,
-                        11.hour() + 30.minute(),
-                        12.hour() + 30.minute(),
-                        EnumSet.of(Day.Wednesday),
-                        "개발 다 끝난 거지?",
-                        "관악구 신림동 1423-8",
-                        "사당역 투썸플레이스",
-                        TickTockColor.GREEN,
-                        true
-                ),
-                CardItem(
-                        1,
-                        11.hour() + 30.minute(),
-                        12.hour() + 30.minute(),
-                        EnumSet.of(Day.Wednesday),
-                        "개발 다 끝난 거지?",
-                        "관악구 신림동 1423-8",
-                        "사당역 투썸플레이스",
-                        TickTockColor.RED,
-                        true
-                ),
-                CardItem(
-                        1,
-                        11.hour() + 30.minute(),
-                        12.hour() + 30.minute(),
-                        EnumSet.of(Day.Wednesday),
-                        "개발 다 끝난 거지?",
-                        "관악구 신림동 1423-8",
-                        "사당역 투썸플레이스",
-                        TickTockColor.BLUE,
-                        true
-                ),
-                CardItem(
-                        1,
-                        11.hour() + 30.minute(),
-                        12.hour() + 30.minute(),
-                        EnumSet.of(Day.Wednesday),
-                        "개발 다 끝난 거지?",
-                        "관악구 신림동 1423-8",
-                        "사당역 투썸플레이스",
-                        TickTockColor.BLUE,
-                        true
-                )
-
-        ).apply { sortedWith(compareBy({ it.startTime }, { it.title })) })
     }
+
+    private fun Alarm.toCardItem() =
+            CardItem(
+                    id = id,
+                    days = days,
+                    title = title,
+                    startLocation = startLocation,
+                    endLocation = endLocation,
+                    color = color,
+                    enable = enable,
+                    endTime = endTime,
+                    startTime = endTime - (travelTime + steps.map { it.duration }.fold(Time(0)) { acc, time -> acc + time }),
+                    travelTime = travelTime
+            )
+
+    private fun CardItem.toAlarm() =
+            Alarm(
+                    id = id,
+                    days = days,
+                    title = title,
+                    startLocation = startLocation,
+                    endLocation = endLocation,
+                    color = color,
+                    enable = enable,
+                    endTime = endTime,
+                    travelTime = travelTime
+            )
 }

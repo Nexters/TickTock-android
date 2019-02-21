@@ -34,6 +34,7 @@ class CardContext(val context: Context) : ArrayList<CardItem>() {
                     .subscribe { it.onNoCardThere() }
         }
 
+        super.clear()
         super.addAll(cardList)
     }
 

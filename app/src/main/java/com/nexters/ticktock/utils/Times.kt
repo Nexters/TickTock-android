@@ -13,9 +13,9 @@ fun Long.minute() =
         Time(this.toInt())
 
 /** time is minute */
-class Time(time:Int) : Comparable<Time> {
+class Time(minute:Int) : Comparable<Time> {
 
-    val time: Int = (time + WHOLE_DAY) % WHOLE_DAY // 24h -> 0, -4h -> 20h
+    val time: Int = ((minute + WHOLE_DAY) % WHOLE_DAY) // 24h -> 0, -4h -> 20h
 
     val hour = ((time / ONE_HOUR) % 12).let {
         if (it == 0)
@@ -23,7 +23,7 @@ class Time(time:Int) : Comparable<Time> {
         else
             it
     }
-    val minute = time % ONE_HOUR
+    val minute = (time + ONE_HOUR) % ONE_HOUR
     val meridiem =
             if (time < HALF_DAY) {
                 AM
@@ -34,8 +34,8 @@ class Time(time:Int) : Comparable<Time> {
     companion object {
         const val ONE_HOUR = 60
 
-        const val WHOLE_DAY = 60 * 24
-        const val HALF_DAY = 60 * 12
+        const val WHOLE_DAY = ONE_HOUR * 24
+        const val HALF_DAY = ONE_HOUR * 12
 
         const val PM = "PM"
         const val AM = "AM"

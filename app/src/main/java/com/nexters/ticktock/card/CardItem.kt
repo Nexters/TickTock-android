@@ -15,7 +15,8 @@ class CardItem(
         startLocation: String,
         endLocation: String,
         color: TickTockColor,
-        enable: Boolean
+        enable: Boolean,
+        val travelTime: Time
 ) {
     var startTime: Time = startTime
         set(value) {
