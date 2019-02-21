@@ -52,7 +52,7 @@ class ControllableTimerSnapHelper(private var context: TimerActivity,
 
                     //timer 재시작
                     stepText.text = stepTimeList[snappedPosition]
-                    stepNum.text = context.getString(R.string.timer_step_num, snappedPosition + 1, stepTimeList.size + 1)
+                    stepNum.text = context.getString(R.string.timer_step_num, snappedPosition + 1, stepTimeList.size)
                     context.onTimerReset()
                     context.mCountDownTimer!!.cancel()
                     val time : List<String> = context.stepList[snappedPosition].time.split(":")
@@ -77,6 +77,8 @@ class ControllableTimerSnapHelper(private var context: TimerActivity,
                     context.startTimer()
                 }
                 else if(snappedPosition == recyclerView.adapter?.itemCount!! - 1) {
+                    stepText.text = stepTimeList[snappedPosition]
+                    stepNum.text = context.getString(R.string.timer_step_num, snappedPosition + 1, stepTimeList.size)
                     context.onTimerReset()
                     context.mCountDownTimer!!.cancel()
                     buttonNext.visibility = View.INVISIBLE
