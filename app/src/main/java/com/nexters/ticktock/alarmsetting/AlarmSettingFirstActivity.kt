@@ -3,13 +3,14 @@ package com.nexters.ticktock.alarmsetting
 import android.app.Activity
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import com.nexters.ticktock.Constant
 import com.nexters.ticktock.Constant.ALARM_SETTING_FIRST_REQUEST_CODE
 import com.nexters.ticktock.Constant.GPS_ENABLE_REQUEST_CODE
-import com.nexters.ticktock.Constant.MAIN_ACTIVITY_REQUEST_CODE
 import com.nexters.ticktock.R
 import com.nexters.ticktock.autocomplete.AutoCompleteActivity
 import com.nexters.ticktock.autocomplete.GPSInfo
@@ -39,10 +40,6 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
         gps.isGPSConnected()
 
         binding.firstSettingDirectionButton.setOnClickListener {
-//            hour = null
-//            minute = null
-//            startLocation = null
-//            endLocation = null
             val intent = Intent(this, AutoCompleteActivity::class.java)
             intent.putExtra("GPS_RESULT", gps.getResult())
             startActivityForResult(intent, Constant.ALARM_SETTING_FIRST_REQUEST_CODE)
@@ -54,7 +51,17 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
 
         binding.firstSettingNextButton.setOnClickListener {
             AlarmSettingSecondActivity.editMode = 1
+            val endTime: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                binding.firstSettingTimePicker.hour * 60 + (binding.firstSettingTimePicker.minute)
+            } else {
+                binding.firstSettingTimePicker.currentHour * 60 + (binding.firstSettingTimePicker.currentMinute)
+            }
+
             val intent: Intent = Intent(this, AlarmSettingSecondActivity::class.java)
+            intent.putExtra("daySet", dayList)
+            intent.putExtra("startLocation", startLocation)
+            intent.putExtra("endLocation", endLocation)
+            intent.putExtra("endTime", endTime)
             startActivity(intent)
         }
 
@@ -78,6 +85,10 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
             }
             /* TODO: 언더라인 두개로 만들어야함*/
             binding.firstSettingLocationText.text = getUnderlinedString("*$startLocation*에서 *$endLocation* 까지")
+        }
+
+        if (endLocation == null || dayList.isEmpty()) {
+            /* TODO: 버튼 비활성화 */
         }
     }
 
