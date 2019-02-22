@@ -175,7 +175,7 @@ class GPSInfo(): Service(), LocationListener {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
 
-    fun isGPSConnected() {
+    fun isGPSConnected(): Boolean {
         if (!checkLocationServicesStatus()) {
             val builder = AlertDialog.Builder(activity)
             builder.setTitle("위치 서비스 비활성화")
@@ -187,7 +187,9 @@ class GPSInfo(): Service(), LocationListener {
             })
             builder.setNegativeButton("취소", { dialogInterface, i -> dialogInterface.cancel() })
             builder.create().show()
+            return false
         }
+        return true
     }
 
     override fun onBind(p0: Intent?): IBinder {
@@ -320,5 +322,12 @@ class GPSInfo(): Service(), LocationListener {
             Log.d(TAG, "cannot find")
         }
         return result
+    }
+
+    fun getSubString(): String {
+        val result = getResult()
+        val splitedList = result.address.split(" ")
+        val size = splitedList.size
+        return splitedList.get(size - 2) + " " + splitedList.get(size - 1)
     }
 }

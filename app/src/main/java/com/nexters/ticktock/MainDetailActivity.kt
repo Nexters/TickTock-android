@@ -12,9 +12,9 @@ import com.nexters.ticktock.Constant.GPS_ENABLE_REQUEST_CODE
 import com.nexters.ticktock.Constant.MAIN_DETAIL_ACTIVITY_REQUEST_CODE
 import com.nexters.ticktock.alarmsetting.AlarmSettingSecondActivity
 import com.nexters.ticktock.autocomplete.AutoCompleteActivity
-import com.nexters.ticktock.autocomplete.GPSInfo
 import com.nexters.ticktock.dao.TickTockDBHelper
 import com.nexters.ticktock.databinding.ActivityMainDetailBinding
+import com.nexters.ticktock.utils.Location
 import com.nexters.ticktock.utils.getResizedString
 import com.nexters.ticktock.utils.getUnderlinedString
 
@@ -27,14 +27,12 @@ class MainDetailActivity(): AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityMainDetailBinding
 
-    private lateinit var gps: GPSInfo
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main_detail)
 
-        gps = GPSInfo(this) // GPS
-        gps.isGPSConnected()
+        Location.getInstance(this)
+        Location.getInstance(this).isGPSConnected()
 
         binding.tvAlarmTime.text = getResizedString("*11:30* AM", 3.125f)
         binding.tvDeliveryFromTitle.text = getUnderlinedString("*현위치*")
@@ -56,7 +54,10 @@ class MainDetailActivity(): AppCompatActivity(), View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             // gps 설정 변경 후 재연결
-            GPS_ENABLE_REQUEST_CODE -> gps.getLocation()
+            GPS_ENABLE_REQUEST_CODE -> {
+                if (Location.getInstance(this).isGPSConnected())
+                    Location.getInstance(this).getLocation()
+            }
 
             MAIN_DETAIL_ACTIVITY_REQUEST_CODE -> {
                 when (resultCode) {
@@ -77,7 +78,7 @@ class MainDetailActivity(): AppCompatActivity(), View.OnClickListener {
 
             binding.btnEdit.id -> {
                 val intent = Intent(this, AutoCompleteActivity::class.java)
-                intent.putExtra("GPS_RESULT", gps.getResult())
+                intent.putExtra("GPS_RESULT", Location.getInstance(this).getResult())
                 intent.putExtra("DESTINATION_DATA", binding.tvDeliveryToTitle.text)
                 startActivityForResult(intent, MAIN_DETAIL_ACTIVITY_REQUEST_CODE)
             }
