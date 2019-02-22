@@ -38,9 +38,6 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_setting_first)
 
-        Location.getInstance(this)
-        Location.getInstance(this).isGPSConnected()
-
         binding.firstSettingDirectionButton.setOnClickListener {
             val intent = Intent(this, AutoCompleteActivity::class.java)
             intent.putExtra("GPS_RESULT", Location.getInstance(this).getResult())
@@ -77,6 +74,9 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
+        Location.getInstance(this)
+        Location.getInstance(this).isGPSConnected()
 
         if (endLocation == null) {
             binding.firstSettingDirectionBefore.visibility = View.VISIBLE

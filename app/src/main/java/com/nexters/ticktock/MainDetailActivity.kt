@@ -42,9 +42,6 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main_detail)
 
-        Location.getInstance(this)
-        Location.getInstance(this).isGPSConnected()
-
         getData(intent.getLongExtra("CARD_ID", 0))
 
         binding.btnClose.setOnClickListener(this)
@@ -77,6 +74,13 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
 
             override fun afterTextChanged(s: Editable?) {}
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        Location.getInstance(this)
+        Location.getInstance(this).isGPSConnected()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -125,7 +129,7 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
             }
 
             binding.btnEditPrepareTime.id -> {
-                val intent = Intent(this, AlarmSettingSecondActivity::class.java)
+                val intent = Intent(this, NoneActivity::class.java)
                 startActivity(intent)
             }
 
