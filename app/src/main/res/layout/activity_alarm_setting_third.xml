@@ -136,7 +136,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
-                            android:checkedButton="@id/radiobtn_color"
+                            android:checkedButton="@id/radiobtn_red"
                             android:gravity="center"
                             android:orientation="horizontal"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -145,7 +145,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/tv_color_title">
 
                             <RadioButton
-                                android:id="@+id/radiobtn_color"
+                                android:id="@+id/radiobtn_red"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:layout_marginStart="10dp"
@@ -154,6 +154,7 @@
                                 android:button="@android:color/transparent" />
 
                             <RadioButton
+                                android:id="@+id/radiobtn_green"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:layout_marginStart="10dp"
@@ -162,6 +163,7 @@
                                 android:button="@android:color/transparent" />
 
                             <RadioButton
+                                android:id="@+id/radiobtn_yellow"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:layout_marginStart="10dp"
@@ -170,6 +172,7 @@
                                 android:button="@android:color/transparent" />
 
                             <RadioButton
+                                android:id="@+id/radiobtn_blue"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:layout_marginStart="10dp"
@@ -178,6 +181,7 @@
                                 android:button="@android:color/transparent" />
 
                             <RadioButton
+                                android:id="@+id/radiobtn_purple"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:layout_marginStart="10dp"

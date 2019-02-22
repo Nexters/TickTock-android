@@ -13,13 +13,18 @@ import android.text.SpannableString
 import android.text.TextWatcher
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.StyleSpan
+import android.util.Log
 import android.view.View
 import android.widget.RadioGroup
 import android.widget.TextView
+import com.nexters.ticktock.CardActivity
 import com.nexters.ticktock.R
+import com.nexters.ticktock.dao.TickTockDBHelper
 import com.nexters.ticktock.databinding.ActivityAlarmSettingThirdBinding
+import com.nexters.ticktock.model.Alarm
 import com.nexters.ticktock.model.Step
 import com.nexters.ticktock.model.enums.Day
+import com.nexters.ticktock.model.enums.TickTockColor
 import com.nexters.ticktock.timer.TimerActivity
 import com.nexters.ticktock.utils.Time
 import com.nexters.ticktock.utils.getHighlightedString
@@ -91,6 +96,32 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
         stepList = intent.getSerializableExtra("stepList") as ArrayList<Step>
     }
 
+    private fun saveData() {
+        val alarmDao = TickTockDBHelper.getInstance(this).alarmDao
+
+        var tickTockColor = when (binding.radiogrpColor.checkedRadioButtonId) {
+            binding.radiobtnRed.id -> TickTockColor.RED
+            binding.radiobtnGreen.id -> TickTockColor.GREEN
+            binding.radiobtnYellow.id -> TickTockColor.YELLOW
+            binding.radiobtnBlue.id -> TickTockColor.BLUE
+            binding.radiobtnPurple.id -> TickTockColor.PURPLE
+            else -> TickTockColor.RED
+        }
+
+        alarmDao.save(Alarm(
+                days = daySet,
+                title = binding.edMemo.text.toString(),
+                startLocation = startLocation!!,
+                endLocation = endLocation!!,
+                color = tickTockColor,
+                enable = true,
+                endTime = endTime,
+                travelTime = travelTime,
+                steps = stepList.toMutableSet()
+
+        ))
+    }
+
     override fun onClick(v: View?) {
         when (v?.id) {
             binding.btnBack.id -> {
@@ -99,7 +130,8 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
 
             binding.layoutSave.id -> {
                 // TODO 저장
-                val intent = Intent(this, TimerActivity::class.java)
+                saveData()
+                val intent = Intent(this, CardActivity::class.java)
                 startActivity(intent)
             }
         }

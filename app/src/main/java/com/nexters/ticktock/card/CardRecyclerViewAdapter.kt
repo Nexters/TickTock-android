@@ -57,7 +57,7 @@ class CardRecyclerViewAdapter(
 
     override fun getPriority(): Int = 5
 
-    inner class ViewHolder(view: View)
+    inner class ViewHolder(val view: View)
         : RecyclerView.ViewHolder(view),
             View.OnClickListener, View.OnLongClickListener, CardChangeListener {
 
@@ -96,7 +96,9 @@ class CardRecyclerViewAdapter(
         private val endTimeTxtView = view.findViewById<TextView>(R.id.endTimeTxt)
         private val endLocationTxtView = view.findViewById<TextView>(R.id.endLocationTxt)
 
-        init {
+        fun bind() {
+            bindButton()
+
             view.setOnClickListener(this)
             view.setOnLongClickListener(this)
             activeSwitchView.setOnCheckedChangeListener { _, isChecked ->
@@ -105,10 +107,6 @@ class CardRecyclerViewAdapter(
             deleteBtnView.setOnClickListener {
                 cardContext.removeAt(super.getAdapterPosition())
             }
-        }
-
-        fun bind() {
-            bindButton()
 
             this@CardRecyclerViewAdapter.cardContext[super.getAdapterPosition()].run {
                 activeSwitchView.isChecked = enable

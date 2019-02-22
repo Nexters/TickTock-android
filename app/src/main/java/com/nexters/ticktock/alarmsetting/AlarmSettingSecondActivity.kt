@@ -111,6 +111,7 @@ class AlarmSettingSecondActivity : AppCompatActivity(), PrepareAdapter.OnStartDr
                 intent.putExtra("startLocation", startLocation)
                 intent.putExtra("endLocation", endLocation)
                 intent.putExtra("travelTime", travelTime)
+                intent.putExtra("endTime", endTime)
                 intent.putExtra("stepList", stepList)
                 intent.putExtra("endTime", endTime)
                 startActivity(intent)
