@@ -3,9 +3,7 @@
 ### 지각방지용 타이머앱
 
 <br/>
-
-![onboarding2](./screenshot/tutorial_2.png)
-![onboarding3](./screenshot/tutorial_3.png)
+<img src="https://github.com/Nexters/TickTock-android/blob/develop/screenshot/tutorial_2.png" width=200 />
 
 <br/>
 
@@ -21,7 +19,7 @@
 
 ## 미리 보기
 
-![ticktock](./screenshot/ticktockGif.gif){width:20}
+<img src="https://github.com/Nexters/TickTock-android/blob/develop/screenshot/ticktockGif.gif" width=300 /></a>
 
 
 ### 1. 알람 리스트를 카드 뷰 형식의 색다른 느낌으로 만나보세요.
