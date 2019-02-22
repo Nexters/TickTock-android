@@ -44,50 +44,6 @@ class PriorTimerActivity : AppCompatActivity(){
         window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
         binding = DataBindingUtil.setContentView(this, com.nexters.ticktock.R.layout.activity_prior_timer)
 
-        /*val mCalendar : Calendar = Calendar.getInstance()
-        mCalendar.set(Calendar.HOUR_OF_DAY, 20)
-        mCalendar.set(Calendar.MINUTE, 33)
-        mCalendar.set(Calendar.SECOND, 0)
-
-
-        val mAlarmIntent:Intent = Intent(this, AlarmReceiver::class.java)
-        val pIntent : PendingIntent = PendingIntent.getBroadcast(this, 0, mAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)*/
-
-        val alarmManager : AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        /*val alarmDao = TickTockDBHelper.getInstance(this).alarmDao
-        val alarmList = alarmDao.findAll()
-
-        for(mini in alarmList) {
-            val stepSet = mini.steps
-            val calendarSet = Calendar.getInstance()
-            var startHour = mini.endTime.hour - mini.travelTime.hour
-            var startMinute = mini.endTime.minute - mini.travelTime.minute
-
-            for(miniStep in stepSet) {
-                startHour -= miniStep.duration.hour
-                startMinute -= miniStep.duration.minute     // 하나의 알람에 있는 startHour, startMinute을 구한다.
-            }
-
-            calendarSet.set(Calendar.HOUR_OF_DAY, startHour)
-            calendarSet.set(Calendar.MINUTE, startMinute)
-
-            val mAlarmIntent:Intent = Intent(this, AlarmReceiver::class.java)
-            val pIntent : PendingIntent = PendingIntent.getBroadcast(this, mini.id.toInt(), mAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-            val alarmManager : AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-            val rightNow : Calendar = Calendar.getInstance()
-            if(rightNow.timeInMillis < calendarSet.timeInMillis) {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, calendarSet.timeInMillis, pIntent)
-                if(Build.VERSION.SDK_INT >= 23)
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendarSet.timeInMillis, pIntent)
-                else if(Build.VERSION.SDK_INT >= 21)
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendarSet.timeInMillis, pIntent)
-                else
-                    alarmManager.set(AlarmManager.RTC_WAKEUP, calendarSet.timeInMillis, pIntent)
-            }
-        }*/
 
         val hourStr = SimpleDateFormat("HH", Locale.KOREA).format(Date())
         val minuteStr = SimpleDateFormat("mm", Locale.KOREA).format(Date())
@@ -107,8 +63,6 @@ class PriorTimerActivity : AppCompatActivity(){
                 hourStr = ((hourStr.toInt()) - 12).toString()
                 isAm = false
             }
-            if(hourStr.toInt() < 10)
-                hourStr = "0$hourStr"
             val minuteStr = SimpleDateFormat("mm", Locale.KOREA).format(Date())
             binding.tvTime.text = "$hourStr:$minuteStr"
 
