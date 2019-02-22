@@ -1,6 +1,9 @@
 package com.nexters.ticktock
 
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Build
@@ -21,6 +24,7 @@ import com.nexters.ticktock.databinding.ActivityMainDetailBinding
 import com.nexters.ticktock.model.Alarm
 import com.nexters.ticktock.model.enums.Day
 import com.nexters.ticktock.model.enums.TickTockColor
+import com.nexters.ticktock.timer.AlarmReceiver
 import com.nexters.ticktock.utils.*
 import java.util.*
 
@@ -135,6 +139,48 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
 
             binding.layoutSave.id -> {
                 setData()
+
+                val alarmDao = TickTockDBHelper.getInstance(this).alarmDao
+                val alarmList = alarmDao.findAll()
+
+                // 알람에서 해당 알람 삭제
+                for(alarm in alarmList) {
+                    if(alarm.id == this.alarmId) {
+                        alarmDao.delete(alarm)
+                        break
+                    }
+                }
+
+                //수정된 알람 재 추가
+                val calendarSet = Calendar.getInstance()
+                val startHour = startHour
+                val startMinute = startMinute
+
+                calendarSet.set(Calendar.HOUR_OF_DAY, startHour)
+                calendarSet.set(Calendar.MINUTE, startMinute)
+
+                Log.d("StartAlarm", "$startHour:$startMinute")
+
+                val mAlarmIntent:Intent = Intent(this, AlarmReceiver::class.java)
+                val pIntent : PendingIntent = PendingIntent.getBroadcast(this, alarmDao.findAll().size, mAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+                val alarmManager : AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+                val rightNow : Calendar = Calendar.getInstance()
+
+                if(rightNow.timeInMillis < calendarSet.timeInMillis) {
+
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, calendarSet.timeInMillis, pIntent)
+                    if(Build.VERSION.SDK_INT >= 23)
+                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendarSet.timeInMillis, pIntent)
+
+                    else if(Build.VERSION.SDK_INT >= 21)
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendarSet.timeInMillis, pIntent)
+
+                    else
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, calendarSet.timeInMillis, pIntent)
+                }
+
                 finish()
             }
         }
