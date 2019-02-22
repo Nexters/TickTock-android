@@ -53,7 +53,8 @@ class DirectionRecyclerAdapter(
         /*
          * 길찾기 간략 정보 시작
          */
-        binding.tvDirectionTotalTime.text = "${transPath[i].path.totalTime}분"
+        if (transPath[i].path.totalHour != 0) binding.tvDirectionTotalTime.text = "${transPath[i].path.totalHour}시간 ${transPath[i].path.totalMinute}분"
+        else binding.tvDirectionTotalTime.text = "${transPath[i].path.totalMinute}분"
         binding.tvDirectionWalkTime.text = "도보 ${transPath[i].path.totalWalk}분"
         val decimal = DecimalFormat("###,###")
         val payment = decimal.format(transPath[i].path.payment)

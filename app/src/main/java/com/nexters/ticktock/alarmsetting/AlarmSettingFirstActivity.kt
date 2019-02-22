@@ -13,6 +13,7 @@ import com.nexters.ticktock.autocomplete.AutoCompleteActivity
 import com.nexters.ticktock.autocomplete.GPSInfo
 import com.nexters.ticktock.databinding.ActivityAlarmSettingFirstBinding
 import com.nexters.ticktock.model.enums.Day
+import com.nexters.ticktock.utils.getUnderlinedString
 
 class AlarmSettingFirstActivity : AppCompatActivity() {
 
@@ -130,7 +131,10 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
             MAIN_ACTIVITY_REQUEST_CODE -> {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-                        //binding.firstSettingDirectionButton.text =  "${data?.getIntExtra("totalTime", 0)}분"
+//                        if (data?.getIntExtra("DIRECTION_TIME_HOUR", 0) != 0) binding.tvDeliveryTimeSecond.setText("${data?.getIntExtra("DIRECTION_TIME_HOUR", 0)}시간 ${data?.getIntExtra("DIRECTION_TIME_MINUTE", 0)}분")
+//                        else binding.tvDeliveryTimeSecond.setText("${data.getIntExtra("DIRECTION_TIME_MINUTE", 0)}분")
+//                        binding.tvDeliveryFromTitle.text = getUnderlinedString("*${data?.getStringExtra("DIRECTION_START")}*")
+//                        binding.tvDeliveryToTitle.text = getUnderlinedString("*${data?.getStringExtra("DIRECTION_DESTINATION")}*")
                     }
                 }
             }
