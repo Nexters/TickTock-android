@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import com.nexters.ticktock.alarmsetting.AlarmSettingFirstActivity
@@ -34,20 +35,21 @@ class CardActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        Log.d("AlarmDao", "onResume")
 
         cardContext.active(alarmDao.findAll()
                 .map { it.toCardItem() }
                 .toList().sortedWith(compareBy({it.startTime}, {it.color}))
         )
+
+        Location.getInstance(this)
+        if (Location.getInstance(this).isGPSConnected())
+            locationTxt.text = Location.getInstance(this).getSubString()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card)
-
-        Location.getInstance(this)
-        if (Location.getInstance(this).isGPSConnected())
-            locationTxt.text = Location.getInstance(this).getSubString()
 
         //set OnBoarding Tutorial
         val preferences = getSharedPreferences("my_preferences", Context.MODE_PRIVATE)

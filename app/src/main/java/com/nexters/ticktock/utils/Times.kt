@@ -1,5 +1,7 @@
 package com.nexters.ticktock.utils
 
+import java.io.Serializable
+
 fun Int.hour() =
         Time(this * 60)
 
@@ -13,7 +15,7 @@ fun Long.minute() =
         Time(this.toInt())
 
 /** time is minute */
-class Time(minute:Int) : Comparable<Time> {
+class Time(minute:Int) : Comparable<Time>, Serializable {
 
     val time: Int = ((minute + WHOLE_DAY) % WHOLE_DAY) // 24h -> 0, -4h -> 20h
 

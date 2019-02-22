@@ -328,6 +328,9 @@ class GPSInfo(): Service(), LocationListener {
         val result = getResult()
         val splitedList = result.address.split(" ")
         val size = splitedList.size
-        return splitedList.get(size - 2) + " " + splitedList.get(size - 1)
+
+        if (size > 2)
+            return splitedList.get(size - 2) + " " + splitedList.get(size - 1)
+        return "마포구 합정동"
     }
 }

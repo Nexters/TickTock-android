@@ -133,7 +133,7 @@ class AlarmDao(private val context: Context) {
     fun findById(id: Long): Alarm? {
         Log.d(LOG_TAG, "findById called - param: $id")
         val readableDB = TickTockDBHelper.getInstance(context).readableDatabase
-        val cursor = readableDB.rawQuery(SELECT_ALL_ALARM_WHERE, null)
+        val cursor = readableDB.rawQuery(SELECT_ALL_ALARM_WHERE, arrayOf(id.toString()))
 
         var alarm: Alarm? = null
         val stepSet = mutableSetOf<Step>()
@@ -148,6 +148,8 @@ class AlarmDao(private val context: Context) {
                 } while (it.moveToNext())
             }
         }
+
+        Log.d(LOG_TAG, "findById result: $alarm")
 
         return alarm?.apply { steps = stepSet }
     }

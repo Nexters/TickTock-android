@@ -15,8 +15,11 @@ import com.nexters.ticktock.R
 import com.nexters.ticktock.autocomplete.AutoCompleteActivity
 import com.nexters.ticktock.databinding.ActivityAlarmSettingFirstBinding
 import com.nexters.ticktock.model.enums.Day
+import com.nexters.ticktock.utils.Time
 import com.nexters.ticktock.utils.Location
 import com.nexters.ticktock.utils.getUnderlinedString
+import com.nexters.ticktock.utils.hour
+import com.nexters.ticktock.utils.minute
 import java.util.*
 
 class AlarmSettingFirstActivity : AppCompatActivity() {
@@ -50,17 +53,22 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
 
         binding.firstSettingNextButton.setOnClickListener {
             AlarmSettingSecondActivity.editMode = 1
-            val endTime: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                binding.firstSettingTimePicker.hour * 60 + (binding.firstSettingTimePicker.minute)
+
+
+            val travelTime = (hour?.hour() ?: Time(0)) + (minute?.minute() ?: Time(0))
+
+            val endTime = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                binding.firstSettingTimePicker.hour.hour() + binding.firstSettingTimePicker.minute.minute()
             } else {
-                binding.firstSettingTimePicker.currentHour * 60 + (binding.firstSettingTimePicker.currentMinute)
+                binding.firstSettingTimePicker.currentHour.hour() + binding.firstSettingTimePicker.currentMinute.minute()
             }
 
             val intent: Intent = Intent(this, AlarmSettingSecondActivity::class.java)
+            intent.putExtra("endTime", endTime)
             intent.putExtra("daySet", dayList)
             intent.putExtra("startLocation", startLocation)
             intent.putExtra("endLocation", endLocation)
-            intent.putExtra("endTime", endTime)
+            intent.putExtra("travelTime", travelTime)
             startActivity(intent)
         }
 

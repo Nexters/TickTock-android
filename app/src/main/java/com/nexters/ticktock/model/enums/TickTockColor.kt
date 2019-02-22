@@ -1,8 +1,9 @@
 package com.nexters.ticktock.model.enums
 
 import com.nexters.ticktock.R
+import java.io.Serializable
 
-enum class TickTockColor(val cardBgColorId: Int, val pickColorId: Int, val cardImgId: Int) {
+enum class TickTockColor(val cardBgColorId: Int, val pickColorId: Int, val cardImgId: Int) : Serializable {
     RED(
             cardBgColorId = R.color.ticktockRedCardColor,
             pickColorId = R.color.ticktockRedPickColor,

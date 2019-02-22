@@ -12,13 +12,11 @@ import android.graphics.drawable.ColorDrawable
 import android.support.constraint.ConstraintLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.Switch
-import android.widget.TextView
+import android.widget.*
 import com.nexters.ticktock.MainDetailActivity
 import com.nexters.ticktock.R
 import com.nexters.ticktock.alarmsetting.AlarmSettingFirstActivity
@@ -57,7 +55,7 @@ class CardRecyclerViewAdapter(
 
     override fun getPriority(): Int = 5
 
-    inner class ViewHolder(view: View)
+    inner class ViewHolder(val view: View)
         : RecyclerView.ViewHolder(view),
             View.OnClickListener, View.OnLongClickListener, CardChangeListener {
 
@@ -96,7 +94,9 @@ class CardRecyclerViewAdapter(
         private val endTimeTxtView = view.findViewById<TextView>(R.id.endTimeTxt)
         private val endLocationTxtView = view.findViewById<TextView>(R.id.endLocationTxt)
 
-        init {
+        fun bind() {
+            bindButton()
+
             view.setOnClickListener(this)
             view.setOnLongClickListener(this)
             activeSwitchView.setOnCheckedChangeListener { _, isChecked ->
@@ -105,10 +105,6 @@ class CardRecyclerViewAdapter(
             deleteBtnView.setOnClickListener {
                 cardContext.removeAt(super.getAdapterPosition())
             }
-        }
-
-        fun bind() {
-            bindButton()
 
             this@CardRecyclerViewAdapter.cardContext[super.getAdapterPosition()].run {
                 activeSwitchView.isChecked = enable
@@ -174,6 +170,7 @@ class CardRecyclerViewAdapter(
                 recyclerView.smoothScrollToPosition(super.getAdapterPosition())
             } else if (!cardContext.isEditPhase) {
                 val intent = Intent(context, MainDetailActivity::class.java)
+                intent.putExtra("CARD_ID", cardContext[super.getAdapterPosition()].id)
                 context.startActivity(intent)
             }
         }
@@ -264,6 +261,7 @@ class CardRecyclerViewAdapter(
     }
 
     override fun onActive() {
+        Log.d("AlarmDao", "onActive")
         notifyDataSetChanged()
     }
 

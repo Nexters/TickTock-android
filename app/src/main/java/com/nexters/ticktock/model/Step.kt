@@ -1,6 +1,7 @@
 package com.nexters.ticktock.model
 
 import com.nexters.ticktock.utils.Time
+import java.io.Serializable
 
 data class Step(
 
@@ -12,5 +13,5 @@ data class Step(
 
         var duration: Time,
 
-        var alarmId: Long
-)
+        var alarmId: Long = 0
+) : Serializable

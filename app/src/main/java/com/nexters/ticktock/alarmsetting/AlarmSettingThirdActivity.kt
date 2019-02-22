@@ -13,34 +13,63 @@ import android.text.SpannableString
 import android.text.TextWatcher
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.StyleSpan
+import android.util.Log
 import android.view.View
 import android.widget.RadioGroup
 import android.widget.TextView
+import com.nexters.ticktock.CardActivity
 import com.nexters.ticktock.R
+import com.nexters.ticktock.dao.TickTockDBHelper
 import com.nexters.ticktock.databinding.ActivityAlarmSettingThirdBinding
+import com.nexters.ticktock.model.Alarm
+import com.nexters.ticktock.model.Step
+import com.nexters.ticktock.model.enums.Day
+import com.nexters.ticktock.model.enums.TickTockColor
 import com.nexters.ticktock.timer.TimerActivity
+import com.nexters.ticktock.utils.Time
 import com.nexters.ticktock.utils.getHighlightedString
 import com.nexters.ticktock.utils.getResizedString
+import java.util.*
+import kotlin.collections.ArrayList
 
 class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     private lateinit var binding: ActivityAlarmSettingThirdBinding
     private lateinit var prepareTimeRecyclerAdapter: PrepareTimeRecyclerAdapter
 
+    private lateinit var daySet: EnumSet<Day>
+    private var startLocation: String? = null
+    private var endLocation: String? = null
+    private lateinit var travelTime: Time
+    private lateinit var endTime: Time
+    private lateinit var stepList: ArrayList<Step>
+
+    private lateinit var startTime: Time
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        getData()
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_setting_third)
 
         binding.tvTitle.text = getHighlightedString(resources.getString(R.string.tv_alarm_setting_third_title))
-        binding.tvStartTimeDescription.text = getResizedString(resources.getString(R.string.tv_start_time_description), 1.85f)
+        binding.tvStartTimeDescription.text = getResizedString("${startTime.meridiem}*${startTime.hour}:${startTime.minute}*", 1.85f)
 
         binding.edMemo.addTextChangedListener(object: TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (count > 0) binding.tvMemoMax.visibility = View.GONE
-                else if (count == 0) binding.tvMemoMax.visibility = View.VISIBLE
+                if (count > 0) {
+                    binding.tvMemoMax.visibility = View.GONE
+                    binding.layoutSave.isEnabled = true
+                    binding.layoutSave.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.btnEnable))
+                }
+                else if (count == 0) {
+                    binding.tvMemoMax.visibility = View.VISIBLE
+                    binding.layoutSave.isEnabled = false
+                    binding.layoutSave.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.btnDisEnable))
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -57,7 +86,48 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
 
         binding.btnBack.setOnClickListener(this)
         binding.layoutPrepareTime.setOnClickListener(this)
-        binding.btnSave.setOnClickListener(this)
+        binding.layoutSave.setOnClickListener(this)
+    }
+
+    private fun getData() {
+        daySet = intent.getSerializableExtra("daySet") as EnumSet<Day>
+        startLocation = intent.getStringExtra("startLocation")
+        endLocation = intent.getStringExtra("endLocation")
+        travelTime = intent.getSerializableExtra("travelTime") as Time
+        endTime = intent.getSerializableExtra("endTime") as Time
+        stepList = intent.getSerializableExtra("stepList") as ArrayList<Step>
+
+        startTime = endTime - travelTime
+
+        for (item in stepList) {
+            startTime -= item.duration
+        }
+    }
+
+    private fun saveData() {
+        val alarmDao = TickTockDBHelper.getInstance(this).alarmDao
+
+        var tickTockColor = when (binding.radiogrpColor.checkedRadioButtonId) {
+            binding.radiobtnRed.id -> TickTockColor.RED
+            binding.radiobtnGreen.id -> TickTockColor.GREEN
+            binding.radiobtnYellow.id -> TickTockColor.YELLOW
+            binding.radiobtnBlue.id -> TickTockColor.BLUE
+            binding.radiobtnPurple.id -> TickTockColor.PURPLE
+            else -> TickTockColor.RED
+        }
+
+        alarmDao.save(Alarm(
+                days = daySet,
+                title = binding.edMemo.text.toString(),
+                startLocation = startLocation!!,
+                endLocation = endLocation!!,
+                color = tickTockColor,
+                enable = true,
+                endTime = endTime,
+                travelTime = travelTime,
+                steps = stepList.toMutableSet()
+
+        ))
     }
 
     override fun onClick(v: View?) {
@@ -66,9 +136,10 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
                 finish()
             }
 
-            binding.btnSave.id -> {
+            binding.layoutSave.id -> {
                 // TODO 저장
-                val intent = Intent(this, TimerActivity::class.java)
+                saveData()
+                val intent = Intent(this, CardActivity::class.java)
                 startActivity(intent)
             }
         }
