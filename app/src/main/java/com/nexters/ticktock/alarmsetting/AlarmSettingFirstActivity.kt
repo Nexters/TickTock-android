@@ -50,7 +50,7 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
 
         binding.firstSettingNextButton.setOnClickListener {
             AlarmSettingSecondActivity.editMode = 1
-            val endTime: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val travelTime: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 binding.firstSettingTimePicker.hour * 60 + (binding.firstSettingTimePicker.minute)
             } else {
                 binding.firstSettingTimePicker.currentHour * 60 + (binding.firstSettingTimePicker.currentMinute)
@@ -60,7 +60,7 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
             intent.putExtra("daySet", dayList)
             intent.putExtra("startLocation", startLocation)
             intent.putExtra("endLocation", endLocation)
-            intent.putExtra("endTime", endTime)
+            intent.putExtra("travelTime", travelTime)
             startActivity(intent)
         }
 

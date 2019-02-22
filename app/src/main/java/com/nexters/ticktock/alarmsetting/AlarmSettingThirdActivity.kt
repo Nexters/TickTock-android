@@ -18,17 +18,29 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import com.nexters.ticktock.R
 import com.nexters.ticktock.databinding.ActivityAlarmSettingThirdBinding
+import com.nexters.ticktock.model.Step
+import com.nexters.ticktock.model.enums.Day
 import com.nexters.ticktock.timer.TimerActivity
 import com.nexters.ticktock.utils.getHighlightedString
 import com.nexters.ticktock.utils.getResizedString
+import java.util.*
+import kotlin.collections.ArrayList
 
 class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     private lateinit var binding: ActivityAlarmSettingThirdBinding
     private lateinit var prepareTimeRecyclerAdapter: PrepareTimeRecyclerAdapter
 
+    private lateinit var daySet: EnumSet<Day>
+    private var startLocation: String? = null
+    private var endLocation: String? = null
+    private var travelTime: Int? = null
+    private lateinit var stepList: ArrayList<Step>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        getData()
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_setting_third)
 
@@ -58,6 +70,14 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
         binding.btnBack.setOnClickListener(this)
         binding.layoutPrepareTime.setOnClickListener(this)
         binding.btnSave.setOnClickListener(this)
+    }
+
+    private fun getData() {
+        daySet = intent.getSerializableExtra("daySet") as EnumSet<Day>
+        startLocation = intent.getStringExtra("startLocation")
+        endLocation = intent.getStringExtra("endLocation")
+        travelTime = intent.getIntExtra("travelTime", 0)
+        stepList = intent.getSerializableExtra("stepList") as ArrayList<Step>
     }
 
     override fun onClick(v: View?) {
