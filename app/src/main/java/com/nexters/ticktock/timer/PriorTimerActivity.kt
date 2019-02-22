@@ -84,7 +84,7 @@ class PriorTimerActivity : AppCompatActivity(){
             val alarmList = alarmDao.findAll()
 
             for(alarm in alarmList) {
-                var startHour = alarm.endTime.hour - alarm.travelTime.hour
+                var startHour = alarm.endTime.time / 60
                 var startMinute = alarm.endTime.minute - alarm.travelTime.minute
 
                 for(step in alarm.steps) {

@@ -85,6 +85,8 @@ class TimerActivity : AppCompatActivity() {
         stepTimeList.add("완료")
         stepList.add(TimerStepItem("출발!"))
 
+        binding.tvStepNum.text = "1 / " + stepList.size.toString()
+
         binding.tvTitle.text = "출근 알람알람알람"
         binding.tvStep.text = stepTimeList[0]
         snapHelper = ControllableTimerSnapHelper(this, binding.tvStep, stepTimeList, binding.tvStepNum, binding.buttonNext, binding.buttonReset)
