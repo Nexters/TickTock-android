@@ -1,6 +1,7 @@
 package com.nexters.ticktock
 
 import android.app.Activity
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -16,6 +17,8 @@ class SplashActivity : Activity() {
 
     private fun startLoading() {
         val handler = Handler()
-        handler.postDelayed({ finish() }, 2000)
+        handler.postDelayed({
+            val intent = Intent(this, CardActivity::class.java)
+            startActivity(intent) }, 2000)
     }
 }

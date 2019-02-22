@@ -32,7 +32,7 @@
         </receiver>
 
         <activity android:name=".timer.TimerActivity" />
-        <activity android:name=".CardActivity"
+        <activity android:name=".SplashActivity"
             android:showOnLockScreen="true"
             android:screenOrientation="sensorPortrait">
             <intent-filter>
@@ -48,6 +48,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <activity android:name=".CardActivity" />
         <activity android:name=".autocomplete.AutoCompleteActivity" />
         <activity android:name=".alarmsetting.AlarmSettingFirstActivity" />
         <activity android:name=".alarmsetting.AlarmSettingSecondActivity" />

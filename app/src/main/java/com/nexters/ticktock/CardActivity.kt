@@ -49,9 +49,6 @@ class CardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card)
 
-        val intent = Intent(this, SplashActivity::class.java)
-        startActivity(intent)
-
         //set OnBoarding Tutorial
         val preferences = getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
 
