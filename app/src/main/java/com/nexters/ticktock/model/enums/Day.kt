@@ -1,10 +1,12 @@
 package com.nexters.ticktock.model.enums
 
+import java.io.Serializable
+
 /**
  * enum 은 UPPERCASE 로 써야 하지만
  * 요일 편하게 쓰려고 그냥 썼음
  */
-enum class Day(val dayName: String) {
+enum class Day(val dayName: String) : Serializable {
 
     Monday("월"),
     Tuesday("화"),
