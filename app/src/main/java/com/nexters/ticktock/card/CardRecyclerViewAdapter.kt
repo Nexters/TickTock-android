@@ -174,6 +174,7 @@ class CardRecyclerViewAdapter(
                 recyclerView.smoothScrollToPosition(super.getAdapterPosition())
             } else if (!cardContext.isEditPhase) {
                 val intent = Intent(context, MainDetailActivity::class.java)
+                intent.putExtra("CARD_ID", cardContext[super.getAdapterPosition()].id)
                 context.startActivity(intent)
             }
         }

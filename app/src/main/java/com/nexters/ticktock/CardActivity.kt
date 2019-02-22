@@ -39,6 +39,10 @@ class CardActivity : AppCompatActivity() {
                 .map { it.toCardItem() }
                 .toList().sortedWith(compareBy({it.startTime}, {it.color}))
         )
+
+        Location.getInstance(this)
+        if (Location.getInstance(this).isGPSConnected())
+            locationTxt.text = Location.getInstance(this).getSubString()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,10 +51,6 @@ class CardActivity : AppCompatActivity() {
 
         val intent = Intent(this, SplashActivity::class.java)
         startActivity(intent)
-
-        Location.getInstance(this)
-        if (Location.getInstance(this).isGPSConnected())
-            locationTxt.text = Location.getInstance(this).getSubString()
 
         //set OnBoarding Tutorial
         val preferences = getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
