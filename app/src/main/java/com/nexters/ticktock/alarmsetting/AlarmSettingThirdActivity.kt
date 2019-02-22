@@ -32,6 +32,8 @@ import com.nexters.ticktock.utils.getResizedString
 import java.util.*
 import kotlin.collections.ArrayList
 
+
+
 class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     private lateinit var binding: ActivityAlarmSettingThirdBinding
@@ -46,15 +48,27 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
 
     private lateinit var startTime: Time
 
+    private var originTime = 0
+    private var quickTime = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         getData()
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_setting_third)
+        binding = DataBindingUtil.setContentView(this, com.nexters.ticktock.R.layout.activity_alarm_setting_third)
 
-        binding.tvTitle.text = getHighlightedString(resources.getString(R.string.tv_alarm_setting_third_title))
-        binding.tvStartTimeDescription.text = getResizedString("${startTime.meridiem}*${startTime.hour}:${startTime.minute}*", 1.85f)
+        binding.tvTitle.text = getHighlightedString(resources.getString(com.nexters.ticktock.R.string.tv_alarm_setting_third_title))
+        binding.tvStartTimeDescription.text = getResizedString("${startTime.meridiem}* ${startTime.hour}:${startTime.minute}*", 1.85f)
+
+        val travelHour = travelTime.time / 60
+        if (travelHour != 0) binding.tvTimeToDestination.text = "${travelHour}시간 ${travelTime.minute}분"
+        else binding.tvTimeToDestination.text = "${travelTime.minute}분"
+
+        val prepareTime = stepList.map { it.duration }.fold(Time(0)) { acc, time -> acc + time }
+        val prepareHour = prepareTime.time / 60
+        if (prepareHour != 0) binding.tvPrepareTime.text = "${prepareHour}시간 ${prepareTime.minute}분"
+        else binding.tvPrepareTime.text = "${prepareTime.minute}분"
 
         binding.edMemo.addTextChangedListener(object: TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -63,12 +77,12 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
                 if (count > 0) {
                     binding.tvMemoMax.visibility = View.GONE
                     binding.layoutSave.isClickable = true
-                    binding.layoutSave.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.btnEnable))
+                    binding.layoutSave.setBackgroundColor(ContextCompat.getColor(applicationContext, com.nexters.ticktock.R.color.btnEnable))
                 }
                 else if (count == 0) {
                     binding.tvMemoMax.visibility = View.VISIBLE
                     binding.layoutSave.isClickable = false
-                    binding.layoutSave.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.btnDisEnable))
+                    binding.layoutSave.setBackgroundColor(ContextCompat.getColor(applicationContext, com.nexters.ticktock.R.color.btnDisEnable))
                 }
             }
 
@@ -78,10 +92,7 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
         binding.radiogrpQuickTime.setOnCheckedChangeListener(this)
 
         binding.recyclerviewPrepareTime.layoutManager = LinearLayoutManager(this)
-        val arrayList = ArrayList<String>()
-        for (i in 0..5)
-            arrayList.add(i, "1시간 5분")
-        prepareTimeRecyclerAdapter = PrepareTimeRecyclerAdapter(this, arrayList)
+        prepareTimeRecyclerAdapter = PrepareTimeRecyclerAdapter(this, stepList)
         binding.recyclerviewPrepareTime.adapter = prepareTimeRecyclerAdapter
 
         binding.btnBack.setOnClickListener(this)
@@ -102,6 +113,8 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
         for (item in stepList) {
             startTime -= item.duration
         }
+
+        originTime = startTime.time
     }
 
     private fun saveData() {
@@ -116,6 +129,13 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
             else -> TickTockColor.RED
         }
 
+        val stepListSize = stepList.size
+        stepList.add(Step(
+                name = "째깍타임",
+                duration = Time(quickTime),
+                order = stepListSize
+        ))
+
         alarmDao.save(Alarm(
                 days = daySet,
                 title = binding.edMemo.text.toString(),
@@ -126,7 +146,6 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
                 endTime = endTime,
                 travelTime = travelTime,
                 steps = stepList.toMutableSet()
-
         ))
     }
 
@@ -139,7 +158,9 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
             binding.layoutSave.id -> {
                 // TODO 저장
                 saveData()
+
                 val intent = Intent(this, CardActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
             }
         }
@@ -162,13 +183,19 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
             binding.radiogrpQuickTime -> {
                 when (checkedId) {
                     binding.radiobtnQuickTime1.id -> {
-                        binding.radiobtnQuickTime1.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
-                        binding.radiobtnQuickTime2.setTextColor(ContextCompat.getColor(this, R.color.colorGray))
-                        binding.radiobtnQuickTime3.setTextColor(ContextCompat.getColor(this, R.color.colorGray))
-                        binding.radiobtnQuickTime4.setTextColor(ContextCompat.getColor(this, R.color.colorGray))
-                        binding.radiobtnQuickTime5.setTextColor(ContextCompat.getColor(this, R.color.colorGray))
+                        quickTime = 0
+                        val time = Time(originTime - quickTime)
+                        binding.tvStartTimeDescription.text = getResizedString("${time.meridiem} " + "*${time.hour}:${time.minute}*", 1.85f)
+                        binding.radiobtnQuickTime1.setTextColor(ContextCompat.getColor(this, com.nexters.ticktock.R.color.colorWhite))
+                        binding.radiobtnQuickTime2.setTextColor(ContextCompat.getColor(this, com.nexters.ticktock.R.color.colorGray))
+                        binding.radiobtnQuickTime3.setTextColor(ContextCompat.getColor(this, com.nexters.ticktock.R.color.colorGray))
+                        binding.radiobtnQuickTime4.setTextColor(ContextCompat.getColor(this, com.nexters.ticktock.R.color.colorGray))
+                        binding.radiobtnQuickTime5.setTextColor(ContextCompat.getColor(this, com.nexters.ticktock.R.color.colorGray))
                     }
                     binding.radiobtnQuickTime2.id -> {
+                        quickTime = 5
+                        val time = Time(originTime - quickTime)
+                        binding.tvStartTimeDescription.text = getResizedString("${time.meridiem} " + "*${time.hour}:${time.minute}*", 1.85f)
                         binding.radiobtnQuickTime1.setTextColor(ContextCompat.getColor(this, R.color.colorGray))
                         binding.radiobtnQuickTime2.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
                         binding.radiobtnQuickTime3.setTextColor(ContextCompat.getColor(this, R.color.colorGray))
@@ -176,6 +203,9 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
                         binding.radiobtnQuickTime5.setTextColor(ContextCompat.getColor(this, R.color.colorGray))
                     }
                     binding.radiobtnQuickTime3.id -> {
+                        quickTime = 10
+                        val time = Time(originTime - quickTime)
+                        binding.tvStartTimeDescription.text = getResizedString("${time.meridiem} " + "*${time.hour}:${time.minute}*", 1.85f)
                         binding.radiobtnQuickTime1.setTextColor(ContextCompat.getColor(this, R.color.colorGray))
                         binding.radiobtnQuickTime2.setTextColor(ContextCompat.getColor(this, R.color.colorGray))
                         binding.radiobtnQuickTime3.setTextColor(ContextCompat.getColor(this, R.color.colorWhite))
@@ -183,6 +213,9 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
                         binding.radiobtnQuickTime5.setTextColor(ContextCompat.getColor(this, R.color.colorGray))
                     }
                     binding.radiobtnQuickTime4.id -> {
+                        quickTime = 15
+                        val time = Time(originTime - quickTime)
+                        binding.tvStartTimeDescription.text = getResizedString("${time.meridiem} " + "*${time.hour}:${time.minute}*", 1.85f)
                         binding.radiobtnQuickTime1.setTextColor(ContextCompat.getColor(this, R.color.colorGray))
                         binding.radiobtnQuickTime2.setTextColor(ContextCompat.getColor(this, R.color.colorGray))
                         binding.radiobtnQuickTime3.setTextColor(ContextCompat.getColor(this, R.color.colorGray))
@@ -190,6 +223,9 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
                         binding.radiobtnQuickTime5.setTextColor(ContextCompat.getColor(this, R.color.colorGray))
                     }
                     binding.radiobtnQuickTime5.id -> {
+                        quickTime = 30
+                        val time = Time(originTime - quickTime)
+                        binding.tvStartTimeDescription.text = getResizedString("${time.meridiem} " + "*${time.hour}:${time.minute}*", 1.85f)
                         binding.radiobtnQuickTime1.setTextColor(ContextCompat.getColor(this, R.color.colorGray))
                         binding.radiobtnQuickTime2.setTextColor(ContextCompat.getColor(this, R.color.colorGray))
                         binding.radiobtnQuickTime3.setTextColor(ContextCompat.getColor(this, R.color.colorGray))
