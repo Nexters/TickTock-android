@@ -39,7 +39,7 @@
     <string name="tv_prepare_time_main_title">알람</string>
     <string name="tv_start_time_title">시작시간</string>
     <string name="tv_start_time_description">pm *1:30*</string>
-    <string name="tv_quick_time_title">퀵타임</string>
+    <string name="tv_quick_time_title">째깍타임</string>
     <string name="radiobtn_quick_time1_text">적용안함</string>
     <string name="radiobtn_quick_time2_text">-5분</string>
     <string name="radiobtn_quick_time3_text">-10분</string>

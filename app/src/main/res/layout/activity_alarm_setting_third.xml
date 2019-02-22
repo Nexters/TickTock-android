@@ -371,6 +371,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
+                                android:id="@+id/tv_time_to_destination"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/tv_alarm_setting_third_time_to_destination_description"
@@ -409,6 +410,7 @@
                                     app:layout_constraintTop_toTopOf="parent" />
 
                                 <TextView
+                                    android:id="@+id/tv_prepare_time"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/tv_alarm_setting_third_prepare_time_description"

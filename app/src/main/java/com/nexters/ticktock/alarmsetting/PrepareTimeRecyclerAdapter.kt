@@ -10,10 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.nexters.ticktock.R
 import com.nexters.ticktock.databinding.ItemPrepareTimeBinding
+import com.nexters.ticktock.model.Step
 
 class PrepareTimeRecyclerAdapter (
         private val context: Context?,
-        private val arrayList: ArrayList<String>
+        private val stepList: ArrayList<Step>
 ): RecyclerView.Adapter<PrepareTimeRecyclerAdapter.PrepareTimeViewHolder>() {
 
     private lateinit var binding: ItemPrepareTimeBinding
@@ -27,12 +28,12 @@ class PrepareTimeRecyclerAdapter (
     }
 
     override fun getItemCount(): Int {
-        return arrayList.size
+        return stepList.size
     }
 
     override fun onBindViewHolder(holder: PrepareTimeViewHolder, i: Int) {
-        // binding.tvTitle
-        // binding.tvDescription
+        binding.tvTitle.text = stepList.get(i).name
+        binding.tvDescription.text = "${stepList.get(i).duration.time}분"
     }
 
     class PrepareTimeViewHolder(val binding: ItemPrepareTimeBinding): RecyclerView.ViewHolder(binding.root)
