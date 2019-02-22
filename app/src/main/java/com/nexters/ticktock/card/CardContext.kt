@@ -36,6 +36,11 @@ class CardContext(val context: Context) : ArrayList<CardItem>() {
 
         super.clear()
         super.addAll(cardList)
+
+        Flowable.fromIterable(cardEventListenerList)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { it.onActive() }
     }
 
     override fun add(element: CardItem): Boolean {

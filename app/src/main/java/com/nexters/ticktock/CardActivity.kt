@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import com.nexters.ticktock.alarmsetting.AlarmSettingFirstActivity
@@ -34,6 +35,7 @@ class CardActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        Log.d("AlarmDao", "onResume")
 
         cardContext.active(alarmDao.findAll()
                 .map { it.toCardItem() }

@@ -12,13 +12,11 @@ import android.graphics.drawable.ColorDrawable
 import android.support.constraint.ConstraintLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.Switch
-import android.widget.TextView
+import android.widget.*
 import com.nexters.ticktock.MainDetailActivity
 import com.nexters.ticktock.R
 import com.nexters.ticktock.alarmsetting.AlarmSettingFirstActivity
@@ -263,6 +261,7 @@ class CardRecyclerViewAdapter(
     }
 
     override fun onActive() {
+        Log.d("AlarmDao", "onActive")
         notifyDataSetChanged()
     }
 

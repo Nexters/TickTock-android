@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.TimePicker
 import com.nexters.ticktock.Constant.GPS_ENABLE_REQUEST_CODE
@@ -145,6 +146,7 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
     fun getData(id: Long) {
         alarmId = id
         val alarmDao = TickTockDBHelper.getInstance(this).alarmDao
+        alarmDao.findAll().forEach { Log.d("AlarmDao", it.toString()) }
         val alarm = alarmDao.findById(id) as Alarm
         val prepareTime = alarm.steps.map { it.duration }.fold(Time(0)) { acc, time -> acc + time }
         val startTime = alarm.endTime - (alarm.travelTime + prepareTime)
@@ -156,7 +158,7 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
         hour = alarm.travelTime.hour
         minute = alarm.travelTime.minute
 
-        if (hour != 0) binding.tvDeliveryTimeSecond.text = "${hour}시간 ${minute}분"
+        if (alarm.travelTime.time / 60 != 0) binding.tvDeliveryTimeSecond.text = "${hour}시간 ${minute}분"
         else binding.tvDeliveryTimeSecond.text = "${minute}분"
         binding.tvDeliveryFromTitle.text = getUnderlinedString("*${alarm.startLocation}*")
         binding.tvDeliveryToTitle.text = getUnderlinedString("*${alarm.endLocation}*")
@@ -188,7 +190,7 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
             TickTockColor.PURPLE -> binding.radiogrpColor.check(binding.radiobtn5.id)
         }
 
-        if (prepareTime.hour != 0) binding.tvPrepareTimeSecond.text = "${prepareTime.hour}시간 ${prepareTime.minute}분"
+        if (prepareTime.time / 60 != 0) binding.tvPrepareTimeSecond.text = "${prepareTime.hour}시간 ${prepareTime.minute}분"
         else binding.tvPrepareTimeSecond.text = "${prepareTime.minute}분"
 
         binding.edMemo.setText(alarm.title)
