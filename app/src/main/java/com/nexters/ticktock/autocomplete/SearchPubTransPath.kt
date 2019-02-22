@@ -10,15 +10,24 @@ class SearchPubTransPath(val type: Int, val path: Path, val subPathList: ArrayLi
      * 1-9-3 subPathList:   이동 교통수단 정보 리스트
      */
 
-    class Path(val totalWalk: Int, val totalTime: Int, val payment: Int, val walkCount: Int) : Parcelable {
+    class Path(val totalWalk: Int, val totalTime: Int, val payment: Int, val walkCount: Int, var totalHour: Int, var totalMinute: Int) : Parcelable {
     /*
      *         totalwalk:   총 도보시간
      * 1-9-2-3 totalTime:   총 소요시간
      * 1-9-2-4 payment:     총 요금
      *         walkCount:   환승간 도보 횟수
+     *         totalHour:   시
+     *         totalMinute: 분
      */
 
+        init {
+            totalHour = totalTime / 60
+            totalMinute = totalTime % 60
+        }
+
         constructor(source: Parcel) : this(
+                source.readInt(),
+                source.readInt(),
                 source.readInt(),
                 source.readInt(),
                 source.readInt(),
@@ -32,6 +41,8 @@ class SearchPubTransPath(val type: Int, val path: Path, val subPathList: ArrayLi
             writeInt(totalTime)
             writeInt(payment)
             writeInt(walkCount)
+            writeValue(totalHour)
+            writeValue(totalMinute)
         }
 
         companion object {

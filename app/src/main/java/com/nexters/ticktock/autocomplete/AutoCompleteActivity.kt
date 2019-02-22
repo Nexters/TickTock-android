@@ -80,7 +80,7 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
         if (gps == null) gps = GPSInfo.Result("", 0.0, 0.0)
 
         if (gps.address != "") {
-            binding.edSearchFrom.setText("내위치: ${gps.address}")
+            binding.edSearchFrom.setText("현위치: ${gps.address}")
             fromLatLng = LatLng(gps.latitude, gps.longitude)
         }
     }
@@ -110,7 +110,11 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
 
             override fun onItemClick(view: View, position: Int) {
                 val intent = Intent()
-                intent.putExtra("totalTime", directionRecyclerAdapter.transPath.get(position).path.totalTime)
+                intent.putExtra("DIRECTION_TIME_HOUR", directionRecyclerAdapter.transPath.get(position).path.totalHour)
+                intent.putExtra("DIRECTION_TIME_MINUTE", directionRecyclerAdapter.transPath.get(position).path.totalMinute)
+                if (binding.edSearchFrom.text.toString().substring(0,3) == "현위치") intent.putExtra("DIRECTION_START", "현위치")
+                else intent.putExtra("DIRECTION_START", binding.edSearchFrom.text.toString())
+                intent.putExtra("DIRECTION_DESTINATION", binding.edSearchTo.text.toString())
                 setResult(Activity.RESULT_OK, intent)
                 finish()
             }
@@ -269,7 +273,7 @@ class AutoCompleteActivity : AppCompatActivity(), OnResultCallbackListener, Plac
                         else if (subPath.getInt("trafficType") == 2) // 버스
                             subPathList.add(SearchPubTransPath.SubPath(subPath.getInt("trafficType"), subPath.getInt("sectionTime"), SearchPubTransPath.Lane(null, subPath.getJSONArray("lane").getJSONObject(0).getString("busNo"), subPath.getJSONArray("lane").getJSONObject(0).getInt("type"), null), subPath.getString("startName"), subPath.getString("endName")))
                     }
-                    val transPath = SearchPubTransPath(jObject.getInt("pathType"), SearchPubTransPath.Path(totalWalk, jInfo.getInt("totalTime"), jInfo.getInt("payment"), walkCount), subPathList)
+                    val transPath = SearchPubTransPath(jObject.getInt("pathType"), SearchPubTransPath.Path(totalWalk, jInfo.getInt("totalTime"), jInfo.getInt("payment"), walkCount, 0, 0), subPathList)
                     transPathList.add(transPath)
                 }
 
