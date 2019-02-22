@@ -67,12 +67,12 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (count > 0) {
                     binding.tvMemoMax.visibility = View.GONE
-                    binding.layoutSave.isEnabled = true
+                    binding.layoutSave.isClickable = true
                     binding.layoutSave.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.btnEnable))
                 }
                 else if (count == 0) {
                     binding.tvMemoMax.visibility = View.VISIBLE
-                    binding.layoutSave.isEnabled = false
+                    binding.layoutSave.isClickable = false
                     binding.layoutSave.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.btnDisEnable))
                 }
             }
