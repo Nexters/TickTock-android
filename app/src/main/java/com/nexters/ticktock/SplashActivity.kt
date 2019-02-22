@@ -19,6 +19,7 @@ class SplashActivity : Activity() {
         val handler = Handler()
         handler.postDelayed({
             val intent = Intent(this, CardActivity::class.java)
-            startActivity(intent) }, 2000)
+            startActivity(intent)
+        finish()}, 2000)
     }
 }
