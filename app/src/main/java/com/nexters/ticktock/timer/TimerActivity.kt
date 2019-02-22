@@ -27,6 +27,7 @@ import android.view.View
 import android.widget.Toast
 import com.nexters.ticktock.R
 import com.nexters.ticktock.databinding.ActivityTimerBinding
+import com.nexters.ticktock.model.Alarm
 import java.util.*
 
 
@@ -70,20 +71,19 @@ class TimerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_timer)
 
-        stepList = mutableListOf(
-                TimerStepItem("00:20"),
-                TimerStepItem("10:00"),
-                TimerStepItem("15:00"),
-                TimerStepItem("출발!")
-        )
+        stepList = mutableListOf(TimerStepItem("00:20"))
 
-        stepTimeList = mutableListOf(
-                "샤워하기",
-                "머리말리기",
-                "옷입기",
-                "완료"
-        )
+        stepTimeList = mutableListOf("샤워하기")
 
+        val intent = intent
+        /*var alarm = intent.getSerializableExtra("curAlarm") as Alarm
+
+        for(step in alarm.steps) {
+            stepTimeList.add(step.name)
+            stepList.add(TimerStepItem(step.duration.minute.toString() + ":" + "00"))
+        }*/
+        stepTimeList.add("완료")
+        stepList.add(TimerStepItem("출발!"))
 
         binding.tvTitle.text = "출근 알람알람알람"
         binding.tvStep.text = stepTimeList[0]

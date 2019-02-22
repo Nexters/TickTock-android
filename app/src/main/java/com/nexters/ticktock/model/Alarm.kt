@@ -3,6 +3,7 @@ package com.nexters.ticktock.model
 import com.nexters.ticktock.model.enums.Day
 import com.nexters.ticktock.model.enums.TickTockColor
 import com.nexters.ticktock.utils.Time
+import java.io.Serializable
 import java.util.*
 
 data class Alarm(
@@ -25,4 +26,4 @@ data class Alarm(
         var travelTime: Time,
 
         var steps: MutableSet<Step> = mutableSetOf()
-)
+) : Serializable
