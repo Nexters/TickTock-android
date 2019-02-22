@@ -53,8 +53,16 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (count > 0) binding.tvMemoMax.visibility = View.GONE
-                else if (count == 0) binding.tvMemoMax.visibility = View.VISIBLE
+                if (count > 0) {
+                    binding.tvMemoMax.visibility = View.GONE
+                    binding.layoutSave.isEnabled = true
+                    binding.layoutSave.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.btnEnable))
+                }
+                else if (count == 0) {
+                    binding.tvMemoMax.visibility = View.VISIBLE
+                    binding.layoutSave.isEnabled = false
+                    binding.layoutSave.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.btnDisEnable))
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -71,7 +79,7 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
 
         binding.btnBack.setOnClickListener(this)
         binding.layoutPrepareTime.setOnClickListener(this)
-        binding.btnSave.setOnClickListener(this)
+        binding.layoutSave.setOnClickListener(this)
     }
 
     private fun getData() {
@@ -89,7 +97,7 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
                 finish()
             }
 
-            binding.btnSave.id -> {
+            binding.layoutSave.id -> {
                 // TODO 저장
                 val intent = Intent(this, TimerActivity::class.java)
                 startActivity(intent)

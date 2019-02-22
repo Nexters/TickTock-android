@@ -12,9 +12,13 @@ import com.nexters.ticktock.Constant.GPS_ENABLE_REQUEST_CODE
 import com.nexters.ticktock.Constant.MAIN_DETAIL_ACTIVITY_REQUEST_CODE
 import com.nexters.ticktock.alarmsetting.AlarmSettingSecondActivity
 import com.nexters.ticktock.autocomplete.AutoCompleteActivity
-import com.nexters.ticktock.autocomplete.GPSInfo
 import com.nexters.ticktock.dao.TickTockDBHelper
 import com.nexters.ticktock.databinding.ActivityMainDetailBinding
+import com.nexters.ticktock.model.Alarm
+import com.nexters.ticktock.model.enums.Day
+import com.nexters.ticktock.model.enums.TickTockColor
+import com.nexters.ticktock.utils.Location
+import com.nexters.ticktock.utils.Time
 import com.nexters.ticktock.utils.getResizedString
 import com.nexters.ticktock.utils.getUnderlinedString
 
@@ -22,19 +26,61 @@ class MainDetailActivity(): AppCompatActivity(), View.OnClickListener {
 
     constructor(id: Long): this() {
         val alarmDao = TickTockDBHelper.getInstance(this).alarmDao
-        val alarm = alarmDao.findById(id)
+        val alarm = alarmDao.findById(id) as Alarm
+        val prepareTime = alarm.steps.map { it.duration }.fold(Time(0)) { acc, time -> acc + time }
+        val startTime = alarm.endTime - (alarm.travelTime + prepareTime)
+
+        binding.tvAlarmTime.text = getResizedString("*${startTime.hour}:${startTime.minute}* ${startTime.meridiem}", 3.125f)
+        binding.tvDestination.text = alarm.endLocation
+        binding.tvDay.text = alarm.days.toString()
+
+        if (alarm.travelTime.hour != 0) binding.tvDeliveryTimeSecond.text = "${alarm.travelTime.hour}시간 ${alarm.travelTime.minute}분"
+        else binding.tvDeliveryTimeSecond.text = "${alarm.travelTime.minute}분"
+        binding.tvDeliveryFromTitle.text = getUnderlinedString("*${alarm.startLocation}*")
+        binding.tvDeliveryToTitle.text = getUnderlinedString("*${alarm.endLocation}*")
+
+        binding.tpMeetingTime.setCurrentHour(startTime.hour)
+        binding.tpMeetingTime.setCurrentMinute(startTime.minute)
+
+        alarm.days.forEach {
+            val checkbox = when (it) {
+                Day.Monday -> binding.cbMonday
+                Day.Tuesday -> binding.cbTuesday
+                Day.Wednesday -> binding.cbWednesday
+                Day.Thursday -> binding.cbThursday
+                Day.Friday -> binding.cbFriday
+                Day.Saturday -> binding.cbSaturday
+                Day.Sunday -> binding.cbSunday
+                else -> binding.cbMonday
+            }
+            checkbox.isChecked = true
+        }
+
+        when (alarm.color) {
+            TickTockColor.RED -> binding.radiogrpColor.check(binding.radiobtn1.id)
+            TickTockColor.GREEN -> binding.radiogrpColor.check(binding.radiobtn2.id)
+            TickTockColor.YELLOW -> binding.radiogrpColor.check(binding.radiobtn3.id)
+            TickTockColor.BLUE -> binding.radiogrpColor.check(binding.radiobtn4.id)
+            TickTockColor.PURPLE -> binding.radiogrpColor.check(binding.radiobtn5.id)
+        }
+
+        binding.cbMonday
+        binding.cbMonday
+
+        if (prepareTime.hour != 0) binding.tvPrepareTimeSecond.text = "${prepareTime.hour}시간 ${prepareTime.minute}분"
+        else binding.tvPrepareTimeSecond.text = "${prepareTime.minute}분"
+
+        binding.edMemo.setText(alarm.title)
     }
 
     private lateinit var binding: ActivityMainDetailBinding
-
-    private lateinit var gps: GPSInfo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main_detail)
 
-        gps = GPSInfo(this) // GPS
-        gps.isGPSConnected()
+        Location.getInstance(this)
+        Location.getInstance(this).isGPSConnected()
 
         binding.tvAlarmTime.text = getResizedString("*11:30* AM", 3.125f)
         binding.tvDeliveryFromTitle.text = getUnderlinedString("*현위치*")
@@ -56,7 +102,10 @@ class MainDetailActivity(): AppCompatActivity(), View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             // gps 설정 변경 후 재연결
-            GPS_ENABLE_REQUEST_CODE -> gps.getLocation()
+            GPS_ENABLE_REQUEST_CODE -> {
+                if (Location.getInstance(this).isGPSConnected())
+                    Location.getInstance(this).getLocation()
+            }
 
             MAIN_DETAIL_ACTIVITY_REQUEST_CODE -> {
                 when (resultCode) {
@@ -77,7 +126,7 @@ class MainDetailActivity(): AppCompatActivity(), View.OnClickListener {
 
             binding.btnEdit.id -> {
                 val intent = Intent(this, AutoCompleteActivity::class.java)
-                intent.putExtra("GPS_RESULT", gps.getResult())
+                intent.putExtra("GPS_RESULT", Location.getInstance(this).getResult())
                 intent.putExtra("DESTINATION_DATA", binding.tvDeliveryToTitle.text)
                 startActivityForResult(intent, MAIN_DETAIL_ACTIVITY_REQUEST_CODE)
             }

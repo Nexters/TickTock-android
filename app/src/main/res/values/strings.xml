@@ -69,14 +69,15 @@
     <string name="alarm_func">알람기능</string>
     <string name="system_manage">시스템 관리</string>
     <string name="item_delete">모든 알람 삭제</string>
-    <string name="init_template">템플릿 초기화</string>
-    <string name="permit_alarm">방해금지 모드에서 알람 허</string>
+    <string name="permit_alarm">방해금지 모드에서 알람 허용</string>
     <string name="lock_screen">잠금화면에 알람 표시</string>
     <string name="use_system_vol">시스템 볼륨 사용</string>
     <string name="volume">볼륨</string>
     <string name="app_on_top">다른 앱 위에 앱 표시</string>
     <string name="push_alarm">푸쉬알림 받기</string>
     <string name="version">버전</string>
+    <string name="dialog_delete_all">모든 알람 삭제</string>
+    <string name="dialog_cancel">앱 내의 모든 알람카드를 삭제합니다.\n삭제 후에는 복구가 불가능합니다.</string>
 
     <!-- timer activity -->
     <string name="timer_step_num">%1$d / %2$d</string>
