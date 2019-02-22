@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item>
+
+    <item
+        android:state_checked = "true">
         <shape android:shape="rectangle" >
             <size
                 android:width="20dp"
@@ -11,4 +13,25 @@
                 android:color="#f6460f" />
         </shape>
     </item>
+
+
+
+    <item
+        android:state_checked = "false" >
+        <shape android:shape="rectangle" >
+            <size
+                android:width="20dp"
+                android:height="20dp" />
+            <corners
+                android:radius="10dp" />
+            <solid
+                android:color="#ffffff" />
+        </shape>
+
+    </item>
+
+
+
+
+
 </layer-list>

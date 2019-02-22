@@ -35,18 +35,6 @@
             android:textSize = "14sp"
             app:layout_constraintTop_toBottomOf="@+id/tv_timer_manage"/>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background = "@android:color/white"
-            android:text = "@string/init_template"
-            android:gravity = "start"
-            android:paddingStart = "28dp"
-            android:paddingTop = "13dp"
-            android:fontFamily="@font/noto_sans_cjk_kr_regular"
-            android:textSize = "14sp"
-            app:layout_constraintTop_toBottomOf="@+id/alarm_delete_btn" />
-
 
     </android.support.constraint.ConstraintLayout>
 </layout>

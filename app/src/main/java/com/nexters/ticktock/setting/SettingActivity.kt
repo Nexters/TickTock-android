@@ -16,10 +16,15 @@ class SettingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_setting)
 
+
+        binding.layoutTimeManage.alarmDeleteBtn.setOnClickListener {
+            val deleteAllAlarm : AlarmDeleteDialog = AlarmDeleteDialog(this)
+            deleteAllAlarm.show()
+        }
+
         binding.backToMainBtn.setOnClickListener {
 
-            val mainIntent = Intent(this, CardActivity::class.java)
-            startActivity(mainIntent)
+            finish()
             overridePendingTransition(R.anim.slide_left2, R.anim.slide_right2)
         }
 
