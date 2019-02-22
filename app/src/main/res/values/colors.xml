@@ -12,6 +12,9 @@
     <color name="colorBus">#FF0000</color>
     <color name="colorSubway">#00FF00</color>
 
+    <color name="btnEnable">#f6460f</color>
+    <color name="btnDisEnable">#d8d8d8</color>
+
     <!-- activity_alarm_setting_third -->
     <color name="colorCardBorder">#979797</color>
     <color name="alarmMainColor">#f6460f</color>
