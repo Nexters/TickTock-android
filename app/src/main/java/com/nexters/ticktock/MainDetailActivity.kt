@@ -3,6 +3,7 @@ package com.nexters.ticktock
 import android.app.Activity
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -46,14 +47,8 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
 
         getData(intent.getLongExtra("CARD_ID", 0))
 
-        binding.tvAlarmTime.text = getResizedString("*11:30* AM", 3.125f)
-        startLocation = "현위치"
-        binding.tvDeliveryFromTitle.text = getUnderlinedString("*${startLocation}*")
-        endLocation = "종각역 마이크임팩트"
-        binding.tvDeliveryToTitle.text = getUnderlinedString("*${endLocation}*")
-
         binding.btnClose.setOnClickListener(this)
-        binding.btnEdit.setOnClickListener(this)
+        binding.cvDeliveryTime.setOnClickListener(this)
         binding.btnEditPrepareTime.setOnClickListener(this)
         binding.layoutSave.setOnClickListener(this)
 
@@ -70,12 +65,12 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (count > 0) {
                     binding.tvMemoMax.visibility = View.GONE
-                    binding.layoutSave.isEnabled = true
+                    binding.layoutSave.isClickable = true
                     binding.layoutSave.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.btnEnable))
                 }
                 else if (count == 0) {
                     binding.tvMemoMax.visibility = View.VISIBLE
-                    binding.layoutSave.isEnabled = false
+                    binding.layoutSave.isClickable = false
                     binding.layoutSave.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.btnDisEnable))
                 }
             }
@@ -122,7 +117,7 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
         when (v?.id) {
             binding.btnClose.id -> finish()
 
-            binding.btnEdit.id -> {
+            binding.cvDeliveryTime.id -> {
                 val intent = Intent(this, AutoCompleteActivity::class.java)
                 intent.putExtra("GPS_RESULT", Location.getInstance(this).getResult())
                 intent.putExtra("DESTINATION_DATA", binding.tvDeliveryToTitle.text)
@@ -153,6 +148,9 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
         binding.tvDestination.text = alarm.endLocation
         binding.tvDay.text = alarm.days.toString()
 
+        startLocation = alarm.startLocation
+        endLocation = alarm.endLocation
+
         hour = alarm.travelTime.hour
         minute = alarm.travelTime.minute
 
@@ -163,10 +161,15 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
         binding.tvDeliveryFromTitle.text = getUnderlinedString("*${alarm.startLocation}*")
         binding.tvDeliveryToTitle.text = getUnderlinedString("*${alarm.endLocation}*")
 
-        startHour = startTime.hour
+        startHour = startTime.time / 60
         startMinute = startTime.minute
-        binding.tpMeetingTime.setCurrentHour(startHour)
-        binding.tpMeetingTime.setCurrentMinute(startMinute)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            binding.tpMeetingTime.hour = startHour
+            binding.tpMeetingTime.minute = startMinute
+        } else {
+            binding.tpMeetingTime.setCurrentHour(startHour)
+            binding.tpMeetingTime.setCurrentMinute(startMinute)
+        }
 
         alarm.days.forEach {
             val checkbox = when (it) {
@@ -183,11 +186,26 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
         }
 
         when (alarm.color) {
-            TickTockColor.RED -> binding.radiogrpColor.check(binding.radiobtn1.id)
-            TickTockColor.GREEN -> binding.radiogrpColor.check(binding.radiobtn2.id)
-            TickTockColor.YELLOW -> binding.radiogrpColor.check(binding.radiobtn3.id)
-            TickTockColor.BLUE -> binding.radiogrpColor.check(binding.radiobtn4.id)
-            TickTockColor.PURPLE -> binding.radiogrpColor.check(binding.radiobtn5.id)
+            TickTockColor.RED -> {
+                binding.layoutTitle.setBackgroundColor(ContextCompat.getColor(this, TickTockColor.RED.cardBgColorId))
+                binding.radiogrpColor.check(binding.radiobtn1.id)
+            }
+            TickTockColor.GREEN -> {
+                binding.layoutTitle.setBackgroundColor(ContextCompat.getColor(this, TickTockColor.GREEN.cardBgColorId))
+                binding.radiogrpColor.check(binding.radiobtn2.id)
+            }
+            TickTockColor.YELLOW -> {
+                binding.layoutTitle.setBackgroundColor(ContextCompat.getColor(this, TickTockColor.YELLOW.cardBgColorId))
+                binding.radiogrpColor.check(binding.radiobtn3.id)
+            }
+            TickTockColor.BLUE -> {
+                binding.layoutTitle.setBackgroundColor(ContextCompat.getColor(this, TickTockColor.BLUE.cardBgColorId))
+                binding.radiogrpColor.check(binding.radiobtn4.id)
+            }
+            TickTockColor.PURPLE -> {
+                binding.layoutTitle.setBackgroundColor(ContextCompat.getColor(this, TickTockColor.PURPLE.cardBgColorId))
+                binding.radiogrpColor.check(binding.radiobtn5.id)
+            }
         }
 
         if (prepareTime.time / 60 != 0) binding.tvPrepareTimeSecond.text = "${prepareTime.hour}시간 ${prepareTime.minute}분"
