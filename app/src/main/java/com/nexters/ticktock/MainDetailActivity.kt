@@ -18,13 +18,9 @@ import com.nexters.ticktock.autocomplete.AutoCompleteActivity
 import com.nexters.ticktock.dao.TickTockDBHelper
 import com.nexters.ticktock.databinding.ActivityMainDetailBinding
 import com.nexters.ticktock.model.Alarm
-import com.nexters.ticktock.model.Step
 import com.nexters.ticktock.model.enums.Day
 import com.nexters.ticktock.model.enums.TickTockColor
-import com.nexters.ticktock.utils.Location
-import com.nexters.ticktock.utils.Time
-import com.nexters.ticktock.utils.getResizedString
-import com.nexters.ticktock.utils.getUnderlinedString
+import com.nexters.ticktock.utils.*
 import java.util.*
 
 class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
@@ -34,7 +30,7 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
     private var alarmId: Long = 0
     private var startLocation = ""
     private var endLocation = ""
-    private var travelTime = Time(0)
+    private var travelTimeInEdit = Time(0)
     private var hour = 0
     private var minute = 0
     private var startHour = 0
@@ -104,12 +100,14 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
                         if (hour != 0) {
                             minute = data?.getIntExtra("DIRECTION_TIME_MINUTE", 0) as Int
                             binding.tvDeliveryTimeSecond.setText("${hour}시간 ${minute}분")
-                            travelTime = Time(hour * 60 + minute)
+                            travelTimeInEdit = Time(hour * 60 + minute)
                         }
                         else {
                             minute = data.getIntExtra("DIRECTION_TIME_MINUTE", 0)
                             binding.tvDeliveryTimeSecond.setText("${minute}분")
                         }
+
+                        travelTimeInEdit = hour.hour() + minute.minute()
                         startLocation = "${data?.getStringExtra("DIRECTION_START")}"
                         binding.tvDeliveryFromTitle.text = getUnderlinedString("*${startLocation}*")
                         endLocation = "${data?.getStringExtra("DIRECTION_DESTINATION")}"
@@ -157,6 +155,8 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
 
         hour = alarm.travelTime.hour
         minute = alarm.travelTime.minute
+
+        travelTimeInEdit = Time(0) + alarm.travelTime
 
         if (alarm.travelTime.time / 60 != 0) binding.tvDeliveryTimeSecond.text = "${hour}시간 ${minute}분"
         else binding.tvDeliveryTimeSecond.text = "${minute}분"
@@ -226,7 +226,7 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
                 color = color,
                 enable = true,
                 endTime = Time(startHour * 60 + startMinute),
-                travelTime = Time(hour * 60 + minute)
+                travelTime = travelTimeInEdit
         ))
     }
 }
