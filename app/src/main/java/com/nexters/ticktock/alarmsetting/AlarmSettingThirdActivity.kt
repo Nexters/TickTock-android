@@ -44,6 +44,8 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
     private lateinit var endTime: Time
     private lateinit var stepList: ArrayList<Step>
 
+    private lateinit var startTime: Time
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -52,7 +54,7 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
         binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_setting_third)
 
         binding.tvTitle.text = getHighlightedString(resources.getString(R.string.tv_alarm_setting_third_title))
-        binding.tvStartTimeDescription.text = getResizedString(resources.getString(R.string.tv_start_time_description), 1.85f)
+        binding.tvStartTimeDescription.text = getResizedString("${startTime.meridiem}*${startTime.hour}:${startTime.minute}*", 1.85f)
 
         binding.edMemo.addTextChangedListener(object: TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -94,6 +96,12 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
         travelTime = intent.getSerializableExtra("travelTime") as Time
         endTime = intent.getSerializableExtra("endTime") as Time
         stepList = intent.getSerializableExtra("stepList") as ArrayList<Step>
+
+        startTime = endTime - travelTime
+
+        for (item in stepList) {
+            startTime -= item.duration
+        }
     }
 
     private fun saveData() {
