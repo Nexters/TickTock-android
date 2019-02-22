@@ -21,6 +21,7 @@ import com.nexters.ticktock.databinding.ActivityAlarmSettingThirdBinding
 import com.nexters.ticktock.model.Step
 import com.nexters.ticktock.model.enums.Day
 import com.nexters.ticktock.timer.TimerActivity
+import com.nexters.ticktock.utils.Time
 import com.nexters.ticktock.utils.getHighlightedString
 import com.nexters.ticktock.utils.getResizedString
 import java.util.*
@@ -34,7 +35,8 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
     private lateinit var daySet: EnumSet<Day>
     private var startLocation: String? = null
     private var endLocation: String? = null
-    private var travelTime: Int? = null
+    private lateinit var travelTime: Time
+    private lateinit var endTime: Time
     private lateinit var stepList: ArrayList<Step>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +78,8 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
         daySet = intent.getSerializableExtra("daySet") as EnumSet<Day>
         startLocation = intent.getStringExtra("startLocation")
         endLocation = intent.getStringExtra("endLocation")
-        travelTime = intent.getIntExtra("travelTime", 0)
+        travelTime = intent.getSerializableExtra("travelTime") as Time
+        endTime = intent.getSerializableExtra("endTime") as Time
         stepList = intent.getSerializableExtra("stepList") as ArrayList<Step>
     }
 
