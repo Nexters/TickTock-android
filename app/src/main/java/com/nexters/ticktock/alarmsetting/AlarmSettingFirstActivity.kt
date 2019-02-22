@@ -10,9 +10,9 @@ import com.nexters.ticktock.Constant.GPS_ENABLE_REQUEST_CODE
 import com.nexters.ticktock.Constant.MAIN_ACTIVITY_REQUEST_CODE
 import com.nexters.ticktock.R
 import com.nexters.ticktock.autocomplete.AutoCompleteActivity
-import com.nexters.ticktock.autocomplete.GPSInfo
 import com.nexters.ticktock.databinding.ActivityAlarmSettingFirstBinding
 import com.nexters.ticktock.model.enums.Day
+import com.nexters.ticktock.utils.Location
 import com.nexters.ticktock.utils.getUnderlinedString
 import java.util.*
 
@@ -20,7 +20,6 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAlarmSettingFirstBinding
 
-    private lateinit var gps: GPSInfo // gps
     private var dayList: EnumSet<Day> = EnumSet.noneOf(Day::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,12 +27,12 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_setting_first)
 
-        gps = GPSInfo(this) // GPS
-        gps.isGPSConnected()
+        Location.getInstance(this)
+        Location.getInstance(this).isGPSConnected()
 
         binding.firstSettingDirectionButton.setOnClickListener {
             val intent = Intent(this, AutoCompleteActivity::class.java)
-            intent.putExtra("GPS_RESULT", gps.getResult())
+            intent.putExtra("GPS_RESULT", Location.getInstance(this).getResult())
             startActivityForResult(intent, Constant.ALARM_SETTING_FIRST_REQUEST_CODE)
         }
 
@@ -127,7 +126,10 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             // gps 설정 변경 후 재연결
-            GPS_ENABLE_REQUEST_CODE -> gps.getLocation()
+            GPS_ENABLE_REQUEST_CODE -> {
+                if (Location.getInstance(this).isGPSConnected())
+                    Location.getInstance(this).getLocation()
+            }
 
             MAIN_ACTIVITY_REQUEST_CODE -> {
                 when (resultCode) {

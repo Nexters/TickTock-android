@@ -19,10 +19,7 @@ import com.nexters.ticktock.dao.TickTockDBHelper
 import com.nexters.ticktock.model.Alarm
 import com.nexters.ticktock.onboarding.OnBoardingActivity
 import com.nexters.ticktock.setting.SettingActivity
-import com.nexters.ticktock.utils.Time
-import com.nexters.ticktock.utils.getHighlightedString
-import com.nexters.ticktock.utils.invisible
-import com.nexters.ticktock.utils.visible
+import com.nexters.ticktock.utils.*
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_card.*
@@ -47,6 +44,10 @@ class CardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card)
+
+        Location.getInstance(this)
+        if (Location.getInstance(this).isGPSConnected())
+            locationTxt.text = Location.getInstance(this).getSubString()
 
         //set OnBoarding Tutorial
         val preferences = getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
@@ -221,4 +222,17 @@ class CardActivity : AppCompatActivity() {
                     endTime = endTime,
                     travelTime = travelTime
             )
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            Constant.GPS_ENABLE_REQUEST_CODE -> {
+                if (Location.getInstance(this).isGPSConnected()) {
+                    Location.getInstance(this).getLocation()
+                    locationTxt.text = Location.getInstance(this).getSubString()
+                }
+            }
+        }
+    }
 }
