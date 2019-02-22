@@ -13,13 +13,14 @@ import com.nexters.ticktock.autocomplete.AutoCompleteActivity
 import com.nexters.ticktock.autocomplete.GPSInfo
 import com.nexters.ticktock.databinding.ActivityAlarmSettingFirstBinding
 import com.nexters.ticktock.model.enums.Day
+import java.util.*
 
 class AlarmSettingFirstActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAlarmSettingFirstBinding
 
     private lateinit var gps: GPSInfo // gps
-    private var dayList: MutableList<Day> = mutableListOf()
+    private var dayList: EnumSet<Day> = EnumSet.noneOf(Day::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
