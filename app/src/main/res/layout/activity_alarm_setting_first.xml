@@ -57,6 +57,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/first_setting_direction_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -65,34 +66,85 @@
                     android:layout_marginRight="24dp"
                     android:background="@drawable/edge_round_layout">
 
-                    <TextView
-                        android:id="@+id/wasting_time_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="출발-도착 소요시간"
-                        android:textSize="12sp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginLeft="20dp" />
+                    <RelativeLayout
+                        android:id="@+id/first_setting_direction_before"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/wasting_time_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="출발-도착 소요시간"
+                            android:textSize="12sp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="20dp" />
 
-                    <ImageButton
-                        android:id="@+id/first_setting_direction_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/btn_one_plus"
-                        android:background="@android:color/transparent"
-                        android:layout_below="@id/wasting_time_text"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="15dp"/>
+                        <ImageButton
+                            android:id="@+id/first_setting_direction_plus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/btn_one_plus"
+                            android:background="@android:color/transparent"
+                            android:layout_below="@id/wasting_time_text"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="15dp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="얼마나 걸리는지 알아볼까요?"
-                        android:layout_centerHorizontal="true"
-                        android:layout_below="@id/first_setting_direction_button"
-                        android:layout_marginTop="7dp"
-                        android:layout_marginBottom="20dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="얼마나 걸리는지 알아볼까요?"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@id/first_setting_direction_plus"
+                            android:layout_marginTop="7dp"
+                            android:layout_marginBottom="20dp"/>
+                    </RelativeLayout>
 
+                    <RelativeLayout
+                        android:id="@+id/first_setting_direction_after"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="소요시간"
+                            android:textSize="12sp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="20dp"/>
+
+                        <ImageView
+                            android:id="@+id/first_setting_edit_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icn_detail_edit"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_alignParentRight="true"/>
+
+                        <TextView
+                            android:id="@+id/first_setting_total_time_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="20dp"
+                            android:text="총 34분 소요"
+                            android:textSize="24sp"
+                            android:textColor="#f6460f"
+                            android:layout_below="@+id/first_setting_edit_image"/>
+
+                        <TextView
+                            android:id="@+id/first_setting_location_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="현위치에서 종각역 마이크 임팩트까지"
+                            android:textSize="12sp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="10dp"
+                            android:layout_below="@+id/first_setting_total_time_text"
+                            android:layout_marginBottom="20dp"/>
+
+                    </RelativeLayout>
                 </RelativeLayout>
 
                 <RelativeLayout

@@ -3,11 +3,14 @@ package com.nexters.ticktock.alarmsetting
 import android.app.Activity
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import android.view.View
 import com.nexters.ticktock.Constant
+import com.nexters.ticktock.Constant.ALARM_SETTING_FIRST_REQUEST_CODE
 import com.nexters.ticktock.Constant.GPS_ENABLE_REQUEST_CODE
-import com.nexters.ticktock.Constant.MAIN_ACTIVITY_REQUEST_CODE
 import com.nexters.ticktock.R
 import com.nexters.ticktock.autocomplete.AutoCompleteActivity
 import com.nexters.ticktock.databinding.ActivityAlarmSettingFirstBinding
@@ -21,6 +24,11 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAlarmSettingFirstBinding
 
     private var dayList: EnumSet<Day> = EnumSet.noneOf(Day::class.java)
+
+    private var hour: Int? = null
+    private var minute: Int? = null
+    private var startLocation: String? = null
+    private var endLocation: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,11 +50,45 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
 
         binding.firstSettingNextButton.setOnClickListener {
             AlarmSettingSecondActivity.editMode = 1
+            val endTime: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                binding.firstSettingTimePicker.hour * 60 + (binding.firstSettingTimePicker.minute)
+            } else {
+                binding.firstSettingTimePicker.currentHour * 60 + (binding.firstSettingTimePicker.currentMinute)
+            }
+
             val intent: Intent = Intent(this, AlarmSettingSecondActivity::class.java)
+            intent.putExtra("daySet", dayList)
+            intent.putExtra("startLocation", startLocation)
+            intent.putExtra("endLocation", endLocation)
+            intent.putExtra("endTime", endTime)
             startActivity(intent)
         }
 
         selectDay()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (endLocation == null) {
+            binding.firstSettingDirectionBefore.visibility = View.VISIBLE
+            binding.firstSettingDirectionAfter.visibility = View.GONE
+        } else {
+            binding.firstSettingDirectionBefore.visibility = View.GONE
+            binding.firstSettingDirectionAfter.visibility = View.VISIBLE
+
+            if (hour != null) {
+                binding.firstSettingTotalTimeText.text = "총 ".plus(hour.toString()).plus("시간 ").plus(minute.toString()).plus("분 소요")
+            } else {
+                binding.firstSettingTotalTimeText.text = "총 ".plus(minute).plus("분 소요")
+            }
+            /* TODO: 언더라인 두개로 만들어야함*/
+            binding.firstSettingLocationText.text = getUnderlinedString("*$startLocation*에서 *$endLocation* 까지")
+        }
+
+        if (endLocation == null || dayList.isEmpty()) {
+            /* TODO: 버튼 비활성화 */
+        }
     }
 
     private fun selectDay() {
@@ -131,13 +173,18 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
                     Location.getInstance(this).getLocation()
             }
 
-            MAIN_ACTIVITY_REQUEST_CODE -> {
+            ALARM_SETTING_FIRST_REQUEST_CODE -> {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-//                        if (data?.getIntExtra("DIRECTION_TIME_HOUR", 0) != 0) binding.tvDeliveryTimeSecond.setText("${data?.getIntExtra("DIRECTION_TIME_HOUR", 0)}시간 ${data?.getIntExtra("DIRECTION_TIME_MINUTE", 0)}분")
-//                        else binding.tvDeliveryTimeSecond.setText("${data.getIntExtra("DIRECTION_TIME_MINUTE", 0)}분")
-//                        binding.tvDeliveryFromTitle.text = getUnderlinedString("*${data?.getStringExtra("DIRECTION_START")}*")
-//                        binding.tvDeliveryToTitle.text = getUnderlinedString("*${data?.getStringExtra("DIRECTION_DESTINATION")}*")
+                        if (data?.getIntExtra("DIRECTION_TIME_HOUR", 0) != 0) {
+                            hour = data?.getIntExtra("DIRECTION_TIME_HOUR", 0)
+                            minute = data?.getIntExtra("DIRECTION_TIME_MINUTE", 0)
+                        } else {
+                            hour = null
+                            minute = data.getIntExtra("DIRECTION_TIME_MINUTE", 0)
+                        }
+                        startLocation = data?.getStringExtra("DIRECTION_START")
+                        endLocation = data?.getStringExtra("DIRECTION_DESTINATION")
                     }
                 }
             }
