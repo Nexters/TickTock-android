@@ -30,7 +30,8 @@ class AlarmSettingSecondActivity : AppCompatActivity(), PrepareAdapter.OnStartDr
     private lateinit var daySet: EnumSet<Day>
     private var startLocation: String? = null
     private var endLocation: String? = null
-    private var travelTime: Int? = null
+    private lateinit var endTime: Time
+    private lateinit var travelTime: Time
 
     override fun onStartDrag(itemPrepareHolder: PrepareAdapter.ItemPrepareHolder) {
         itemTouchHelper.startDrag(itemPrepareHolder)
@@ -44,7 +45,8 @@ class AlarmSettingSecondActivity : AppCompatActivity(), PrepareAdapter.OnStartDr
         daySet = intent.getSerializableExtra("daySet") as EnumSet<Day>
         startLocation = intent.getStringExtra("startLocation")
         endLocation = intent.getStringExtra("endLocation")
-        travelTime = intent.getIntExtra("travelTime", 0)
+        travelTime = intent.getSerializableExtra("travelTime") as Time
+        endTime = intent.getSerializableExtra("endTime") as Time
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,6 +112,7 @@ class AlarmSettingSecondActivity : AppCompatActivity(), PrepareAdapter.OnStartDr
                 intent.putExtra("endLocation", endLocation)
                 intent.putExtra("travelTime", travelTime)
                 intent.putExtra("stepList", stepList)
+                intent.putExtra("endTime", endTime)
                 startActivity(intent)
             } else if (editMode == 2) {
                 editMode = 1
