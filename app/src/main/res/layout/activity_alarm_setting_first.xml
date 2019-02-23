@@ -47,9 +47,12 @@
                         android:layout_marginLeft="32dp"/>
 
                     <TextView
+                        android:id="@+id/first_setting_head_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="어디로 몇 시까지\n가면 될까요?"
+                        android:text="@string/first_setting_head_text"
+                        android:fontFamily="@font/noto_sans_cjk_kr_light"
+                        android:textColor="#323232"
                         android:layout_alignLeft="@+id/tag_one"
                         android:layout_below="@id/tag_one"
                         android:layout_marginTop="6dp"
@@ -75,7 +78,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="출발-도착 소요시간"
+                            android:fontFamily="@font/noto_sans_cjk_kr_light"
                             android:textSize="12sp"
+                            android:textColor="#6b6b6b"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp" />
 
@@ -93,6 +98,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="얼마나 걸리는지 알아볼까요?"
+                            android:fontFamily="@font/noto_sans_cjk_kr_light"
+                            android:textColor="#b6b6b6"
                             android:layout_centerHorizontal="true"
                             android:layout_below="@id/first_setting_direction_plus"
                             android:layout_marginTop="7dp"
@@ -109,6 +116,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="소요시간"
+                            android:fontFamily="@font/noto_sans_cjk_kr_light"
+                            android:textColor="#6b6b6b"
                             android:textSize="12sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"/>
@@ -129,6 +138,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="20dp"
                             android:text="총 34분 소요"
+                            android:fontFamily="@font/noto_sans_cjk_kr_light"
                             android:textSize="24sp"
                             android:textColor="#f6460f"
                             android:layout_below="@+id/first_setting_edit_image"/>
@@ -138,7 +148,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="현위치에서 종각역 마이크 임팩트까지"
+                            android:fontFamily="@font/noto_sans_cjk_kr_light"
                             android:textSize="12sp"
+                            android:textColor="#6b6b6b"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="10dp"
                             android:layout_below="@+id/first_setting_total_time_text"
@@ -161,6 +173,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="약속시간"
+                        android:textColor="#6b6b6b"
+                        android:fontFamily="@font/noto_sans_cjk_kr_light"
                         android:layout_marginTop="20dp"
                         android:layout_marginLeft="20dp"
                         android:textSize="12sp"/>
@@ -193,7 +207,9 @@
                             android:id="@+id/first_setting_date_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/noto_sans_cjk_kr_light"
                             android:text="요일"
+                            android:textColor="#6b6b6b"
                             android:layout_marginLeft="20dp"/>
 
                         <LinearLayout

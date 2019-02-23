@@ -15,11 +15,8 @@ import com.nexters.ticktock.R
 import com.nexters.ticktock.autocomplete.AutoCompleteActivity
 import com.nexters.ticktock.databinding.ActivityAlarmSettingFirstBinding
 import com.nexters.ticktock.model.enums.Day
-import com.nexters.ticktock.utils.Time
-import com.nexters.ticktock.utils.Location
-import com.nexters.ticktock.utils.getUnderlinedString
-import com.nexters.ticktock.utils.hour
-import com.nexters.ticktock.utils.minute
+import com.nexters.ticktock.utils.*
+import kotlinx.android.synthetic.main.activity_card.*
 import java.util.*
 
 class AlarmSettingFirstActivity : AppCompatActivity() {
@@ -43,6 +40,9 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
             intent.putExtra("GPS_RESULT", Location.getInstance(this).getResult())
             startActivityForResult(intent, Constant.ALARM_SETTING_FIRST_REQUEST_CODE)
         }
+
+        binding.firstSettingHeadText.text = getHighlightedString(resources.getString(R.string.first_setting_head_text))
+
 
         binding.firstSettingBackButton.setOnClickListener {
             finish()

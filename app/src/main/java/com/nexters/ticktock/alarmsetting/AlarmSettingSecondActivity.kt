@@ -16,6 +16,7 @@ import com.nexters.ticktock.model.Alarm
 import com.nexters.ticktock.model.Step
 import com.nexters.ticktock.model.enums.Day
 import com.nexters.ticktock.utils.Time
+import com.nexters.ticktock.utils.getHighlightedString
 import java.util.*
 
 class AlarmSettingSecondActivity : AppCompatActivity(), PrepareAdapter.OnStartDragListener {
@@ -56,6 +57,7 @@ class AlarmSettingSecondActivity : AppCompatActivity(), PrepareAdapter.OnStartDr
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_alarm_setting_second)
 
+        binding.secondSettingText.text = getHighlightedString(resources.getString(R.string.second_setting_head_text))
         binding.secondSettingRecycler.layoutManager = LinearLayoutManager(this)
 
         val adapter = PrepareAdapter(this, prepareList, this)

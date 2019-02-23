@@ -20,6 +20,7 @@
             android:layout_marginLeft="24dp"
             android:layout_toRightOf="@+id/list_recycle"
             android:text="경무와 데이트"
+            android:fontFamily="@font/noto_sans_cjk_kr_light"
             android:textSize="14sp" />
 
         <ImageView
@@ -48,6 +49,7 @@
             android:layout_marginRight="18dp"
             android:layout_toLeftOf="@+id/list_order_change"
             android:text="5분"
+            android:fontFamily="@font/noto_sans_cjk_kr_light"
             android:textSize="14sp" />
     </RelativeLayout>
 </layout>

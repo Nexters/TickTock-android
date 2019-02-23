@@ -23,18 +23,20 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:hint="ex)샤워하기"
+            android:fontFamily="@font/noto_sans_cjk_kr_light"
             android:textAlignment="center"
             android:textSize="14sp" />
 
         <EditText
             android:id="@+id/prepare_time_edit"
-            android:layout_width="32dp"
+            android:layout_width="36dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_toStartOf="@+id/prepare_plus_button"
             android:hint="0분"
+            android:fontFamily="@font/noto_sans_cjk_kr_light"
             android:textAlignment="center"
             android:textSize="14sp" />
 
