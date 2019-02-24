@@ -126,7 +126,6 @@ class CardActivity : AppCompatActivity() {
             }
         }
 
-        // TODO deleteCheckMessageText.text = getHighlightedString("*${cardContext[0].title}*${resources.getString(R.string.deleteCheckMessage)}")
         cardContext.addCardEventListener(cardEventListener)
 
         addBtn.setOnClickListener {

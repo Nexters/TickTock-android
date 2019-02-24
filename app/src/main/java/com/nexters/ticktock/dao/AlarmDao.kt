@@ -149,9 +149,9 @@ class AlarmDao(private val context: Context) {
             }
         }
 
-        Log.d(LOG_TAG, "findById result: $alarm")
-
-        return alarm?.apply { steps = stepSet }
+        return alarm?.apply { steps = stepSet }.also {
+            Log.d(LOG_TAG, "findById result: $it")
+        }
     }
 
     fun save(alarm: Alarm) {
@@ -184,7 +184,7 @@ class AlarmDao(private val context: Context) {
         val alarmId = readableDB.rawQuery(MAX_ALARM_ID, null).use {
             it.moveToFirst()
             it.getLong(0)
-        } + 1
+        }
         val steps = alarm.steps
 
         steps.forEach {
