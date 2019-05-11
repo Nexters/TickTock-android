@@ -10,7 +10,7 @@
 
         <TextView
             android:id = "@+id/tv_system_manage1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +23,7 @@
 
         <TextView
             android:id = "@+id/tv_system_manage2"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background = "@android:color/white"
             android:text = "@string/app_on_top"
@@ -40,7 +40,7 @@
 
         <TextView
             android:id = "@+id/tv_system_manage3"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background = "@android:color/white"
             android:text = "@string/push_alarm"
@@ -49,6 +49,7 @@
             android:paddingTop = "13dp"
             android:paddingBottom="13dp"
             android:paddingStart = "28dp"
+            android:layout_marginTop = "1.9dp"
             android:fontFamily="@font/noto_sans_cjk_kr_regular"
             android:textSize = "14sp"
             app:layout_constraintTop_toBottomOf="@+id/tv_system_manage2"
@@ -65,6 +66,7 @@
             android:paddingTop = "13dp"
             android:paddingBottom="13dp"
             android:paddingStart = "28dp"
+            android:layout_marginTop = "1.9dp"
             android:fontFamily="@font/noto_sans_cjk_kr_regular"
             android:textSize = "14sp"
             app:layout_constraintTop_toBottomOf="@+id/tv_system_manage3"
