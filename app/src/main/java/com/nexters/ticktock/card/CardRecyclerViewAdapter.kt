@@ -89,10 +89,8 @@ class CardRecyclerViewAdapter(
         /** card bottom */
         // start location
         private val startTimeTxtView = view.findViewById<TextView>(R.id.startTimeTxt)
-        private val startLocationTxtView = view.findViewById<TextView>(R.id.startLocationTxt)
         // end location
         private val endTimeTxtView = view.findViewById<TextView>(R.id.endTimeTxt)
-        private val endLocationTxtView = view.findViewById<TextView>(R.id.endLocationTxt)
 
         fun bind() {
             bindButton()
@@ -160,9 +158,7 @@ class CardRecyclerViewAdapter(
 
         private fun bindCardBottom(item: CardItem) {
             startTimeTxtView.text = item.startTime.toString()
-            startLocationTxtView.text = item.startLocation
             endTimeTxtView.text = item.endTime.toString()
-            endLocationTxtView.text = item.endLocation
         }
 
         override fun onClick(v: View?) {

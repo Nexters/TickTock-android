@@ -82,15 +82,6 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
                 setData()
 
                 val alarmDao = TickTockDBHelper.getInstance(this).alarmDao
-                val alarmList = alarmDao.findAll()
-
-                // 알람에서 해당 알람 삭제
-                for(alarm in alarmList) {
-                    if(alarm.id == this.alarmId) {
-                        alarmDao.delete(alarm)
-                        break
-                    }
-                }
 
                 //수정된 알람 재 추가
                 val calendarSet = Calendar.getInstance()

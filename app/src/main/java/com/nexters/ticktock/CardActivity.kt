@@ -203,7 +203,7 @@ class CardActivity : AppCompatActivity() {
                     color = color,
                     enable = enable,
                     endTime = endTime,
-                    startTime = endTime - (travelTime + steps.map { it.duration }.fold(Time(0)) { acc, time -> acc + time }),
+                    startTime = endTime - (steps.map { it.duration }.fold(Time(0)) { acc, time -> acc + time }),
                     travelTime = travelTime
             )
 
