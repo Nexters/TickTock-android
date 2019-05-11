@@ -3,6 +3,7 @@ package com.nexters.ticktock.alarmsetting
 import android.app.Activity
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -55,6 +56,22 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
         selectDay()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        activeNextButton()
+    }
+
+    private fun activeNextButton() {
+        if (dayList.isEmpty()) {
+            binding.firstSettingNextButton.isEnabled = false
+            binding.firstSettingNextButton.setBackgroundColor(Color.parseColor("#D8D8D8"))
+        } else {
+            binding.firstSettingNextButton.isEnabled = true
+            binding.firstSettingNextButton.setBackgroundColor(Color.parseColor("#f6460f"))
+        }
+    }
+
     private fun selectDay() {
         binding.firstSettingMon.setOnClickListener {
             if (dayList.contains(Day.Monday)) {
@@ -64,6 +81,8 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
                 binding.firstSettingMon.setImageResource(R.drawable.btn_mon_sel)
                 dayList.add(Day.Monday)
             }
+
+            activeNextButton()
         }
 
         binding.firstSettingTue.setOnClickListener {
@@ -74,6 +93,8 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
                 binding.firstSettingTue.setImageResource(R.drawable.btn_tue_sel)
                 dayList.add(Day.Tuesday)
             }
+
+            activeNextButton()
         }
 
         binding.firstSettingWed.setOnClickListener {
@@ -84,6 +105,8 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
                 binding.firstSettingWed.setImageResource(R.drawable.btn_wed_sel)
                 dayList.add(Day.Wednesday)
             }
+
+            activeNextButton()
         }
 
         binding.firstSettingThur.setOnClickListener {
@@ -94,6 +117,8 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
                 binding.firstSettingThur.setImageResource(R.drawable.btn_thur_sel)
                 dayList.add(Day.Thursday)
             }
+
+            activeNextButton()
         }
 
         binding.firstSettingFri.setOnClickListener {
@@ -104,6 +129,8 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
                 binding.firstSettingFri.setImageResource(R.drawable.btn_fri_sel)
                 dayList.add(Day.Friday)
             }
+
+            activeNextButton()
         }
 
         binding.firstSettingSat.setOnClickListener {
@@ -115,6 +142,8 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
                 binding.firstSettingSat.setImageResource(R.drawable.btn_sat_sel)
                 dayList.add(Day.Saturday)
             }
+
+            activeNextButton()
         }
 
         binding.firstSettingSun.setOnClickListener {
@@ -125,6 +154,8 @@ class AlarmSettingFirstActivity : AppCompatActivity() {
                 binding.firstSettingSun.setImageResource(R.drawable.btn_sun_sel)
                 dayList.add(Day.Sunday)
             }
+
+            activeNextButton()
         }
     }
 }
