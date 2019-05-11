@@ -47,7 +47,6 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
     private lateinit var daySet: EnumSet<Day>
     private var startLocation: String? = null
     private var endLocation: String? = null
-    private lateinit var travelTime: Time
     private lateinit var endTime: Time
     private lateinit var stepList: ArrayList<Step>
 
@@ -65,10 +64,6 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
 
         binding.tvTitle.text = getHighlightedString(resources.getString(com.nexters.ticktock.R.string.tv_alarm_setting_third_title))
         binding.tvStartTimeDescription.text = getResizedString("${startTime.meridiem}* ${startTime.hour}:${startTime.minute}*", 1.85f)
-
-        val travelHour = travelTime.time / 60
-        if (travelHour != 0) binding.tvTimeToDestination.text = "${travelHour}시간 ${travelTime.minute}분"
-        else binding.tvTimeToDestination.text = "${travelTime.minute}분"
 
         val prepareTime = stepList.map { it.duration }.fold(Time(0)) { acc, time -> acc + time }
         val prepareHour = prepareTime.time / 60
@@ -107,13 +102,12 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
 
     private fun getData() {
         daySet = intent.getSerializableExtra("daySet") as EnumSet<Day>
-        startLocation = intent.getStringExtra("startLocation")
-        endLocation = intent.getStringExtra("endLocation")
-        travelTime = intent.getSerializableExtra("travelTime") as Time
+        startLocation = ""
+        endLocation = ""
         endTime = intent.getSerializableExtra("endTime") as Time
         stepList = intent.getSerializableExtra("stepList") as ArrayList<Step>
 
-        startTime = endTime - travelTime
+        startTime = endTime
 
         for (item in stepList) {
             startTime -= item.duration
@@ -149,7 +143,7 @@ class AlarmSettingThirdActivity : AppCompatActivity(), View.OnClickListener, Rad
                 color = tickTockColor,
                 enable = true,
                 endTime = endTime,
-                travelTime = travelTime,
+                travelTime = Time(0),
                 steps = stepList.toMutableSet()
         ))
     }

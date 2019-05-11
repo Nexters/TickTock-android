@@ -44,9 +44,9 @@ class AlarmSettingSecondActivity : AppCompatActivity(), PrepareAdapter.OnStartDr
 
     private fun getData() {
         daySet = intent.getSerializableExtra("daySet") as EnumSet<Day>
-        startLocation = intent.getStringExtra("startLocation")
-        endLocation = intent.getStringExtra("endLocation")
-        travelTime = intent.getSerializableExtra("travelTime") as Time
+        startLocation = ""
+        endLocation = ""
+        travelTime = Time(0)
         endTime = intent.getSerializableExtra("endTime") as Time
     }
 

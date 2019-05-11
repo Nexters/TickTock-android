@@ -1,6 +1,5 @@
 package com.nexters.ticktock
 
-import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
@@ -15,10 +14,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.TimePicker
-import com.nexters.ticktock.Constant.GPS_ENABLE_REQUEST_CODE
-import com.nexters.ticktock.Constant.MAIN_DETAIL_ACTIVITY_REQUEST_CODE
-import com.nexters.ticktock.alarmsetting.AlarmSettingSecondActivity
-import com.nexters.ticktock.autocomplete.AutoCompleteActivity
 import com.nexters.ticktock.dao.TickTockDBHelper
 import com.nexters.ticktock.databinding.ActivityMainDetailBinding
 import com.nexters.ticktock.model.Alarm
@@ -33,11 +28,6 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityMainDetailBinding
 
     private var alarmId: Long = 0
-    private var startLocation = ""
-    private var endLocation = ""
-    private var travelTimeInEdit = Time(0)
-    private var hour = 0
-    private var minute = 0
     private var startHour = 0
     private var startMinute = 0
     private var dayList: EnumSet<Day> = EnumSet.noneOf(Day::class.java)
@@ -49,7 +39,6 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
         getData(intent.getLongExtra("CARD_ID", 0))
 
         binding.btnClose.setOnClickListener(this)
-        binding.cvDeliveryTime.setOnClickListener(this)
         binding.btnEditPrepareTime.setOnClickListener(this)
         binding.layoutSave.setOnClickListener(this)
 
@@ -80,57 +69,9 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
         })
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        Location.getInstance(this)
-        Location.getInstance(this).isGPSConnected()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            // gps 설정 변경 후 재연결
-            GPS_ENABLE_REQUEST_CODE -> {
-                if (Location.getInstance(this).isGPSConnected())
-                    Location.getInstance(this).getLocation()
-            }
-
-            MAIN_DETAIL_ACTIVITY_REQUEST_CODE -> {
-                when (resultCode) {
-                    Activity.RESULT_OK -> {
-                        hour = data?.getIntExtra("DIRECTION_TIME_HOUR", 0) as Int
-                        if (hour != 0) {
-                            minute = data?.getIntExtra("DIRECTION_TIME_MINUTE", 0) as Int
-                            binding.tvDeliveryTimeSecond.setText("${hour}시간 ${minute}분")
-                            travelTimeInEdit = Time(hour * 60 + minute)
-                        }
-                        else {
-                            minute = data.getIntExtra("DIRECTION_TIME_MINUTE", 0)
-                            binding.tvDeliveryTimeSecond.setText("${minute}분")
-                        }
-
-                        travelTimeInEdit = hour.hour() + minute.minute()
-                        startLocation = "${data?.getStringExtra("DIRECTION_START")}"
-                        binding.tvDeliveryFromTitle.text = getUnderlinedString("*${startLocation}*")
-                        endLocation = "${data?.getStringExtra("DIRECTION_DESTINATION")}"
-                        binding.tvDeliveryToTitle.text = getUnderlinedString("*${endLocation}*")
-                    }
-                }
-            }
-        }
-    }
-
     override fun onClick(v: View?) {
         when (v?.id) {
             binding.btnClose.id -> finish()
-
-            binding.cvDeliveryTime.id -> {
-                val intent = Intent(this, AutoCompleteActivity::class.java)
-                intent.putExtra("GPS_RESULT", Location.getInstance(this).getResult())
-                intent.putExtra("DESTINATION_DATA", binding.tvDeliveryToTitle.text)
-                startActivityForResult(intent, MAIN_DETAIL_ACTIVITY_REQUEST_CODE)
-            }
 
             binding.btnEditPrepareTime.id -> {
                 val intent = Intent(this, NoneActivity::class.java)
@@ -195,21 +136,7 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
         val startTime = alarm.endTime - (alarm.travelTime + prepareTime)
 
         binding.tvAlarmTime.text = getResizedString("*${startTime.hour}:${startTime.minute}* ${startTime.meridiem}", 3.125f)
-        binding.tvDestination.text = alarm.endLocation
-        binding.tvDay.text = alarm.days.toString()
-
-        startLocation = alarm.startLocation
-        endLocation = alarm.endLocation
-
-        hour = alarm.travelTime.hour
-        minute = alarm.travelTime.minute
-
-        travelTimeInEdit = Time(0) + alarm.travelTime
-
-        if (alarm.travelTime.time / 60 != 0) binding.tvDeliveryTimeSecond.text = "${hour}시간 ${minute}분"
-        else binding.tvDeliveryTimeSecond.text = "${minute}분"
-        binding.tvDeliveryFromTitle.text = getUnderlinedString("*${alarm.startLocation}*")
-        binding.tvDeliveryToTitle.text = getUnderlinedString("*${alarm.endLocation}*")
+        binding.tvMemo.setText(alarm.title)
 
         startHour = startTime.time / 60
         startMinute = startTime.minute
@@ -289,12 +216,12 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
                 id = alarmId,
                 days = dayList,
                 title = binding.edMemo.text.toString(),
-                startLocation = startLocation,
-                endLocation = endLocation,
+                startLocation = "",
+                endLocation = "",
                 color = color,
                 enable = true,
                 endTime = Time(startHour * 60 + startMinute),
-                travelTime = travelTimeInEdit
+                travelTime = Time(0)
         ))
     }
 }

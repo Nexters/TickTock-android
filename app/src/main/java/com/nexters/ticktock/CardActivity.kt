@@ -41,10 +41,6 @@ class CardActivity : AppCompatActivity() {
                 .map { it.toCardItem() }
                 .toList().sortedWith(compareBy({it.startTime}, {it.color}))
         )
-
-        Location.getInstance(this)
-        if (Location.getInstance(this).isGPSConnected())
-            locationTxt.text = Location.getInstance(this).getSubString()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -223,17 +219,4 @@ class CardActivity : AppCompatActivity() {
                     endTime = endTime,
                     travelTime = travelTime
             )
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            Constant.GPS_ENABLE_REQUEST_CODE -> {
-                if (Location.getInstance(this).isGPSConnected()) {
-                    Location.getInstance(this).getLocation()
-                    locationTxt.text = Location.getInstance(this).getSubString()
-                }
-            }
-        }
-    }
 }

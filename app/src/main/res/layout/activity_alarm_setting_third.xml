@@ -362,45 +362,13 @@
                         app:layout_constraintBottom_toTopOf="@id/layout_save">
 
                         <android.support.constraint.ConstraintLayout
-                            android:id="@+id/layout_time_to_destination"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/tv_alarm_setting_third_time_to_destination_title"
-                                android:fontFamily="@font/noto_sans_cjk_kr_light"
-                                android:textColor="#343434"
-                                android:textSize="14sp"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:id="@+id/tv_time_to_destination"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/tv_alarm_setting_third_time_to_destination_description"
-                                android:fontFamily="@font/noto_sans_cjk_kr_light"
-                                android:textColor="#343434"
-                                android:textSize="14sp"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-                        </android.support.constraint.ConstraintLayout>
-
-                        <android.support.constraint.ConstraintLayout
                             android:id="@+id/layout_prepare_time"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/layout_time_to_destination">
+                            app:layout_constraintTop_toTopOf="parent">
 
                             <android.support.constraint.ConstraintLayout
                                 android:id="@+id/layout_prepare_time_double"
