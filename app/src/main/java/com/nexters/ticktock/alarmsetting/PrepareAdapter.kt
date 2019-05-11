@@ -1,6 +1,8 @@
 package com.nexters.ticktock.alarmsetting
 
 import android.content.Context
+import android.databinding.DataBindingUtil
+import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,12 +12,16 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.nexters.ticktock.R
+import com.nexters.ticktock.databinding.ActivityAlarmSettingSecondBinding
+import kotlinx.android.synthetic.main.activity_alarm_setting_second.view.*
 import kotlinx.android.synthetic.main.item_prepare.view.*
 import kotlinx.android.synthetic.main.item_prepare_edit.view.*
 import java.util.*
 
 
 class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareModel>, val startDragListener: OnStartDragListener) : RecyclerView.Adapter<PrepareAdapter.ItemPrepareHolder>(), PrepareItemTouchHelperCallback.OnItemMoveListener {
+
+    lateinit var binding: ActivityAlarmSettingSecondBinding
 
     interface OnStartDragListener {
         fun onStartDrag(itemPrepareHolder: ItemPrepareHolder)
@@ -31,6 +37,9 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ItemPrepareHolder {
         val editView = LayoutInflater.from(context).inflate(R.layout.item_prepare_edit, parent, false)
         val changeView = LayoutInflater.from(context).inflate(R.layout.item_prepare, parent, false)
+
+        val layoutInflater = context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.activity_alarm_setting_second, parent, false)
 
         return if (AlarmSettingSecondActivity.editMode == 1)
             ItemPrepareHolder(editView)
@@ -81,6 +90,14 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
                     val model = PrepareModel("", 0)
                     prepareList.add(model)
                     notifyItemInserted(adapterPosition)
+
+                    if (prepareList.size == 1) {
+                        binding.secondSettingNextButton.isEnabled = false
+                        binding.secondSettingNextButton.setBackgroundColor(Color.parseColor("#D8D8D8"))
+                    } else {
+                        binding.secondSettingNextButton.isEnabled = true
+                        binding.secondSettingNextButton.setBackgroundColor(Color.parseColor("#f6460f"))
+                    }
                 }
             } else {
                 if (!item.name.isEmpty()) {

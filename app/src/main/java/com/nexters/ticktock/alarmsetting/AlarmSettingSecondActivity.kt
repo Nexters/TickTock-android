@@ -2,6 +2,7 @@ package com.nexters.ticktock.alarmsetting
 
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -48,6 +49,22 @@ class AlarmSettingSecondActivity : AppCompatActivity(), PrepareAdapter.OnStartDr
         endLocation = ""
         travelTime = Time(0)
         endTime = intent.getSerializableExtra("endTime") as Time
+    }
+
+    private fun activeNextButton() {
+        if (prepareList.size == 1) {
+            binding.secondSettingNextButton.isEnabled = false
+            binding.secondSettingNextButton.setBackgroundColor(Color.parseColor("#D8D8D8"))
+        } else {
+            binding.secondSettingNextButton.isEnabled = true
+            binding.secondSettingNextButton.setBackgroundColor(Color.parseColor("#f6460f"))
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        activeNextButton()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -136,6 +153,7 @@ class AlarmSettingSecondActivity : AppCompatActivity(), PrepareAdapter.OnStartDr
                 binding.secondSettingRoot.requestFocus()
             }
 
+            activeNextButton()
             return@setOnTouchListener false
         }
 
@@ -145,6 +163,7 @@ class AlarmSettingSecondActivity : AppCompatActivity(), PrepareAdapter.OnStartDr
                 binding.secondSettingRoot.requestFocus()
             }
 
+            activeNextButton()
             return@setOnTouchListener false
         }
 
@@ -154,6 +173,7 @@ class AlarmSettingSecondActivity : AppCompatActivity(), PrepareAdapter.OnStartDr
                 binding.secondSettingRoot.requestFocus()
             }
 
+            activeNextButton()
             return@setOnTouchListener false
         }
     }
