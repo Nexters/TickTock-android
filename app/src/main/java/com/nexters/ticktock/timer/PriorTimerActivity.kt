@@ -80,6 +80,9 @@ class PriorTimerActivity : AppCompatActivity(){
         //준비시작 버튼 누르면 바로 타이머 시작
         binding.btnTimerstart.setOnClickListener{
 
+            val alarmManager : AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+
             val alarmDao = TickTockDBHelper.getInstance(this).alarmDao
             val alarmList = alarmDao.findAll()
 
@@ -106,7 +109,7 @@ class PriorTimerActivity : AppCompatActivity(){
             val intent = Intent(this, TimerActivity::class.java)
             intent.putExtra("curAlarm", curAlarm)
             startActivity(intent)
-            overridePendingTransition(com.nexters.ticktock.R.anim.slide_in_up, com.nexters.ticktock.R.anim.slide_out_up)
+            overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
         }
     }
 }

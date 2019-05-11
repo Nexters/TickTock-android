@@ -133,13 +133,12 @@ class MainDetailActivity: AppCompatActivity(), View.OnClickListener {
         alarmDao.findAll().forEach { Log.d("AlarmDao", it.toString()) }
         val alarm = alarmDao.findById(id) as Alarm
         val prepareTime = alarm.steps.map { it.duration }.fold(Time(0)) { acc, time -> acc + time }
-        val startTime = alarm.endTime - (alarm.travelTime + prepareTime)
 
-        binding.tvAlarmTime.text = getResizedString("*${startTime.hour}:${startTime.minute}* ${startTime.meridiem}", 3.125f)
+        binding.tvAlarmTime.text = getResizedString("*${alarm.endTime.hour}:${alarm.endTime.minute}* ${alarm.endTime.meridiem}", 3.125f)
         binding.tvMemo.setText(alarm.title)
 
-        startHour = startTime.time / 60
-        startMinute = startTime.minute
+        startHour = alarm.endTime.time / 60
+        startMinute = alarm.endTime.minute
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             binding.tpMeetingTime.hour = startHour
             binding.tpMeetingTime.minute = startMinute
