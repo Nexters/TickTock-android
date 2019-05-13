@@ -87,7 +87,7 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
                 itemView.prepare_item_plus_button.visibility = View.VISIBLE
 
                 itemView.prepare_item_plus_button.setOnClickListener { view ->
-                    val model = PrepareModel("", 0)
+                    val model = PrepareModel("", 1)
                     prepareList.add(model)
                     notifyItemInserted(adapterPosition)
 
@@ -160,14 +160,26 @@ class PrepareAdapter(val context: Context, var prepareList: ArrayList<PrepareMod
 
                         v.prepare_time_edit.text = Editable.Factory.getInstance().newEditable(temp)
                     } else {
-                        var temp = v.prepare_time_edit.text.toString()
+                        var tempInt = if (v.prepare_time_edit.text.toString() == "") {
+                            1
+                        } else {
+                            v.prepare_time_edit.text.toString().toInt()
+                        }
+
+                        if (tempInt > 99) {
+                            tempInt = 99
+                        } else if (tempInt < 1) {
+                            tempInt = 1
+                        }
+
+                        var temp = tempInt.toString()
 
                         temp = temp.replace("분", "")
 
                         if (!temp.isEmpty())
                             prepareList[layoutPosition].time = temp.toInt()
                         else
-                            prepareList[layoutPosition].time = 0
+                            prepareList[layoutPosition].time = 1
 
                         notifyItemChanged(layoutPosition, "timeFocus")
                     }

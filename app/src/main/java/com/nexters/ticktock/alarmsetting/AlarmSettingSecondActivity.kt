@@ -40,7 +40,7 @@ class AlarmSettingSecondActivity : AppCompatActivity(), PrepareAdapter.OnStartDr
     }
 
     var prepareList: ArrayList<PrepareModel> = arrayListOf(
-            PrepareModel("", 0)
+            PrepareModel("", 1)
     )
 
     private fun getData() {
